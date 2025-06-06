@@ -27,6 +27,50 @@ window.eqsearch = function () {
     };
 };
 
+Alpine.data('eqsearch', (initialQuery = '') => ({
+    query: initialQuery,
+    results: [],
+    loading: false,
+
+    async load() {
+        if (this.query.length < 2) {
+            this.results = [];
+            this.loading = false;
+            return;
+        }
+
+        this.loading = true;
+
+        try {
+            const res = await fetch(`/search/suggest?q=${encodeURIComponent(this.query)}`);
+            const data = await res.json();
+            this.results = data;
+        } catch (e) {
+            console.error('error loading search results:', e);
+        } finally {
+            this.loading = false;
+        }
+    }
+}));
+
+Alpine.data('itemDrops', (itemId) => ({
+    itemId,
+    loading: true,
+    drops: [],
+    async load() {
+        this.loading = true;
+        try {
+            const res = await fetch(`/items/drops_by_zone/${this.itemId}`);
+            const data = await res.json();
+            this.drops = data;
+        } catch (e) {
+            console.error('error loading npc droppers:', e);
+        } finally {
+            this.loading = false;
+        }
+    }
+}));
+
 Alpine.store('tooltip', {
     content: '',
     visible: false,
@@ -35,7 +79,7 @@ Alpine.store('tooltip', {
 
     async loadTooltip(url, triggerEl, event) {
         if (!triggerEl) return;
-        //if (event && event.preventDefault) event.preventDefault();
+        if (event && event.preventDefault) event.preventDefault();
 
         this.loadingUrl = url;
         this.tooltipEl = document.getElementById('global-tooltip');

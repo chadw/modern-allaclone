@@ -9,7 +9,7 @@
             <div class="flex min-w-0 gap-x-4">
                 <div class="min-w-0 flex-auto">
                     <p class="text-sm/6 font-semibold text-neutral-content">
-                        <a href="/recipes/{{ $recipe->id }}">{{ ucRomanNumeral($recipe->name) }}</a>
+                        <a href="{{ route('recipes.show', $recipe->id) }}">{{ ucRomanNumeral($recipe->name) }}</a>
                     </p>
                     <p class="mt-1 truncate text-xs/5 text-gray-500">{{ config('everquest.db_skills')[$recipe->tradeskill] }}</p>
                 </div>

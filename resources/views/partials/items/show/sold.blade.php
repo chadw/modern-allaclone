@@ -13,7 +13,7 @@
         <div class="flex min-w-0 gap-x-4">
             <div class="min-w-0 flex-auto">
                 <p class="text-sm/6 font-semibold text-neutral-content">
-                    <a href="/npc/{{ $npc['id'] }}">{{ $npc['name'] }}</a>
+                    <a href="{{ route('npcs.show', $npc['id']) }}">{{ $npc['clean_name'] }}</a>
                 </p>
             </div>
         </div>

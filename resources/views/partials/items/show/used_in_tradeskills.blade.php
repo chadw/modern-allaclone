@@ -9,7 +9,7 @@
             <div class="flex min-w-0 gap-x-4">
                 <div class="min-w-0 flex-auto">
                     <p class="text-sm/6 font-semibold text-neutral-content">
-                        <a href="/recipes/{{ $ts->id }}">{{ ucRomanNumeral($ts->name) }}</a>
+                        <a href="{{ route('recipes.show', $ts->id) }}">{{ ucRomanNumeral($ts->name) }}</a>
                     </p>
                 </div>
             </div>

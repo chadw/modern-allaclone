@@ -8,9 +8,7 @@
     </div>
 
     <div class="sm:basis-2/3 md:basis-1/2 xl:basis-2/3 w-full">
-        @if ($dropsByZone)
-            @include('partials.items.show.drops', ['drops' => $dropsByZone])
-        @endif
+        @include('partials.items.show.drops')
 
         @if ($recipes->isNotEmpty())
             @include('partials.items.show.recipes', ['recipes' => $recipes])

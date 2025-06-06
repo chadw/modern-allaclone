@@ -68,11 +68,10 @@ class ItemViewModel
 
     public function dropsByZone()
     {
-        //@todo optimize, update.. maybe move to frontend fetch?
         $itemId = $this->item->id;
-        $is_dropped = LootdropEntry::where('item_id', $itemId)->exists();
 
-        if (!$is_dropped) return [];
+        $lootdropIds = LootdropEntry::where('item_id', $itemId)->pluck('lootdrop_id');
+        if ($lootdropIds->isEmpty()) return [];
 
         $ignoreZones = config('everquest.ignore_zones') ?? [];
         $excludeMerchants = config('everquest.merchants_dont_drop_stuff') ?? true;
@@ -89,7 +88,10 @@ class ItemViewModel
             ->join('spawnentry', 'npc_types.id', '=', 'spawnentry.npcID')
             ->join('spawn2', 'spawnentry.spawngroupID', '=', 'spawn2.spawngroupID')
             ->join('zone', 'spawn2.zone', '=', 'zone.short_name')
-            ->join('loottable_entries', 'npc_types.loottable_id', '=', 'loottable_entries.loottable_id')
+            ->join('loottable_entries', function ($join) use ($lootdropIds) {
+                $join->on('npc_types.loottable_id', '=', 'loottable_entries.loottable_id')
+                     ->whereIn('loottable_entries.lootdrop_id', $lootdropIds);
+            })
             ->join('lootdrop_entries', function($join) use ($itemId) {
                 $join->on('loottable_entries.lootdrop_id', '=', 'lootdrop_entries.lootdrop_id')
                      ->where('lootdrop_entries.item_id', '=', $itemId);
@@ -117,6 +119,7 @@ class ItemViewModel
                     'npcs' => $items->map(fn($drop) => [
                         'id' => $drop['id'],
                         'name' => $drop['name'],
+                        'clean_name' => $drop['clean_name'],
                         'multiplier' => $drop['multiplier'],
                         'probability' => $drop['probability'],
                         'chance' => $drop['chance'],
@@ -181,6 +184,7 @@ class ItemViewModel
                 return [
                     'id' => $npc->id,
                     'name' => $npc->name,
+                    'clean_name' => $npc->clean_name,
                     'zone' => $spawn?->zone,
                     'zone_long_name' => $zone?->long_name,
                     'class' => $npc->class,
@@ -192,6 +196,7 @@ class ItemViewModel
                     'npcs' => $items->map(fn($npc) => [
                         'id' => $npc['id'],
                         'name' => $npc['name'],
+                        'clean_name' => $npc['clean_name'],
                         'class' => $npc['class'],
                     ])->values(),
                 ];

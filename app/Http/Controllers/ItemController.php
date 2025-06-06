@@ -35,7 +35,7 @@ class ItemController extends Controller
 
         return view('items.show', [
             'item' => $item,
-            'dropsByZone' => $vm->dropsByZone(),
+            //'dropsByZone' => $vm->dropsByZone(),
             'recipes' => $vm->recipes(),
             'used_in_ts' => $vm->usedInTradeskills(),
             'forage' => $vm->forageZones(),
@@ -51,5 +51,12 @@ class ItemController extends Controller
         return response()->json([
             'html' => view('partials.items.popup', ['item' => $item])->render()
         ]);
+    }
+
+    public function drops_by_zone(Item $item)
+    {
+        $drops = (new ItemViewModel($item))->dropsByZone();
+
+        return response()->json($drops);
     }
 }

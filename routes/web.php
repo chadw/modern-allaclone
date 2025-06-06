@@ -17,6 +17,7 @@ Route::get('/search/suggest', [App\Http\Controllers\SearchController::class, 'su
 Route::get('/items', [ItemController::class, 'index'])->name('items.index');
 Route::get('/items/{item}', [ItemController::class, 'show'])->name('items.show');
 Route::get('/items/popup/{item}', [ItemController::class, 'popup'])->name('items.popup');
+Route::get('/items/drops_by_zone/{item}', [ItemController::class, 'drops_by_zone'])->name('items.drops_by_zone');
 Route::get('/zones', [ZoneController::class, 'index'])->name('zones.index');
 Route::get('/zones/{zone}', [ZoneController::class, 'show'])->name('zones.show');
 Route::get('/spells', [SpellController::class, 'index'])->name('spells.index');

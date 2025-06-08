@@ -13,10 +13,6 @@ return [
      */
 
     'allow_quests_npc' => false, // quests for npcs are available from NPC's page
-    'display_named_npcs_info' => true, // If TRUE, will display a link to show named NPCs and export to CVS for maps
-    'display_npc_stats'                  => true, // If TRUE, will display HP, Damage, Special Attacks, etc for NPCs
-    'display_spawn_group_info'           => true, // If TRUE, will display the spawngroup link from the zone pages
-    'group_npcs_by_name'                 => true, // groups the NPCs by their name in zone npcs lists
     'server_max_npc_level'               => 95, // Max Level for any NPCs on the Server
     'show_npc_drop_chances'              => true, // if TRUE, chances of droping of each item will be shown when browsing npcs
     'show_npc_number_in_zone_level_list' => true, // choose between number and x for npcs in zone levels list
@@ -24,7 +20,6 @@ return [
     'show_npcs_average_damages'          => true, // How much NPC does as melee damages, in average, this allows to comparate mobs together
     'spawngroup_around_range'            => 100, // range of surrounding spawngroups, spawngroups page
     'trackable_npcs_only'                => true, // If TRUE, will only display NPCs that are set to be trackable in search results
-    'hide_invisible_men'                 => true, // hide the invisible mens in bestiaries
 
     /**
      * Items
@@ -44,13 +39,6 @@ return [
      */
     'max_recently_discovered_items' => 25, // Max number of recently discovered items to display
     'merchants_dont_drop_stuff'     => true, // if TRUE, you won't see merchants drops, damned PEQ world builders ! :)
-    'sort_zone_level_list'          => true, // sort or not the zones in zone levels list
-
-    /**
-     * Spells
-     */
-    'use_spell_globals' => false, // If TRUE, any spells in the spell_globals table will not be displayed
-
 
     'ignore_zones' => [
         "load", "loading", "load2", "nektropos", "arttest", "apprentice", "tutorial", "cshome"

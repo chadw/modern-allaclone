@@ -49,7 +49,7 @@
                         <div class="flex items-center justify-between">
                             <div class="flex items-center space-x-2">
                                 @if ($val->item?->icon)
-                                    <img src="{{ asset('img/items/' . $val->item->icon . '.png') }}"
+                                    <img src="{{ asset('img/icons/' . $val->item->icon . '.png') }}"
                                         alt="{{ $val->item->Name }} Icon" loading="lazy" class="w-6 h-6 rounded">
                                 @endif
                                 <div class="badge badge-sm badge-info">
@@ -105,11 +105,11 @@
                     @endif
                     <div class="flex items-center space-x-3">
                         @if ($val->item?->icon)
-                            <img src="{{ asset('img/items/' . $val->item->icon . '.png') }}"
+                            <img src="{{ asset('img/icons/' . $val->item->icon . '.png') }}"
                                 alt="{{ $val->item->Name }} Icon" loading="lazy" class="w-6 h-6 rounded" width="24"
                                 height="24">
                         @elseif ($isValidContainer && $val->custom_container_icon)
-                            <img src="{{ asset('img/items/' . $val->custom_container_icon . '.png') }}"
+                            <img src="{{ asset('img/icons/' . $val->custom_container_icon . '.png') }}"
                                 alt="{{ $val->custom_container_name }} Icon" loading="lazy" class="w-6 h-6 rounded"
                                 width="24" height="24">
                         @endif

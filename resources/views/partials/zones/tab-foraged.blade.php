@@ -5,7 +5,7 @@
             <li>
                 <a href="{{ route('items.show', $item->id) }}" class="block hover:bg-base-200 rounded p-2 transition">
                     <div class="flex items-center gap-2 text-base text-base-content">
-                        <img src="{{ asset('img/items/' . $item->icon . '.png') }}" alt="{{ $item->Name }} Icon"
+                        <img src="{{ asset('img/icons/' . $item->icon . '.png') }}" alt="{{ $item->Name }} Icon"
                             class="w-6 h-6 rounded" width="24" height="24">
                         <span class="truncate">{{ $item->Name }}</span>
                     </div>

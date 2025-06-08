@@ -48,7 +48,7 @@
 <div class="w-full p-4 bg-base-200 rounded-lg border-1 border-base-content sticky top-120">
     <div class="flex justify-between items-start">
         <h1 class="text-2xl font-bold">{{ $item->Name }}</h1>
-        <img src="{{ asset('img/items/' . $item->icon . '.png') }}" alt="{{ $item->Name }}" class="w-10 h-auto ml-4" />
+        <img src="{{ asset('img/icons/' . $item->icon . '.png') }}" alt="{{ $item->Name }}" class="w-10 h-auto ml-4" />
     </div>
 
     <div class="mt-2 space-y-1 text-sm text-gray-300">

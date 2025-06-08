@@ -127,7 +127,7 @@
                 @if ($npc->attackProcSpell)
                     <h3 class="block mb-4 font-semibold">Proc ({{ $npc->attackProcSpellProcChance }}%)</h3>
                     <div class="flex items-center gap-2 mb-1 whitespace-nowrap">
-                        <img src="{{ asset('img/items/' . $npc->attackProcSpell->new_icon . '.png') }}"
+                        <img src="{{ asset('img/icons/' . $npc->attackProcSpell->new_icon . '.png') }}"
                             alt="{{ $npc->attackProcSpell->name }} Icon" loading="lazy"
                             class="border border-base-content/50 w-6 h-6 rounded" width="24" height="24">
                         <a class="text-base link-info link-hover"
@@ -140,7 +140,7 @@
                         @foreach ($npc->filteredSpellEntries as $npcspell)
                             @if ($npcspell->spells)
                                 <div class="flex items-center gap-2 whitespace-nowrap truncate">
-                                    <img src="{{ asset('img/items/' . $npcspell->spells->new_icon . '.png') }}"
+                                    <img src="{{ asset('img/icons/' . $npcspell->spells->new_icon . '.png') }}"
                                         alt="{{ $npcspell->spells->name }} Icon" loading="lazy"
                                         class="border border-base-content/50 w-6 h-6 rounded" width="24"
                                         height="24">

@@ -24,7 +24,7 @@
 <div class="w-full p-4 bg-base-200 rounded-lg border-1 border-base-content sticky top-120">
     <div class="flex justify-between items-start">
         <h1 class="text-2xl font-bold">{{ $spell->name }}</h1>
-        <img src="{{ asset('img/items/' . $spell->new_icon . '.png') }}" alt="{{ $spell->name }}"
+        <img src="{{ asset('img/icons/' . $spell->new_icon . '.png') }}" alt="{{ $spell->name }}"
             class="w-10 h-auto ml-4" />
     </div>
 

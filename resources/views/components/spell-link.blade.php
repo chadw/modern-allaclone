@@ -4,7 +4,7 @@
         @mouseleave="$store.tooltip.hideTooltip()" class="text-base link-info link-hover flex items-center gap-1">
 
         @if ($spellIcon)
-            <img src="{{ asset('img/items/' . $spellIcon . '.png') }}" alt="{{ $spellName }}" width="20"
+            <img src="{{ asset('img/icons/' . $spellIcon . '.png') }}" alt="{{ $spellName }}" width="20"
                 height="20" class="mr-1">
         @endif
 

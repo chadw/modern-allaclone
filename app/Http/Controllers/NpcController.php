@@ -55,6 +55,7 @@ class NpcController extends Controller
             ->with([
                 'firstSpawnEntries.spawn2.zoneData',
                 'npcFaction.primaryFaction',
+                'npcFactionEntries.factionList',
                 'lootTable.loottableEntries.lootdropEntries.item',
                 'spawnEntries.spawn2',
             ])
@@ -83,13 +84,39 @@ class NpcController extends Controller
             $npc->filteredSpellEntries = collect();
         }
 
+        // separate and group faction
+        $raisesFaction = [];
+        $lowersFaction = [];
+
+        foreach ($npc->npcFactionEntries as $entry) {
+            $factionName = $entry->factionList->name ?? 'Unknown';
+            $factionId   = $entry->faction_id;
+            $value       = $entry->value;
+
+            if ($value > 0) {
+                $raisesFaction[] = [
+                    'name' => $factionName,
+                    'id' => $factionId,
+                    'value' => $value,
+                ];
+            } elseif ($value < 0) {
+                $lowersFaction[] = [
+                    'name' => $factionName,
+                    'id' => $factionId,
+                    'value' => $value,
+                ];
+            }
+        }
+
         $defaultTab = null;
         if ($npc->lootTable?->loottableEntries->isNotEmpty()) {
             $defaultTab = 'drops';
         } elseif ($npc->spawnEntries->isNotEmpty()) {
             $defaultTab = 'spawns';
+        } elseif ($npc->npcFactionEntries->isNotEmpty()) {
+            $defaultTab = 'faction';
         }
 
-        return view('npcs.show', compact('npc', 'defaultTab'));
+        return view('npcs.show', compact('npc', 'defaultTab', 'raisesFaction', 'lowersFaction'));
     }
 }

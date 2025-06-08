@@ -16,12 +16,22 @@
                     </svg>
                 </label>
                 <ul tabindex="0" class="dropdown-content mt-3 z-[60] menu p-2 shadow bg-base-200 rounded-box w-52">
-                    <li><a href="/zones" class="uppercase">Zones</a></li>
-                    <li><a href="/items" class="uppercase">Items</a></li>
-                    <li><a href="/spells" class="uppercase">Spells</a></li>
-                    <li><a href="/npcs" class="uppercase">NPCs</a></li>
-                    <li><a href="/tasks" class="uppercase">Tasks</a></li>
-                    <li><a href="/recipes" class="uppercase">Recipes</a></li>
+                    <li><a href="{{ route('zones.index') }}" class="uppercase">Zones</a></li>
+                    <li><a href="{{ route('items.index') }}" class="uppercase">Items</a></li>
+                    <li><a href="{{ route('spells.index') }}" class="uppercase">Spells</a></li>
+                    <li><a href="{{ route('npcs.index') }}" class="uppercase">NPCs</a></li>
+                    <li tabindex="0">
+                        <details>
+                            <summary class="uppercase flex items-center justify-between cursor-pointer">
+                                More
+                            </summary>
+                            <ul class="pl-4">
+                                <li><a href="{{ route('recipes.index') }}">Recipes</a></li>
+                                <li><a href="{{ route('tasks.index') }}">Tasks</a></li>
+                                <li><a href="{{ route('factions.index') }}">Faction</a></li>
+                            </ul>
+                        </details>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -36,8 +46,7 @@
             <form @submit.prevent class="flex items-center space-x-2 w-full justify-end">
                 <div x-data="eqsearch()" @click.away="results = []" class="relative w-full max-w-xs">
                     <input type="text" placeholder="Search NPCs, Items, Recipes..." x-model="query"
-                        @input.debounce.600ms="load" @focus="if (query.length > 0) load()"
-                        @keydown.enter.prevent
+                        @input.debounce.600ms="load" @focus="if (query.length > 0) load()" @keydown.enter.prevent
                         class="input input-bordered input-sm text-white w-full focus:outline-none" autocomplete="off" />
                     <div x-show="results.length > 0 || loading"
                         class="absolute right-0 mt-2 z-50
@@ -81,12 +90,24 @@
         </div>
 
         <div class="hidden xl:flex space-x-2 absolute left-5 top-1/2 -translate-y-1/2">
-            <a href="/zones" class="btn btn-ghost uppercase">Zones</a>
-            <a href="/items" class="btn btn-ghost uppercase">Items</a>
-            <a href="/spells" class="btn btn-ghost uppercase">Spells</a>
-            <a href="/npcs" class="btn btn-ghost uppercase">NPCs</a>
-            <a href="/tasks" class="btn btn-ghost uppercase">Tasks</a>
-            <a href="/recipes" class="btn btn-ghost uppercase">Recipes</a>
+            <a href="{{ route('zones.index') }}" class="btn btn-ghost uppercase">Zones</a>
+            <a href="{{ route('items.index') }}" class="btn btn-ghost uppercase">Items</a>
+            <a href="{{ route('spells.index') }}" class="btn btn-ghost uppercase">Spells</a>
+            <a href="{{ route('npcs.index') }}" class="btn btn-ghost uppercase">NPCs</a>
+            <div class="dropdown dropdown-hover">
+                <label tabindex="0" class="btn btn-ghost uppercase flex items-center gap-1">
+                    More
+                    <svg class="chevron h-4 w-4 transition-transform duration-200" xmlns="http://www.w3.org/2000/svg"
+                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </label>
+                <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
+                    <li><a href="{{ route('recipes.index') }}">Recipes</a></li>
+                    <li><a href="{{ route('tasks.index') }}">Tasks</a></li>
+                    <li><a href="{{ route('factions.index') }}">Faction</a></li>
+                </ul>
+            </div>
         </div>
 
     </div>

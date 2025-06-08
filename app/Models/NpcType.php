@@ -80,6 +80,11 @@ class NpcType extends Model
         return $this->belongsTo(NpcFaction::class, 'npc_faction_id', 'id');
     }
 
+    public function npcFactionEntries(): HasMany
+    {
+        return $this->hasMany(NpcFactionEntry::class, 'npc_faction_id', 'npc_faction_id');
+    }
+
     public function lootDrops(): HasManyThrough
     {
         return $this->hasManyThrough(

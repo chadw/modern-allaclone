@@ -15,7 +15,8 @@
                 <tr>
                     <td scope="row">
                         <div class="flex flex-col">
-                            <x-item-link :item_id="$item->id" :item_name="$item->Name" :item_icon="$item->icon" />
+                            <x-item-link :item_id="$item->id" :item_name="$item->Name" :item_icon="$item->icon"
+                                    item_class="flex" />
                             <span class="text-xs uppercase text-gray-500 ml-8 truncate">
                                 @if ($item->slots > 0)
                                     {{ get_slots_string($item->slots) }}

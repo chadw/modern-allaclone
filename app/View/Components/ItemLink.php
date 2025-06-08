@@ -11,12 +11,14 @@ class ItemLink extends Component
     public $itemId;
     public $itemName;
     public $itemIcon;
+    public string $itemClass;
 
-    public function __construct($itemId, $itemName, $itemIcon = null)
+    public function __construct(int $itemId, string $itemName, $itemIcon = null, string $itemClass = '')
     {
         $this->itemId = $itemId;
         $this->itemName = $itemName;
         $this->itemIcon = $itemIcon;
+        $this->itemClass = $itemClass;
     }
 
     public function render(): View|Closure|string

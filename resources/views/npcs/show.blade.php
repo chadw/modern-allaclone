@@ -165,6 +165,9 @@
             @if ($npc->spawnEntries)
                 @include('partials.npcs.tab-spawns')
             @endif
+            @if ($raisesFaction || $lowersFaction)
+                @include('partials.npcs.tab-faction')
+            @endif
         </div>
     @endif
 @endsection

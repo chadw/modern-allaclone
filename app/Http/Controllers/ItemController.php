@@ -35,7 +35,6 @@ class ItemController extends Controller
 
         return view('items.show', [
             'item' => $item,
-            //'dropsByZone' => $vm->dropsByZone(),
             'recipes' => $vm->recipes(),
             'used_in_ts' => $vm->usedInTradeskills(),
             'forage' => $vm->forageZones(),

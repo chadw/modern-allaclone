@@ -1,32 +1,6 @@
 import './bootstrap';
 import Alpine from 'alpinejs'
 
-window.eqsearch = function () {
-    return {
-        query: '',
-        results: [],
-        loading: false,
-        search() {
-            if (this.query.length < 2) {
-                this.results = [];
-                this.loading = false;
-                return;
-            }
-
-            this.loading = true;
-
-            fetch(`/search/suggest?q=${encodeURIComponent(this.query)}`)
-                .then(res => res.json())
-                .then(data => {
-                    this.results = data;
-                })
-                .finally(() => {
-                    this.loading = false;
-                });
-        }
-    };
-};
-
 Alpine.data('eqsearch', (initialQuery = '') => ({
     query: initialQuery,
     results: [],
@@ -155,11 +129,10 @@ Alpine.store('tooltip', {
 window.Alpine = Alpine
 Alpine.start()
 
-/*
-** Project Lazarus specific logo observer
-*/
 document.addEventListener("DOMContentLoaded", function () {
-    // logo observer
+    /*
+    ** Project Lazarus specific logo observer
+    */
     const logo = document.getElementById('laz-desktop-logo');
     const navbartrigger = document.getElementById('navbar-trigger');
 
@@ -172,6 +145,17 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     observer.observe(navbartrigger);
+
+    // faction select
+    const select = document.getElementById('select-faction');
+    if (select) {
+        select.addEventListener('change', (e) => {
+            const value = e.target.value;
+            if (value) {
+                window.location.href = `/factions/${value}`;
+            }
+        });
+    }
 });
 
 document.body.addEventListener('click', () => {

@@ -4,7 +4,7 @@
         <table class="table table-auto md:table-fixed w-full table-zebra">
             <thead class="text-xs uppercase bg-base-300">
                 <tr>
-                    <th scope="col" width="60%">Coords</th>
+                    <th scope="col" width="60%">Coords (x,y,z)</th>
                     <th scope="col" width="20%">Chance</th>
                     <th scope="col" width="20%">Respawn</th>
                 </tr>
@@ -14,7 +14,7 @@
                     @foreach ($npc->spawnEntries as $spawn)
                         <tr>
                             <td scope="row">
-                                x={{ $spawn->spawn2->x }}, y={{ $spawn->spawn2->y }}, z={{ $spawn->spawn2->z }}
+                                {{ $spawn->spawn2->x }}, {{ $spawn->spawn2->y }}, {{ $spawn->spawn2->z }}
                             </td>
                             <td>
                                 {{ $spawn->chance }}%

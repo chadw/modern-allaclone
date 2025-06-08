@@ -23,21 +23,18 @@
                 <tbody>
                     @foreach ($spell['spells'] as $sp)
                         <tr>
-                            <td scope="row" class="font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                <div class="flex items-center space-x-3">
-                                    <img src="{{ asset('img/items/' . $sp->new_icon . '.png') }}"
-                                        alt="{{ $sp->name }} Icon" loading="lazy" class="w-6 h-6 rounded"
-                                        width="24" height="24">
-                                    <span class="font-medium">
-                                        <a class="text-base link-info link-hover"
-                                            href="{{ route('spells.show', $sp->id) }}">{{ $sp->name }}</a>
-                                    </span>
-                                </div>
+                            <td scope="row">
+                                <x-spell-link :spell_id="$sp->id" :spell_name="$sp->name" :spell_icon="$sp->new_icon" />
                             </td>
                             <td>{{ config('everquest.classes_abbr')[$selectedClass] }}/{{ $spell['level'] }}</td>
                             <td class="text-nowrap">
                                 @for ($n = 1; $n <= 12; $n++)
-                                    {!! spell_desc($sp, $n) !!}
+                                <x-spell-effect
+                                    :spell="$sp"
+                                    :n="$n"
+                                    :all-spells="$allSpells"
+                                    :all-zones="$allZones"
+                                />
                                 @endfor
                             </td>
                             <td>{{ $sp->mana }}</td>

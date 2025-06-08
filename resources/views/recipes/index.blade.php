@@ -9,7 +9,6 @@
         <div class="divider uppercase text-xl font-bold text-sky-400">Recipes ({{ $recipes->total() }} Found)</div>
     </div>
 
-
     <div class="border border-base-content/5 overflow-x-auto">
         <table class="table table-auto table-zebra md:table-fixed w-full">
             <thead class="text-xs uppercase bg-base-300">

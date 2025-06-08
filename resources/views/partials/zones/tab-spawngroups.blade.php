@@ -4,7 +4,7 @@
         <table class="table table-auto md:table-fixed w-full table-zebra">
             <thead class="text-xs uppercase bg-base-300">
                 <tr>
-                    <th scope="col" width="40%">Spawn Grp</th>
+                    <th scope="col" width="40%">Spawn Grp (x,y,z)</th>
                     <th scope="col" width="40%">NPCs</th>
                     <th scope="col" width="20%">Respawn</th>
                 </tr>
@@ -16,7 +16,7 @@
                             <div class="flex flex-col">
                                 {{ $grp->name }}
                                 <span class="text-xs uppercase text-gray-500">
-                                    x: {{ floor($grp->x) }}, y: {{ floor($grp->y) }}, z: {{ floor($grp->z) }}
+                                    {{ floor($grp->x) }}, {{ floor($grp->y) }}, {{ floor($grp->z) }}
                                 </span>
                             </div>
                         </td>

@@ -10,6 +10,8 @@ This project is still under early active development and not all planned feature
 
 ## Installation
 
+[Download the item/spell icons!](https://github.com/chadw/modern-allaclone/releases/download/1.0.0/icons.zip) and unzip them to /public/img/icons
+
 To setup a local development environment
 ```
 git clone https://github.com/chadw/modern-allaclone.git

@@ -20,7 +20,7 @@ Alpine.data('eqsearch', (initialQuery = '') => ({
             const data = await res.json();
             this.results = data;
         } catch (e) {
-            console.error('error loading search results:', e);
+            //console.error('error loading search results:', e);
         } finally {
             this.loading = false;
         }
@@ -130,10 +130,7 @@ window.Alpine = Alpine
 Alpine.start()
 
 document.addEventListener("DOMContentLoaded", function () {
-    /*
-    ** Project Lazarus specific logo observer
-    */
-    const logo = document.getElementById('laz-desktop-logo');
+    const logo = document.getElementById('eqemu-desktop-logo');
     const navbartrigger = document.getElementById('navbar-trigger');
 
     const observer = new IntersectionObserver(([entry]) => {

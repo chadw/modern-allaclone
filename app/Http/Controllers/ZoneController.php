@@ -20,7 +20,11 @@ class ZoneController extends Controller
 
         $zones = Zone::getExpansionZones($currentExpansion);
 
-        return view('zones.index', compact('zones', 'expansions'));
+        return view('zones.index', [
+            'zones' => $zones,
+            'expansions' => $expansions,
+            'metaTitle' => config('app.name') . ' - Zones',
+        ]);
     }
 
     public function show(Zone $zone, Request $request)
@@ -151,9 +155,19 @@ class ZoneController extends Controller
         // get alt currency since tasks could use it
         $altCurrency = AlternateCurrency::with('item:id,Name,icon')->get();
 
-        return view('zones.show', compact(
-            'zone', 'npcs', 'drops', 'spawnGroups', 'foraged', 'connectedZones',
-            'tasks', 'altCurrency',
-        ));
+        // zone version for meta title
+        $zversion = $zone->version ? ' - version (' . $zone->version . ')' : '';
+
+        return view('zones.show', [
+            'zone' => $zone,
+            'npcs' => $npcs,
+            'drops' => $drops,
+            'spawnGroups' => $spawnGroups,
+            'foraged' => $foraged,
+            'connectedZones' => $connectedZones,
+            'tasks' => $tasks,
+            'altCurrency' => $altCurrency,
+            'metaTitle' => config('app.name') . ' - Zone: ' . $zone->long_name . $zversion,
+        ]);
     }
 }

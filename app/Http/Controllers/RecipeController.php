@@ -22,6 +22,7 @@ class RecipeController extends Controller
         return view('recipes.index', [
             'tradeskills' => $tradeskills,
             'recipes' => $recipes,
+            'metaTitle' => config('app.name') . ' - Recipe Search',
         ]);
     }
 
@@ -57,6 +58,7 @@ class RecipeController extends Controller
             'components' => $components,
             'tradeskills' => $tradeskills,
             'failCount' => $failCount,
+            'metaTitle' => config('app.name') . ' - Recipe: ' . ucRomanNumeral($recipe->name),
         ]);
     }
 }

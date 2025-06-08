@@ -15,7 +15,10 @@ class FactionController extends Controller
             return FactionList::orderBy('name', 'asc')->get();
         });
 
-        return view('factions.index', compact('factions'));
+        return view('factions.index', [
+            'factions' => $factions,
+            'metaTitle' => config('app.name') . ' - Factions',
+        ]);
     }
 
     public function show(FactionList $faction)
@@ -87,6 +90,11 @@ class FactionController extends Controller
             return $npcs->sortBy('npc_name');
         });
 
-        return view('factions.show', compact('allFactions', 'faction', 'factions'));
+        return view('factions.show', [
+            'allFactions' => $allFactions,
+            'faction' => $faction,
+            'factions' => $factions,
+            'metaTitle' => config('app.name') . ' - Faction: ' . $faction->name,
+        ]);
     }
 }

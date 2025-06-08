@@ -57,6 +57,7 @@ class SpellController extends Controller
             'searchName' => $request->input('name'),
             'allSpells' => $allSpells,
             'allZones' => $allZones,
+            'metaTitle' => config('app.name') . ' - Spell Search',
         ]);
     }
 
@@ -69,7 +70,11 @@ class SpellController extends Controller
             $description = $desc?->value ?? null;
         }
 
-        return view('spells.show', compact('spell', 'description'));
+        return view('spells.show', [
+            'spell' => $spell,
+            'description' => $description,
+            'metaTitle' => config('app.name') . ' - Spell: ' . $spell->name,
+        ]);
     }
 
     public function popup(Spell $spell)

@@ -4,7 +4,7 @@
 
         <div class="flex items-center xl:w-1/3 w-auto">
             <a href="/" class="xl:hidden">
-                <img src="{{ asset('img/laz.png') }}" class="min-w-[80px] min-h-[29px]">
+                <img src="{{ asset('img/eqemu.png') }}" class="min-w-[80px] min-h-[38px]">
             </a>
 
             <div class="dropdown xl:hidden ml-2">
@@ -36,9 +36,9 @@
             </div>
         </div>
 
-        <div id="laz-desktop-logo" class="hidden xl:flex justify-center xl:w-1/3 relative">
+        <div id="eqemu-desktop-logo" class="hidden xl:flex justify-center xl:w-1/3 relative">
             <a href="/" class="block absolute -top-9">
-                <img src="{{ asset('img/laz.png') }}" class="w-[200px] h-[72px]">
+                <img src="{{ asset('img/eqemu.png') }}" class="w-[158px] h-[76px]">
             </a>
         </div>
 

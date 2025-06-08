@@ -25,6 +25,7 @@ class ItemController extends Controller
 
         return view('items.index', [
             'items' => $items,
+            'metaTitle' => config('app.name') . ' - Item Search',
         ]);
     }
 
@@ -40,6 +41,7 @@ class ItemController extends Controller
             'forage' => $vm->forageZones(),
             'soldByZone' => $vm->soldInZones(),
             'ground_spawn' => $vm->itemGroundSpawn(),
+            'metaTitle' => config('app.name') . ' - Item: ' . $item->Name,
         ]);
     }
 

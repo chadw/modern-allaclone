@@ -46,7 +46,10 @@ class NpcController extends Controller
             }
         }
 
-        return view('npcs.index', compact('npcs'));
+        return view('npcs.index', [
+            'npcs' => $npcs,
+            'metaTitle' => config('app.name') . ' - NPC Search',
+        ]);
     }
 
     public function show(NpcType $npc)
@@ -117,6 +120,14 @@ class NpcController extends Controller
             $defaultTab = 'faction';
         }
 
-        return view('npcs.show', compact('npc', 'defaultTab', 'raisesFaction', 'lowersFaction'));
+        $lvl = $npc->level ? ' - Level (' . $npc->level . ')' : '';
+
+        return view('npcs.show', [
+            'npc' => $npc,
+            'defaultTab' => $defaultTab,
+            'raisesFaction' => $raisesFaction,
+            'lowersFaction' => $lowersFaction,
+            'metaTitle' => config('app.name') . ' - NPC: ' . $npc->clean_name . $lvl,
+        ]);
     }
 }

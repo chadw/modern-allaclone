@@ -31,6 +31,25 @@ EQEMU_DB_PASSWORD=password
 ```
 To set this up in production you'll want to do a few other things. Always install this outside your publically accessible web directory. Symlink the /public folder to your public accessible web directory.
 
+## Screenshots
+
+![global search](https://github.com/user-attachments/assets/928ad81d-bbd0-459e-90ab-c9a60879044a)
+
+![zones](https://github.com/user-attachments/assets/186bb44c-d820-404e-b630-bcf993cdf114)
+
+![zone view](https://github.com/user-attachments/assets/b8d27fe8-5037-4974-8d7b-988afa0d3a75)
+
+![npc details](https://github.com/user-attachments/assets/194a897f-5123-4cae-a691-9c6c8a7d3862)
+
+![item details](https://github.com/user-attachments/assets/eaef9979-d73b-4db0-aa7b-64d545f0d8c2)
+
+![spell search and table view](https://github.com/user-attachments/assets/95cd93bf-9d93-4eb6-a924-012492a0c0d0)
+
+![additional spell data](https://github.com/user-attachments/assets/feb15f5c-28c1-4acc-9f78-c10a47eacc70)
+
+![item tooltips](https://github.com/user-attachments/assets/27fb0872-4765-4588-b414-0fd0f161e478)
+
+![recipe search and details](https://github.com/user-attachments/assets/3ccb49ad-76f7-454b-86b6-ca8a2d5a145e)
 
 ## License
 

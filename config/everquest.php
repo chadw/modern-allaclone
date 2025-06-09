@@ -41,7 +41,7 @@ return [
     'merchants_dont_drop_stuff'     => true, // if TRUE, you won't see merchants drops, damned PEQ world builders ! :)
 
     'ignore_zones' => [
-        "load", "loading", "load2", "nektropos", "arttest", "apprentice", "tutorial", "cshome"
+        'load', 'loading', 'load2', 'nektropos', 'arttest', 'apprentice', 'tutorial', 'cshome',
     ],
 
     /*

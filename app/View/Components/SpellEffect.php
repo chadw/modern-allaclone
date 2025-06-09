@@ -2146,16 +2146,16 @@ class SpellEffect extends Component
     {
         $modifier = '';
         if ($value_max < 0) {
-            $modifier = "Decrease ";
+            $modifier = 'Decrease ';
         } else {
-            $modifier = "Increase ";
+            $modifier = 'Increase ';
         }
 
         $desc = $modifier . $effect_name;
         if ($value_min !== $value_max) {
-            $desc .= " by " . (abs($value_min)) . $type . " (L" . $minlvl . ") to " . (abs($value_max)) . $type . " (L" . $maxlvl . ")";
+            $desc .= ' by ' . (abs($value_min)) . $type . ' (L' . $minlvl . ') to ' . (abs($value_max)) . $type . ' (L' . $maxlvl . ')';
         } else {
-            $desc .= " by " . (abs($value_max)) . $type;
+            $desc .= ' by ' . (abs($value_max)) . $type;
         }
 
         return $desc;

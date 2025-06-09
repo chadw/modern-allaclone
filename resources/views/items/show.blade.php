@@ -1,5 +1,9 @@
 @extends('layouts.default')
-@section('title', $item->Name ?? 'Unknown Item')
+
+@section('title')
+    <img src="{{ asset('img/icons/' . $item->icon . '.png') }}" alt="{{ $item->Name }}" class="inline-block w-7 h-7 mr-2">
+    {{ $item->Name ?? 'Unknown Item' }}
+@endsection
 
 @section('content')
 <div class="flex flex-col lg:flex-row lg:items-start gap-4">

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Spell extends Model
 {
@@ -31,5 +32,30 @@ class Spell extends Model
     public function effectdesc2(): BelongsTo
     {
         return $this->belongsTo(DbStr::class, 'effectdescnum2', 'id')->where('type', 6);
+    }
+
+    public function scrolleffect(): HasMany
+    {
+        return $this->hasMany(Item::class, 'scrolleffect', 'id')->select('id', 'Name', 'icon', 'scrolleffect');
+    }
+
+    public function clickeffect(): HasMany
+    {
+        return $this->hasMany(Item::class, 'clickeffect', 'id')->select('id', 'Name', 'icon', 'clickeffect');
+    }
+
+    public function proceffect(): HasMany
+    {
+        return $this->hasMany(Item::class, 'proceffect', 'id')->select('id', 'Name', 'icon', 'proceffect');
+    }
+
+    public function worneffect(): HasMany
+    {
+        return $this->hasMany(Item::class, 'worneffect', 'id')->select('id', 'Name', 'icon', 'worneffect');
+    }
+
+    public function focuseffect(): HasMany
+    {
+        return $this->hasMany(Item::class, 'focuseffect', 'id')->select('id', 'Name', 'icon', 'focuseffect');
     }
 }

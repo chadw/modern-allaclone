@@ -63,16 +63,33 @@ class SpellController extends Controller
 
     public function show(Spell $spell)
     {
-        //@todo update
         $description = null;
         if ($spell->descnum) {
-            $desc = DbStr::where('id', $spell->descnum)->first();
-            $description = $desc?->value ?? null;
+            $desc = DbStr::where('id', $spell->descnum)->where('type', 6)->first();
+            $description = $desc?->getSpellDescription($spell);
         }
+
+        $spell->load([
+            'scrolleffect',
+            'clickeffect',
+            'proceffect',
+            'worneffect',
+            'focuseffect',
+        ]);
+
+        $allSpells = Cache::remember('all_spells', now()->addWeek(), function () {
+            return Spell::pluck('name', 'id');
+        });
+
+        $allZones = Cache::remember('all_zones', now()->addMonth(), function () {
+            return Zone::select('id', 'short_name', 'long_name')->get()->keyBy('short_name');
+        });
 
         return view('spells.show', [
             'spell' => $spell,
             'description' => $description,
+            'allSpells' => $allSpells,
+            'allZones' => $allZones,
             'metaTitle' => config('app.name') . ' - Spell: ' . $spell->name,
         ]);
     }

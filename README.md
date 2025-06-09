@@ -12,13 +12,14 @@ This project is still under early active development and not all planned feature
 
 [Download the item/spell icons!](https://github.com/chadw/modern-allaclone/releases/download/1.0.0/icons.zip) and unzip them to /public/img/icons
 
-To setup a local development environment
+### To setup a local development environment
 ```
 git clone https://github.com/chadw/modern-allaclone.git
 cd modern-allaclone
 
 composer install
-npm install && npm run build
+npm install
+npm run dev
 
 cp .env.example .env
 ```
@@ -31,7 +32,14 @@ EQEMU_DB_DATABASE=peq
 EQEMU_DB_USERNAME=user
 EQEMU_DB_PASSWORD=password
 ```
-To set this up in production you'll want to do a few other things. Always install this outside your publically accessible web directory. Symlink the /public folder to your public accessible web directory.
+### To set this up in production
+First build the assets
+```
+npm run build
+```
+Then copy the /public/build/ folder to your production server.
+
+Always install this outside your publically accessible web directory. Symlink the /public folder to your public accessible web directory.
 
 ## Screenshots
 

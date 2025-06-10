@@ -75,7 +75,7 @@
 
 <div class="card bg-base-100 text-base-content shadow-sm my-6">
     <div class="card-body">
-        <h2 class="card-title">Effects</h2>
+        <h2 class="card-title text-info/70">Effects</h2>
         @for ($n = 1; $n <= 12; $n++)
             <x-spell-effect :spell="$spell" :n="$n" :all-spells="$allSpells" :all-zones="$allZones" />
         @endfor
@@ -83,7 +83,7 @@
 </div>
 <div class="card bg-base-100 text-base-content shadow-sm my-6">
     <div class="card-body">
-        <h2 class="card-title">Cast Messages</h2>
+        <h2 class="card-title text-info/70">Cast Messages</h2>
         @if ($spell->you_cast)
             <div class="col-span-3 flex justify-between">
                 <span>When you cast</span>

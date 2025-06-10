@@ -1,7 +1,8 @@
 @extends('layouts.default')
 
 @section('title')
-    <img src="{{ asset('img/icons/' . $spell->new_icon . '.png') }}" alt="{{ $spell->name }}" class="inline-block w-7 h-7 mr-2">
+    <img src="{{ asset('img/icons/' . $spell->new_icon . '.png') }}" alt="{{ $spell->name }}"
+        class="inline-block w-7 h-7 mr-2">
     {{ $spell->name }}
 @endsection
 
@@ -68,32 +69,42 @@
             </div>
             <div class="card bg-base-100 shadow-sm">
                 <div class="card-body">
-                    <h2 class="card-title">items with this effect</h2>
+                    <h2 class="card-title text-info/70"">items with this effect</h2>
                     <div class="space-y-2">
-                        @foreach ($spell->clickeffect as $click)
-                            <span class="inline-flex w-full items-center gap-1 whitespace-nowrap">
-                                <x-item-link :item_id="$click->id" :item_name="$click->Name" :item_icon="$click->icon" item_class="flex" />
-                                <span class="font-sm text-accent">(Click)</span>
-                            </span>
-                        @endforeach
-                        @foreach ($spell->proceffect as $proc)
-                            <span class="inline-flex w-full items-center gap-1 whitespace-nowrap">
-                                <x-item-link :item_id="$proc->id" :item_name="$proc->Name" :item_icon="$proc->icon" item_class="flex" />
-                                <span class="font-sm text-accent">(Proc)</span>
-                            </span>
-                        @endforeach
-                        @foreach ($spell->focuseffect as $focus)
-                            <span class="inline-flex items-center gap-1 whitespace-nowrap">
-                                <x-item-link :item_id="$focus->id" :item_name="$focus->Name" :item_icon="$focus->icon" item_class="flex" />
-                                <span class="font-sm text-accent">(Focus)</span>
-                            </span>
-                        @endforeach
-                        @foreach ($spell->worneffect as $worn)
-                            <span class="inline-flex items-center gap-1 whitespace-nowrap">
-                                <x-item-link :item_id="$worn->id" :item_name="$worn->Name" :item_icon="$worn->icon" item_class="flex" />
-                                <span class="font-sm text-accent">(Worn)</span>
-                            </span>
-                        @endforeach
+                        @if (
+                                $spell->clickeffect->isNotEmpty() ||
+                                $spell->proceffect->isNotEmpty() ||
+                                $spell->focuseffect->isNotEmpty() ||
+                                $spell->worneffect->isNotEmpty())
+                            @foreach ($spell->clickeffect as $click)
+                                <span class="inline-flex w-full items-center gap-1 whitespace-nowrap">
+                                    <x-item-link :item_id="$click->id" :item_name="$click->Name" :item_icon="$click->icon" item_class="flex" />
+                                    <span class="font-sm text-accent">(Click)</span>
+                                </span>
+                            @endforeach
+                            @foreach ($spell->proceffect as $proc)
+                                <span class="inline-flex w-full items-center gap-1 whitespace-nowrap">
+                                    <x-item-link :item_id="$proc->id" :item_name="$proc->Name" :item_icon="$proc->icon" item_class="flex" />
+                                    <span class="font-sm text-accent">(Proc)</span>
+                                </span>
+                            @endforeach
+                            @foreach ($spell->focuseffect as $focus)
+                                <span class="inline-flex items-center gap-1 whitespace-nowrap">
+                                    <x-item-link :item_id="$focus->id" :item_name="$focus->Name" :item_icon="$focus->icon"
+                                        item_class="flex" />
+                                    <span class="font-sm text-accent">(Focus)</span>
+                                </span>
+                            @endforeach
+                            @foreach ($spell->worneffect as $worn)
+                                <span class="inline-flex items-center gap-1 whitespace-nowrap">
+                                    <x-item-link :item_id="$worn->id" :item_name="$worn->Name" :item_icon="$worn->icon"
+                                        item_class="flex" />
+                                    <span class="font-sm text-accent">(Worn)</span>
+                                </span>
+                            @endforeach
+                        @else
+                            None
+                        @endif
                     </div>
                 </div>
             </div>

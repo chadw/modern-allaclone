@@ -29,6 +29,7 @@
                                 <li><a href="{{ route('recipes.index') }}">Recipes</a></li>
                                 <li><a href="{{ route('tasks.index') }}">Tasks</a></li>
                                 <li><a href="{{ route('factions.index') }}">Faction</a></li>
+                                <li><a href="{{ route('pets.index') }}">Pets</a></li>
                             </ul>
                         </details>
                     </li>
@@ -106,6 +107,7 @@
                     <li><a href="{{ route('recipes.index') }}">Recipes</a></li>
                     <li><a href="{{ route('tasks.index') }}">Tasks</a></li>
                     <li><a href="{{ route('factions.index') }}">Faction</a></li>
+                    <li><a href="{{ route('pets.index') }}">Pets</a></li>
                 </ul>
             </div>
         </div>

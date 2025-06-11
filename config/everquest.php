@@ -141,6 +141,18 @@ return [
         16  => 'BER',
     ],
 
+    'pet_classes' => [
+        15  => 'Beastlord',
+        2   => 'Cleric',
+        6   => 'Druid',
+        14  => 'Enchanter',
+        13  => 'Magician',
+        11  => 'Necromancer',
+        5   => 'Shadow Knight',
+        10  => 'Shaman',
+        12  => 'Wizard',
+    ],
+
     'bagtypes' => [
         0   => 'SMALLBAG',
         1   => 'LARGEBAG',

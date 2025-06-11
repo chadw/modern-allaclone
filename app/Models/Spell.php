@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Spell extends Model
 {
@@ -57,5 +58,17 @@ class Spell extends Model
     public function focuseffect(): HasMany
     {
         return $this->hasMany(Item::class, 'focuseffect', 'id')->select('id', 'Name', 'icon', 'focuseffect');
+    }
+
+    public function pets(): HasOne
+    {
+        return $this->hasOne(Pet::class, 'type', 'teleport_zone')
+            ->where('temp', 0);
+    }
+
+    public function npcs(): HasOne
+    {
+        return $this->hasOne(NpcType::class, 'name', 'teleport_zone')
+            ->select('id', 'name', 'race', 'level', 'class', 'hp', 'mana', 'AC', 'mindmg', 'maxdmg');
     }
 }

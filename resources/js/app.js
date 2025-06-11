@@ -153,6 +153,16 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     }
+
+    const petSelect = document.getElementById('select-pet-class');
+    if (petSelect) {
+        petSelect.addEventListener('change', (e) => {
+            const value = e.target.value;
+            if (value) {
+                window.location.href = `/pets/${value}`;
+            }
+        });
+    }
 });
 
 document.body.addEventListener('click', () => {

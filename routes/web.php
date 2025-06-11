@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\NpcController;
+use App\Http\Controllers\PetController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\ZoneController;
@@ -46,3 +47,8 @@ Route::get('/factions/{faction}', [FactionController::class, 'show'])->name('fac
 // tasks
 Route::get('/tasks', [TaskController::class, 'index'])->name('tasks.index');
 Route::get('/tasks/{task}', [TaskController::class, 'show'])->name('tasks.show');
+
+// pets
+Route::get('/pets/{id?}', [PetController::class, 'index'])
+    ->name('pets.index')
+    ->where('id', '[0-9]+');

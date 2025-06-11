@@ -6,5 +6,7 @@
 
     @if ($tasks->isNotEmpty())
         @include('partials.tasks.index-table')
+
+        {{ $tasks->onEachSide(2)->links() }}
     @endif
 @endsection

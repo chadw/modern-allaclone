@@ -17,7 +17,7 @@
                 <a href="{{ route('npcs.show', $npc->id) }}" class="link-info link-hover">
                     {{ $npc->clean_name }}
                 </a>
-                @if ($npc['spawnentries']->first()?->spawn2->zoneData)
+                @if ($activity->cached_zones->isEmpty() && $npc['spawnentries']->first()?->spawn2->zoneData)
                     @php
                         $zone = $npc['spawnentries']->first()?->spawn2->zoneData;
                     @endphp

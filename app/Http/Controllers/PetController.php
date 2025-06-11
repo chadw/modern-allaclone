@@ -34,6 +34,7 @@ class PetController extends Controller
 
         return view('pets.index', [
             'pets' => $pets,
+            'selClassName' => $selClassName,
             'metaTitle' => config('app.name') . ' - Pets: ' . $selClassName,
         ]);
     }

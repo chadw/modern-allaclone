@@ -1,5 +1,5 @@
 @extends('layouts.default')
-@section('title', 'Pets')
+@section('title', 'Pets' . ' - ' . $selClassName ?? 'Unknown')
 
 @section('content')
     <label class="select">

@@ -37,7 +37,7 @@ class SpellEffect extends Component
     {
         if (!$id) return null;
 
-        return Cache::remember("item:$id", now()->addDays(30), function () use ($id) {
+        return Cache::remember("item:$id", now()->addMonth(), function () use ($id) {
             return Item::select('id', 'Name', 'icon')->find($id);
         });
     }

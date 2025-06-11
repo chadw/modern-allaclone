@@ -28,3 +28,6 @@
 .dropdown:hover .chevron {
     transform: rotate(180deg);
 }
+@media (max-width: 768px) {
+    .task-loot-link a { font-size: var(--text-sm); }
+}

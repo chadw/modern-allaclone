@@ -32,8 +32,60 @@ class Task extends Model
         };
     }
 
+    public function getFixedDescriptionAttribute()
+    {
+        $desc = $this->description ?? '';
+        if (!$desc) return '';
+
+        $regex = '/\[(.*?)\]/';
+
+        $result = [
+            'global' => $this->replaceDescriptionContent(trim(preg_replace($regex, '', $desc))),
+            'activities' => []
+        ];
+
+        if (preg_match_all($regex, $desc, $matches)) {
+            foreach ($matches[1] as $match) {
+                $desc_split = array_map('trim', explode(',', $match));
+                $steps = [];
+
+                // desc can be associated with multiple steps
+                while (!empty($desc_split) && is_numeric($desc_split[0])) {
+                    // pluck the step
+                    $steps[] = (int) array_shift($desc_split);
+                }
+
+                if ($steps && $desc_split) {
+                    $description = $this->replaceDescriptionContent(implode(',', $desc_split));
+
+                    $result['activities'][] = [
+                        'steps' => $steps,
+                        'text' => $description,
+                    ];
+                }
+            }
+        }
+
+        return $result;
+    }
+
+    private function replaceDescriptionContent($desc): string
+    {
+        $desc = trim($desc);
+        $desc = str_replace(']', '', $desc);
+        $desc = str_ireplace('<br>', '<br />', $desc);
+        $desc = preg_replace_callback('/<c\s+"(#[0-9A-Fa-f]{3,6})">/', function ($matches) {
+            return '<span style="color: ' . $matches[1] . '">';
+        }, $desc);
+        $desc = str_ireplace('</c>', '</span>', $desc);
+
+        return $desc;
+    }
+
     public function taskActivities(): HasMany
     {
-        return $this->hasMany(TaskActivity::class, 'taskid', 'id');
+        return $this->hasMany(TaskActivity::class, 'taskid', 'id')
+            ->orderBy('activityid', 'asc')
+            ->orderBy('step', 'asc');
     }
 }

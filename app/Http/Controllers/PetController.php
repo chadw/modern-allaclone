@@ -10,14 +10,15 @@ class PetController extends Controller
 {
     public function index(Request $request, $id = null)
     {
-        $request->validate([
-            'class' => 'in:15,2,6,14,13,11,5,10,12',
-        ]);
-
+        $petClassIds = array_keys((array) config('everquest.pet_classes'));
         $selClass = 'classes15';
         $selClassName = 'Beastlord';
 
         if ($id) {
+            if (!in_array((int) $id, $petClassIds)) {
+                abort(404);
+            }
+
             $selClass = 'classes' . $id;
             $selClassName = config('everquest.classes.' . $id);
         }

@@ -2,20 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\NpcType;
 use App\Models\Item;
-use App\Models\TradeskillRecipe;
 use App\Models\Zone;
-//use App\Models\Faction;
 use App\Models\Spell;
+use App\Models\NpcType;
+use App\Models\FactionList;
+use App\Models\TradeskillRecipe;
+use Illuminate\Http\Request;
 
 class SearchController extends Controller
 {
     public function suggest(Request $request)
     {
-        //@todo add faction
-
         $q = $request->query('q');
 
         if (strlen($q) < 2) {
@@ -63,9 +61,8 @@ class SearchController extends Controller
                         'id' => 'zone-' . $z->id
                     ];
                 })
-                /*
             )->merge(
-                Faction::where('name', 'like', "%{$q}%")->limit(3)->get()->map(function ($f) {
+                FactionList::where('name', 'like', "%{$q}%")->limit(5)->get()->map(function ($f) {
                     return [
                         'type' => 'faction',
                         'name' => $f->name,
@@ -73,7 +70,6 @@ class SearchController extends Controller
                         'id' => 'faction-' . $f->id
                     ];
                 })
-                */
             )->merge(
                 Spell::where('name', 'like', "%{$q}%")->groupBy('name')->limit(5)->get()->map(function ($s) {
                     return [
@@ -85,6 +81,6 @@ class SearchController extends Controller
                 })
             );
 
-        return response()->json($results->take(30)->values());
+        return response()->json($results->take(40)->values());
     }
 }

@@ -13,6 +13,7 @@ class ItemFilter
     protected array $filters = [
         'name',
         'slot',
+        'augslot',
         'type',
         'class',
         'bagslots',
@@ -114,6 +115,14 @@ class ItemFilter
             $bitmask = (int) $value;
 
             $this->builder->whereRaw("(slots & ?) != 0", [$bitmask]);
+        }
+    }
+
+    protected function augslot($value)
+    {
+        if ($value !== null && is_numeric($value)) {
+            $bitmask = 1 << ($value - 1);
+            $this->builder->whereRaw("(augtype & ?) != 0", [$bitmask]);
         }
     }
 

@@ -34,7 +34,8 @@
                         @foreach (config('custom_search_fields.item_types_select') as $group => $types)
                             <optgroup label="{{ $group }}">
                                 @foreach ($types as $id => $name)
-                                    <option value="{{ $id }}" {{ (request('type') != '' && request('type') == $id) ? 'selected' : '' }}>
+                                    <option value="{{ $id }}"
+                                        {{ request('type') != '' && request('type') == $id ? 'selected' : '' }}>
                                         {{ $name }}
                                     </option>
                                 @endforeach
@@ -49,9 +50,22 @@
                     <span class="label">Slot</span>
                     <select id="slot" name="slot" class="select">
                         <option value="">-</option>
-                        @foreach (collect(config('everquest.slots'))->except($removeSlots)->sort() as $id => $slot)
+                        @foreach (collect(config('everquest.slots'))->except($removeSlots)->sort() as $id => $islot)
                             <option value="{{ $id }}" {{ request('slot') == $id ? 'selected' : '' }}>
-                                {{ $slot }}</option>
+                                {{ $islot }}</option>
+                        @endforeach
+                    </select>
+                </label>
+            </div>
+
+            <div class="flex flex-col w-full sm:w-auto">
+                <label class="select w-full sm:w-auto">
+                    <span class="label">Aug Slot</span>
+                    <select id="augslot" name="augslot" class="select">
+                        <option value="">-</option>
+                        @foreach (collect(config('everquest.aug_slots')) as $id)
+                            <option value="{{ $id }}" {{ request('augslot') == $id ? 'selected' : '' }}>
+                                {{ $id }}</option>
                         @endforeach
                     </select>
                 </label>
@@ -86,17 +100,11 @@
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
-            <x-item-search-stat-filter id="stat1" :stats="$stats"
-                :selected_stat="request('stat1')"
-                :selected_stat_comp="request('stat1comp')"
+            <x-item-search-stat-filter id="stat1" :stats="$stats" :selected_stat="request('stat1')" :selected_stat_comp="request('stat1comp')"
                 :stat_value="request('stat1val')" />
-            <x-item-search-stat-filter id="stat2" :stats="$stats"
-                :selected_stat="request('stat2')"
-                :selected_stat_comp="request('stat2comp')"
+            <x-item-search-stat-filter id="stat2" :stats="$stats" :selected_stat="request('stat2')" :selected_stat_comp="request('stat2comp')"
                 :stat_value="request('stat2val')" />
-            <x-item-search-stat-filter id="stat3" :stats="$stats"
-                :selected_stat="request('stat3')"
-                :selected_stat_comp="request('stat3comp')"
+            <x-item-search-stat-filter id="stat3" :stats="$stats" :selected_stat="request('stat3')" :selected_stat_comp="request('stat3comp')"
                 :stat_value="request('stat3val')" />
         </div>
 
@@ -106,9 +114,9 @@
                     <label class="input w-48">
                         <span class="label">Bag Size >=</span>
                         <input type="number" class="input validator" min="0" max="200"
-                            title="Must be between 0 and 200"
-                            id="bagslots" name="bagslots" value="{{ request('bagslots') }}" maxlength="3" />
-                      </label>
+                            title="Must be between 0 and 200" id="bagslots" name="bagslots"
+                            value="{{ request('bagslots') }}" maxlength="3" />
+                    </label>
                 </div>
             </div>
         </div>

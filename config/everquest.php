@@ -40,7 +40,14 @@ return [
     'merchants_dont_drop_stuff'         => true, // if TRUE, you won't see merchants drops, damned PEQ world builders ! :)
 
     'ignore_zones' => [
-        'load', 'loading', 'load2', 'nektropos', 'arttest', 'apprentice', 'tutorial', 'cshome',
+        'load',
+        'loading',
+        'load2',
+        'nektropos',
+        'arttest',
+        'apprentice',
+        'tutorial',
+        'cshome',
     ],
 
     /*
@@ -1472,7 +1479,7 @@ return [
     ], // 150
 
     'db_skills' => [
-       -1   => 'None',
+        -1   => 'None',
         0   => '1H Blunt',
         1   => '1H Slashing',
         2   => '2H Blunt',
@@ -2862,5 +2869,33 @@ return [
         14  => 'Speak With', // ?
         100 => 'Give Cash',
         255 => 'Unknown',
+    ],
+
+    'aug_slots' => [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
     ],
 ];

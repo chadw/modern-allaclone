@@ -1,7 +1,6 @@
-<form method="get" action="{{ route('spells.index') }}" class="p-4 mb-4">
+<form method="get" action="{{ route('spells.index') }}" class="mb-6">
     <div class="space-y-4">
         <div>
-            <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Search For</label>
             <input type="text" id="name" name="name" value="{{ request('name') }}"
                 class="w-full input"
                 placeholder="Searches spells by name" />

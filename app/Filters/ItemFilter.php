@@ -17,6 +17,7 @@ class ItemFilter
         'type',
         'class',
         'bagslots',
+        'effect',
         /* stats */
         'stat1',
         'stat1comp',
@@ -133,6 +134,29 @@ class ItemFilter
 
             $this->builder->whereRaw("(classes & ?) != 0", [$bitmask]);
         }
+    }
+
+    protected function effect($value)
+    {
+        if ($value === null || $value === '') {
+            return;
+        }
+
+        $effectRelations = [
+            'procEffectSpell',
+            'wornEffectSpell',
+            'focusEffectSpell',
+            'clickEffectSpell',
+            'scrollEffectSpell',
+        ];
+
+        $this->builder->where(function ($query) use ($value, $effectRelations) {
+            foreach ($effectRelations as $relation) {
+                $query->orWhereHas($relation, function ($q) use ($value) {
+                    $q->where('name', 'like', "%{$value}%");
+                });
+            }
+        });
     }
 
     protected function stat1()

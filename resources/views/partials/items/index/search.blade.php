@@ -8,7 +8,6 @@
 <form method="get" action="{{ route('items.index') }}" class="mb-6">
     <div class="space-y-4">
         <div>
-            <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Search For</label>
             <input type="text" id="name" name="name" value="{{ request('name') }}" class="w-full input"
                 placeholder="Search item by name" />
         </div>
@@ -106,6 +105,16 @@
                 :stat_value="request('stat2val')" />
             <x-item-search-stat-filter id="stat3" :stats="$stats" :selected_stat="request('stat3')" :selected_stat_comp="request('stat3comp')"
                 :stat_value="request('stat3val')" />
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+            <div class="flex flex-col w-full sm:w-auto">
+                <label class="input w-full">
+                    <span class="label">Has Effect</span>
+                    <input type="text" class="input" id="effect" name="effect"
+                        value="{{ request('effect') }}" minlength="3" />
+                </label>
+            </div>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">

@@ -45,6 +45,17 @@ Alpine.data('itemDrops', (itemId) => ({
     }
 }));
 
+Alpine.store('itemsearch', {
+    open: false,
+    toggle() {
+        this.open = !this.open;
+        localStorage.setItem('item_search', this.open);
+    },
+    init() {
+        this.open = localStorage.getItem('item_search') === 'true';
+    }
+});
+
 Alpine.store('tooltip', {
     content: '',
     visible: false,

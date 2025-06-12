@@ -1,7 +1,6 @@
-<form method="get" action="{{ route('npcs.index') }}" class="mb-4">
+<form method="get" action="{{ route('npcs.index') }}" class="mb-6">
     <div class="space-y-4">
         <div>
-            <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Search For</label>
             <input type="text" id="name" name="name" value="{{ request('name') }}"
                 class="w-full input validator"
                 pattern="[A-Za-z]*" minlength="3"

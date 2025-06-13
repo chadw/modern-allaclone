@@ -16,7 +16,7 @@ class SpellLink extends Component
 
     public function __construct(
         int $spellId,
-        string $spellName,
+        string|null $spellName = null,
         $spellIcon = null,
         string $spellClass = '',
         bool $effectsOnly = false

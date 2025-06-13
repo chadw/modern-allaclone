@@ -246,13 +246,17 @@
         @if ($item->proceffect > 0 && $item->proceffect < 65535)
             <div>
                 <strong>Combat Effect:</strong>
-                <x-spell-link
-                    :spell_id="$item->proceffect"
-                    :spell_name="$item->custom_proceffect"
-                    :spell_icon="null"
-                    spell_class="inline-flex"
-                    :effects_only="1"
-                />
+                @if ($item->custom_proceffect)
+                    <x-spell-link
+                        :spell_id="$item->proceffect"
+                        :spell_name="$item->custom_proceffect"
+                        :spell_icon="null"
+                        spell_class="inline-flex"
+                        :effects_only="1"
+                    />
+                @else
+                    <span class="text-error">Unknown</span>
+                @endif
                 @if ($item->proclevel2 > 0)
                     <br>
                     <strong>Level for effect:</strong> {{ $item->proclevel2 }}
@@ -265,13 +269,17 @@
         @if ($item->worneffect > 0 && $item->worneffect < 65535)
             <div>
                 <strong>Worn Effect:</strong>
-                <x-spell-link
-                    :spell_id="$item->worneffect"
-                    :spell_name="$item->custom_worneffect"
-                    :spell_icon="null"
-                    spell_class="inline-flex"
-                    :effects_only="1"
-                />
+                @if ($item->custom_worneffect)
+                    <x-spell-link
+                        :spell_id="$item->worneffect"
+                        :spell_name="$item->custom_worneffect"
+                        :spell_icon="null"
+                        spell_class="inline-flex"
+                        :effects_only="1"
+                    />
+                @else
+                    <span class="text-error">Unknown</span>
+                @endif
                 @if ($item->wornlevel > 0)
                     <br>
                     <strong>Level for effect:</strong> {{ $item->wornlevel }}
@@ -282,13 +290,17 @@
         @if ($item->focuseffect > 0 && $item->focuseffect < 65535)
             <div>
                 <strong>Focus Effect:</strong>
-                <x-spell-link
-                    :spell_id="$item->focuseffect"
-                    :spell_name="$item->custom_focuseffect"
-                    :spell_icon="null"
-                    spell_class="inline-flex"
-                    :effects_only="1"
-                />
+                @if ($item->custom_focuseffect)
+                    <x-spell-link
+                        :spell_id="$item->focuseffect"
+                        :spell_name="$item->custom_focuseffect"
+                        :spell_icon="null"
+                        spell_class="inline-flex"
+                        :effects_only="1"
+                    />
+                @else
+                    <span class="text-error">Unknown</span>
+                @endif
                 @if ($item->focuslevel > 0)
                     <br>
                     <strong>Level for effect:</strong> {{ $item->focuslevel }}
@@ -299,13 +311,17 @@
         @if ($item->clickeffect > 0 && $item->clickeffect < 65535)
             <div>
                 <strong>Click Effect:</strong>
-                <x-spell-link
-                    :spell_id="$item->clickeffect"
-                    :spell_name="$item->custom_clickeffect"
-                    :spell_icon="null"
-                    spell_class="inline-flex"
-                    :effects_only="1"
-                />
+                @if ($item->custom_clickeffect)
+                    <x-spell-link
+                        :spell_id="$item->clickeffect"
+                        :spell_name="$item->custom_clickeffect"
+                        :spell_icon="null"
+                        spell_class="inline-flex"
+                        :effects_only="1"
+                    />
+                @else
+                    <span class="text-error">Unknown</span>
+                @endif
                 (
                 @if ($item->clicktype == 4)
                     Must Equip.
@@ -332,13 +348,17 @@
         @if ($item->scrolleffect > 0 && $item->scrolleffect < 65535)
             <div>
                 <strong>Spell Scroll Effect:</strong>
-                <x-spell-link
-                    :spell_id="$item->scrolleffect"
-                    :spell_name="$item->custom_scrolleffect"
-                    :spell_icon="null"
-                    spell_class="inline-flex"
-                    :effects_only="0"
-                />
+                @if ($item->custom_scrolleffect)
+                    <x-spell-link
+                        :spell_id="$item->scrolleffect"
+                        :spell_name="$item->custom_scrolleffect"
+                        :spell_icon="null"
+                        spell_class="inline-flex"
+                        :effects_only="0"
+                    />
+                @else
+                    <span class="text-error">Unknown</span>
+                @endif
             </div>
         @endif
         {{-- bard item? --}}

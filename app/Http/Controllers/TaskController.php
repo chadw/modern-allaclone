@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Item;
 use App\Models\Task;
 use App\Filters\TaskFilter;
 use Illuminate\Http\Request;
@@ -12,14 +13,21 @@ class TaskController extends Controller
 {
     public function index(Request $request)
     {
-        $tasks = (new TaskFilter($request))
-            ->apply(Task::query())
-            ->orderBy('title', 'asc')
-            ->paginate(50)
-            ->withQueryString();
+        $tasks = Task::attachRewardsMultiple(
+            (new TaskFilter($request))
+                ->apply(Task::query())
+                ->select([
+                    'id', 'type', 'duration', 'title', 'reward_id_list', 'cash_reward', 'exp_reward',
+                    'reward_points', 'min_level', 'max_level', 'repeatable',
+                ])
+                ->where('enabled', 1)
+                ->orderBy('title', 'asc')
+                ->paginate(50)
+                ->withQueryString()
+        );
 
-        // get alt currency since tasks could use it
-        $altCurrency = AlternateCurrency::with('item:id,Name,icon')->get();
+        // get cached alt currency since tasks could use it
+        $altCurrency = AlternateCurrency::allAltCurrency();
 
         return view('tasks.index', [
             'tasks' => $tasks,
@@ -44,11 +52,13 @@ class TaskController extends Controller
                 $activity->cached_items = $activity->items;
             }
 
+            $task = Task::attachRewardsSingle($task);
+
             return $task;
         });
 
-        // get alt currency since tasks could use it
-        $altCurrency = AlternateCurrency::with('item:id,Name,icon')->get();
+        // get cached alt currency since tasks could use it
+        $altCurrency = AlternateCurrency::allAltCurrency();
 
         return view('tasks.show', [
             'task' => $activities,

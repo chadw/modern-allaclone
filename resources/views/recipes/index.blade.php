@@ -13,9 +13,9 @@
         <table class="table table-auto table-zebra md:table-fixed w-full">
             <thead class="text-xs uppercase bg-base-300">
                 <tr>
-                    <th scope="col" width="60%">Name</th>
-                    <th scope="col" width="20%">Tradeskill</th>
-                    <th scope="col" width="20%" class="text-right">Trivial</th>
+                    <th scope="col" class="w-[60%]">Name</th>
+                    <th scope="col" class="w-[20%]">Tradeskill</th>
+                    <th scope="col" class="w-[20%] text-right">Trivial</th>
                 </tr>
             </thead>
             <tbody>
@@ -28,7 +28,7 @@
                             </a>
                         </div>
                     </td>
-                    <td>{{ config('everquest.skills.tradeskill')[$recipe->tradeskill] ?? 'Non-Tradeskill' }}</td>
+                    <td class="truncate">{{ config('everquest.skills.tradeskill')[$recipe->tradeskill] ?? 'Non-Tradeskill' }}</td>
                     <td class="text-right {{ $recipe->trivial >= 300 ? 'text-error font-semibold' : 'text-accent font-semibold' }}">
                         {{ $recipe->trivial }}
                     </td>

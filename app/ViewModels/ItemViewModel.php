@@ -2,11 +2,12 @@
 namespace App\ViewModels;
 
 use App\Models\Item;
-use App\Models\LootdropEntry;
-use App\Models\NpcType;
-use App\Models\TradeskillRecipe;
 use App\Models\Forage;
+use App\Models\NpcType;
 use App\Models\GroundSpawn;
+use App\Models\LootdropEntry;
+use App\Models\TradeskillRecipe;
+use Illuminate\Support\Collection;
 
 class ItemViewModel
 {
@@ -66,12 +67,12 @@ class ItemViewModel
         return $this;
     }
 
-    public function dropsByZone()
+    public function dropsByZone(): Collection
     {
         $itemId = $this->item->id;
 
         $lootdropIds = LootdropEntry::where('item_id', $itemId)->pluck('lootdrop_id');
-        if ($lootdropIds->isEmpty()) return [];
+        if ($lootdropIds->isEmpty()) return collect();//[];
 
         $ignoreZones = config('everquest.ignore_zones') ?? [];
         $excludeMerchants = config('everquest.merchants_dont_drop_stuff') ?? true;
@@ -128,27 +129,29 @@ class ItemViewModel
             })->values();
     }
 
-    public function recipes()
+    public function recipes(): Collection
     {
         return TradeskillRecipe::whereHas('entries', function ($q) {
-            $q->where('item_id', $this->item->id)->where('successcount', '>', 0);
+            $q->where('item_id', $this->item->id)
+                ->where('successcount', '>', 0);
         })
         ->select('id', 'name', 'tradeskill', 'trivial', 'nofail')
         ->groupBy('id', 'name', 'tradeskill')
         ->get();
     }
 
-    public function usedInTradeskills()
+    public function usedInTradeskills(): Collection
     {
         return TradeskillRecipe::whereHas('entries', function ($q) {
-            $q->where('item_id', $this->item->id)->where('componentcount', '>', 0);
+            $q->where('item_id', $this->item->id)
+                ->where('componentcount', '>', 0);
         })
         ->select('id', 'name', 'tradeskill')
         ->groupBy('id', 'name', 'tradeskill')
         ->get();
     }
 
-    public function forageZones()
+    public function forageZones(): Collection
     {
         $expansions = config('everquest.expansions');
 
@@ -168,10 +171,11 @@ class ItemViewModel
                     'chance' => $forage->chance,
                     'level' => $forage->level,
                 ];
-            })->sortBy('long_name')->values();
+            })->sortBy('long_name')
+            ->values();
     }
 
-    public function soldInZones()
+    public function soldInZones(): Collection
     {
         return NpcType::whereHas('merchantlist', fn($q) => $q->where('item', $this->item->id))
             ->whereHas('spawnentries.spawn2.zoneData')
@@ -200,10 +204,11 @@ class ItemViewModel
                         'class' => $npc['class'],
                     ])->values(),
                 ];
-            })->sortBy('zone_name')->values();
+            })->sortBy('zone_name')
+            ->values();
     }
 
-    public function itemGroundSpawn()
+    public function itemGroundSpawn(): Collection
     {
         return GroundSpawn::select(['zoneid', 'max_x', 'max_y', 'max_z'])
             ->with(['zone:id,zoneidnumber,long_name'])
@@ -229,6 +234,7 @@ class ItemViewModel
                         'z' => $item['z'],
                     ])->values(),
                 ];
-            })->sortBy('zone_name')->values();
+            })->sortBy('zone_name')
+            ->values();
     }
 }

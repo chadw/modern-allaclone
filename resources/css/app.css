@@ -20,14 +20,36 @@
     preferredStrategy: 'pseudoelements';
 }
 
-[x-cloak] { display: none !important; }
-#laz-desktop-logo.stuck {
+[x-cloak] {
+    display: none !important;
+}
+
+.collapse-title.p-0::after {
+    top: 0.7rem;
+}
+
+.zone-npc-drops input[type="checkbox"] {
+    padding: 0;
+}
+
+.zone-npc-drops .collapse-content {
+    padding-left: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+}
+
+#eqemu-desktop-logo.stuck {
     top: 0.35rem;
 }
-.text-heroic-stat { color: #d6b429; }
+
+.text-heroic-stat {
+    color: #d6b429;
+}
+
 .dropdown:hover .chevron {
     transform: rotate(180deg);
 }
+
 @media (max-width: 768px) {
     .task-loot-link a { font-size: var(--text-sm); }
 }

@@ -2,9 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Task extends Model
 {
@@ -12,15 +15,6 @@ class Task extends Model
 
     protected $connection = 'eqemu';
     protected $table = 'tasks';
-
-    public function getRewardsAttribute()
-    {
-        $ids = explode('|', $this->reward_id_list);
-
-        return Item::whereIn('id', $ids)
-            ->select('id', 'Name', 'icon')
-            ->get();
-    }
 
     public function getTaskTypeAttribute(): string
     {
@@ -87,5 +81,45 @@ class Task extends Model
         return $this->hasMany(TaskActivity::class, 'taskid', 'id')
             ->orderBy('activityid', 'asc')
             ->orderBy('step', 'asc');
+    }
+
+    public static function attachRewardsMultiple(Collection|Paginator $tasks): Collection|Paginator
+    {
+        $arePaginated = $tasks instanceof Paginator;
+
+        $allTasks = $arePaginated ? $tasks->getCollection() : $tasks;
+
+        $rewardIds = $allTasks->flatMap(function ($task) {
+            return explode('|', $task->reward_id_list);
+        })->unique()->filter();
+
+        $items = Item::whereIn('id', $rewardIds)->select('id', 'Name', 'icon')->get()->keyBy('id');
+
+        $allTasks->each(function ($task) use ($items) {
+            $ids = array_map('intval', explode('|', $task->reward_id_list));
+            $task->rewards = collect($ids)
+                ->map(fn ($id) => $items[$id] ?? null)
+                ->filter();
+        });
+
+        if ($arePaginated) {
+            $tasks->setCollection($allTasks);
+
+            return $tasks;
+        }
+
+        return $allTasks;
+    }
+
+    public static function attachRewardsSingle(Task $task): Task
+    {
+        $rewardIds = array_map('intval', explode('|', $task->reward_id_list));
+        $items = Item::whereIn('id', $rewardIds)->select('id', 'Name', 'icon')->get()->keyBy('id');
+
+        $task->rewards = collect($rewardIds)
+            ->map(fn ($id) => $items[$id] ?? null)
+            ->filter();
+
+        return $task;
     }
 }

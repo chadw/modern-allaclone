@@ -18,10 +18,10 @@
             <table class="table table-auto md:table-fixed w-full table-zebra">
                 <thead class="text-xs uppercase bg-base-300">
                     <tr>
-                        <th scope="col" width="30%">Name</th>
-                        <th scope="col" width="30%">Zone</th>
-                        <th scope="col" width="20%">Lvl</th>
-                        <th scope="col" width="20%">HP</th>
+                        <th scope="col" class="w-[30%]">Name</th>
+                        <th scope="col" class="w-[30%]">Zone</th>
+                        <th scope="col" class="w-[20%]">Lvl</th>
+                        <th scope="col" class="w-[20%] hidden md:table-cell">HP</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -60,7 +60,7 @@
                             <td>
                                 {{ $npc->level }}{{ $npc->maxlevel && $npc->maxlevel > $npc->level ? '-' . $npc->maxlevel : '' }}
                             </td>
-                            <td class="text-nowrap">{{ number_format($npc->hp) }}</td>
+                            <td class="hidden md:table-cell text-nowrap">{{ number_format($npc->hp) }}</td>
                         </tr>
                     @endforeach
                 </tbody>

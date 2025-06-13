@@ -5,8 +5,8 @@
         <table class="table table-auto md:table-fixed table-sm w-full table-zebra">
             <thead class="text-xs uppercase bg-base-300">
                 <tr>
-                    <th scope="col" width="90%">NPC</th>
-                    <th scope="col" width="10%" class="text-right">Value</th>
+                    <th scope="col" class="w-[90%]">NPC</th>
+                    <th scope="col" class="w-[10%] text-right">Value</th>
                 </tr>
             </thead>
             <tbody>

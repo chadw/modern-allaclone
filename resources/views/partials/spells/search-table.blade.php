@@ -11,12 +11,12 @@
         <table class="table table-auto md:table-fixed w-full table-zebra">
             <thead class="text-xs uppercase bg-base-300">
                 <tr>
-                    <th scope="col" width="20%">Name</th>
-                    <th scope="col" width="10%">Class</th>
-                    <th scope="col" width="40%">Effect(s)</th>
-                    <th scope="col" width="10%">Mana</th>
-                    <th scope="col" width="10%">Skill</th>
-                    <th scope="col" width="10%">Target Type</th>
+                    <th scope="col" class="w-[20%]">Name</th>
+                    <th scope="col" class="w-[10%]">Class</th>
+                    <th scope="col" class="w-[40%]">Effect(s)</th>
+                    <th scope="col" class="w-[10%] hidden lg:table-cell">Mana</th>
+                    <th scope="col" class="w-[10%] hidden md:table-cell">Skill</th>
+                    <th scope="col" class="w-[10%] hidden lg:table-cell">Target Type</th>
                 </tr>
             </thead>
             @if ($spell['spells']->isNotEmpty())
@@ -24,9 +24,14 @@
                     @foreach ($spell['spells'] as $sp)
                         <tr>
                             <td scope="row">
-                                <x-spell-link :spell_id="$sp->id" :spell_name="$sp->name" :spell_icon="$sp->new_icon" />
+                                <x-spell-link
+                                    :spell_id="$sp->id"
+                                    :spell_name="$sp->name"
+                                    :spell_icon="$sp->new_icon"
+                                    spell_class="flex"
+                                />
                             </td>
-                            <td>{{ config('everquest.classes_abbr')[$selectedClass] }}/{{ $spell['level'] }}</td>
+                            <td>{{ config('everquest.classes_abbr.' . $selectedClass) }}/{{ $spell['level'] }}</td>
                             <td class="text-nowrap">
                                 @for ($n = 1; $n <= 12; $n++)
                                 <x-spell-effect
@@ -37,9 +42,9 @@
                                 />
                                 @endfor
                             </td>
-                            <td>{{ $sp->mana }}</td>
-                            <td>{{ config('everquest.db_skills')[$sp->skill] ?? 'Unknown' }}</td>
-                            <td>
+                            <td class="hidden lg:table-cell">{{ $sp->mana }}</td>
+                            <td class="hidden md:table-cell">{{ config('everquest.db_skills.' . $sp->skill) ?? 'Unknown' }}</td>
+                            <td class="hidden lg:table-cell">
                                 @php
                                     $targetType = config('everquest.spell_targets')[$sp->targettype] ?? null;
                                 @endphp

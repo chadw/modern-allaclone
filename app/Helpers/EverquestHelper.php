@@ -86,7 +86,7 @@ if (!function_exists('sign')) {
 
 if (!function_exists('get_class_usable_string')) {
     function get_class_usable_string($val): string {
-        $classes = config('everquest.classes_short');
+        $classes = (array) config('everquest.classes_short');
         $result = [];
 
         // Special case for "ALL"
@@ -106,7 +106,7 @@ if (!function_exists('get_class_usable_string')) {
 
 if (!function_exists('get_race_usable_string')) {
     function get_race_usable_string($val): string {
-        $races = config('everquest.races_short');
+        $races = (array) config('everquest.races_short');
         $result = [];
 
         // Special case for "ALL"
@@ -126,7 +126,7 @@ if (!function_exists('get_race_usable_string')) {
 
 if (!function_exists('get_deity_usable_string')) {
     function get_deity_usable_string($val): string {
-        $deities = config('everquest.deities_short');
+        $deities = (array) config('everquest.deities_short');
         $result = [];
 
         foreach ($deities as $bit => $name) {
@@ -141,7 +141,7 @@ if (!function_exists('get_deity_usable_string')) {
 
 if (!function_exists('get_slots_string')) {
     function get_slots_string($val): string {
-        $slots = config('everquest.slots');
+        $slots = (array) config('everquest.slots');
         $result = [];
 
         foreach ($slots as $bit => $name) {
@@ -156,7 +156,7 @@ if (!function_exists('get_slots_string')) {
 
 if (!function_exists('item_aug_data')) {
     function item_aug_data($item) {
-        $augdb = config('everquest.db_aug_restrict');
+        $augdb = (array) config('everquest.db_aug_restrict');
         $html = '';
 
         if (($item->itemtype ?? 0) == 54) {

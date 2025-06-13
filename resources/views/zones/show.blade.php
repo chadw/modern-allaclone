@@ -1,5 +1,12 @@
 @extends('layouts.default')
-@section('title', $zone->long_name ?? 'Zone')
+
+@php
+    $title = $zone->long_name;
+    if ($zone->version) {
+        $title .= ' - v' . $zone->version;
+    }
+@endphp
+@section('title', $title ?? 'Zone')
 
 @section('content')
     @if ($zone)
@@ -12,7 +19,6 @@
 
         <div class="card mb-6">
             <div class="card-body p-0">
-                <h2 class="card-title text-info/70 text-2xl border-b border-base-content/10">Zone Information</h2>
                 <div class="flex flex-wrap gap-4">
                     <div class="flex flex-col">
                         @if ($zone->canbind)
@@ -43,7 +49,7 @@
                         @endif
                     </div>
                 </div>
-                <div class="flex flex-wrap gap-4">
+                <div class="flex flex-wrap gap-4 mt-2">
                     <div class="flex flex-col">
                         <span>
                             <strong>Succor:</strong> x={{ $zone->safe_x ?? '?' }}, y={{ $zone->safe_y ?? '?' }},
@@ -62,9 +68,10 @@
                                 <strong>Connected Zones:</strong>
                                 @foreach ($connectedZones as $i => $connectedZone)
                                     <a href="{{ route('zones.show', $connectedZone->id) }}"
+                                        title="{{ $connectedZone->long_name }}"
                                         class="link link-hover link-info">
                                         {{ $connectedZone->long_name }}
-                                    </a>{{ $i < $connectedZones->count() - 1 ? ',' : '' }}
+                                    </a>{{ !$loop->last ? ',' : '' }}
                                 @endforeach
                             </p>
                         </div>

@@ -15,13 +15,13 @@
         <table class="table table-auto md:table-fixed table-sm w-full table-zebra">
             <thead class="text-xs uppercase bg-base-300">
                 <tr>
-                    <th scope="col" width="5%">Lvl</th>
-                    <th scope="col" width="30%">Spell</th>
-                    <th scope="col" width="10%">Race</th>
-                    <th scope="col" width="20%">Class</th>
-                    <th scope="col" width="10%">HP</th>
-                    <th scope="col" width="10%">AC</th>
-                    <th scope="col" width="15%">DMG</th>
+                    <th scope="col" class="w-[5%]">Lvl</th>
+                    <th scope="col" class="w-[30%]">Spell</th>
+                    <th scope="col" class="w-[10%] hidden lg:table-cell">Race</th>
+                    <th scope="col" class="w-[20%]">Class</th>
+                    <th scope="col" class="w-[10%] hidden md:table-cell">HP</th>
+                    <th scope="col" class="w-[10%] hidden lg:table-cell">AC</th>
+                    <th scope="col" class="w-[15%] hidden lg:table-cell">DMG</th>
                 </tr>
             </thead>
             <tbody>
@@ -32,7 +32,7 @@
 
                     <tr>
                         <td scope="row">{{ $pet->npcs->level }}</td>
-                        <td scope="row">
+                        <td>
                             <x-spell-link
                                 :spell_id="$pet->id"
                                 :spell_name="$pet->name"
@@ -40,13 +40,13 @@
                                 spell_class="flex"
                             />
                         </td>
-                        <td scope="row">
+                        <td class="hidden lg:table-cell">
                             {{ config('everquest.db_races.' . $pet->npcs->race) ?? 'Unknown' }}
                         </td>
-                        <td scope="row">{{ config('everquest.classes.' . $pet->npcs->class) }}</td>
-                        <td scope="row">{{ $pet->npcs->hp }}</td>
-                        <td scope="row">{{ $pet->npcs->AC }}</td>
-                        <td scope="row">
+                        <td>{{ config('everquest.classes.' . $pet->npcs->class) }}</td>
+                        <td class="hidden md:table-cell">{{ $pet->npcs->hp }}</td>
+                        <td class="hidden lg:table-cell">{{ $pet->npcs->AC }}</td>
+                        <td class="hidden lg:table-cell">
                             {{ $pet->npcs->mindmg }}-{{ $pet->npcs->maxdmg }}
                         </td>
                     </tr>

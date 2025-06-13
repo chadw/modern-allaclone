@@ -3,7 +3,9 @@
     <ul class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2">
         @foreach ($foraged as $item)
             <li>
-                <a href="{{ route('items.show', $item->id) }}" class="block hover:bg-base-200 rounded p-2 transition">
+                <a href="{{ route('items.show', $item->id) }}"
+                    title="{{ $item->Name }}"
+                    class="block hover:bg-base-200 rounded p-2 transition">
                     <div class="flex items-center gap-2 text-base text-base-content">
                         <img src="{{ asset('img/icons/' . $item->icon . '.png') }}" alt="{{ $item->Name }} Icon"
                             class="w-6 h-6 rounded" width="24" height="24">

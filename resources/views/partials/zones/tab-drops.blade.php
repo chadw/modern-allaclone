@@ -4,9 +4,9 @@
         <table class="table table-auto md:table-fixed w-full table-zebra">
             <thead class="text-xs uppercase bg-base-300">
                 <tr>
-                    <th scope="col" width="40%">Item</th>
-                    <th scope="col" width="20%">Type</th>
-                    <th scope="col" width="40%">Dropped</th>
+                    <th scope="col" class="w-2/5">Item</th>
+                    <th scope="col" class="w-1/5 hidden md:table-cell">Type</th>
+                    <th scope="col" class="w-2/5">Dropped</th>
                 </tr>
             </thead>
             <tbody>
@@ -21,7 +21,7 @@
                                 />
                             </div>
                         </td>
-                        <td>
+                        <td class="hidden md:table-cell">
                             @if ($drop['item']['bagslots'] > 0)
                                 Bag
                             @else
@@ -29,28 +29,23 @@
                             @endif
                         </td>
                         <td class="text-nowrap">
-                            @foreach ($drop['npcs'] as $index => $npc)
-                                @if ($index < 2)
-                                    {{ $npc->clean_name }} (Lv {{ $npc->level }})
-                                @endif
-                            @endforeach
-
-                            @if (count($drop['npcs']) > 2)
-                                <div class="collapse collapse-arrow bg-base-200 mt-2">
-                                    <input type="checkbox" />
-                                    <div class="collapse-title font-medium">
-                                        Show {{ count($drop['npcs']) - 2 }} more NPCs
-                                    </div>
-                                    <div class="collapse-content">
-                                        <ul class="list-disc list-inside">
-                                            @foreach ($drop['npcs'] as $index => $npc)
-                                                @if ($index >= 2)
-                                                    <li>{{ $npc->clean_name }} (Lv {{ $npc->level }})</li>
-                                                @endif
-                                            @endforeach
-                                        </ul>
-                                    </div>
+                            @if (count($drop['npcs']) === 1)
+                                {{ $drop['npcs'][0]->clean_name }} (Lvl {{ $drop['npcs'][0]->level }})
+                            @elseif (count($drop['npcs']) > 1)
+                            <div class="zone-npc-drops collapse collapse-arrow bg-ghost">
+                                <input type="checkbox" />
+                                <div class="collapse-title font-medium p-0">
+                                    {{ $drop['npcs'][0]->clean_name }} (Lvl {{ $drop['npcs'][0]->level }})
+                                    + {{ count(array_slice($drop['npcs'], 1)) }} more
                                 </div>
+                                <div class="collapse-content">
+                                    <ul class="list-none list-inside">
+                                        @foreach (array_slice($drop['npcs'], 1) as $npc)
+                                            <li>{{ $npc->clean_name }} (Lvl {{ $npc->level }})</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            </div>
                             @endif
                         </td>
                     </tr>

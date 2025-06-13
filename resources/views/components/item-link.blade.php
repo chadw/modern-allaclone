@@ -1,7 +1,8 @@
 <div x-data class="{{ $itemClass }}">
     <a href="{{ route('items.show', $itemId) }}"
         @mouseenter="$store.tooltip.loadTooltip('{{ route('items.popup', $itemId) }}', $el, $event)"
-        @mouseleave="$store.tooltip.hideTooltip()" class="text-base link-info link-hover flex items-center gap-1">
+        @mouseleave="$store.tooltip.hideTooltip()" class="text-base link-info link-hover flex items-center gap-1"
+        title="{{ $itemName }}">
 
         @if ($itemIcon)
             <img src="{{ asset('img/icons/' . $itemIcon . '.png') }}" alt="{{ $itemName }}" width="20"

@@ -4,12 +4,12 @@
         <table class="table table-auto md:table-fixed w-full table-zebra">
             <thead class="text-xs uppercase bg-base-300">
                 <tr>
-                    <th scope="col" width="40%">Tasks</th>
-                    <th scope="col" width="10%">Type</th>
-                    <th scope="col" width="5%">Min Lvl</th>
-                    <th scope="col" width="5%">Max Lvl</th>
-                    <th scope="col" width="10%">Repeat</th>
-                    <th scope="col" width="30%">Rewards</th>
+                    <th scope="col" class="w-[30%]">Tasks</th>
+                    <th scope="col" class="w-[10%] hidden md:table-cell">Type</th>
+                    <th scope="col" class="w-[10%] hidden lg:table-cell truncate">Min Lvl</th>
+                    <th scope="col" class="w-[10%] hidden lg:table-cell truncate">Max Lvl</th>
+                    <th scope="col" class="w-[10%] hidden md:table-cell">Repeat</th>
+                    <th scope="col" class="w-[30%]">Rewards</th>
                 </tr>
             </thead>
             <tbody>
@@ -26,21 +26,22 @@
                                 </span>
                             </div>
                         </td>
-                        <td>{{ $task->task_type }}</td>
-                        <td>{{ $task->min_level }}</td>
-                        <td>{{ $task->max_level }}</td>
-                        <td>
+                        <td class="hidden md:table-cell">{{ $task->task_type }}</td>
+                        <td class="hidden lg:table-cell">{{ $task->min_level }}</td>
+                        <td class="hidden lg:table-cell">{{ $task->max_level }}</td>
+                        <td class="hidden md:table-cell">
                             {!! $task->repeatable
                                 ? '<span class="badge badge-soft badge-accent">Yes</span>'
                                 : '<span class="badge badge-soft badge-warning">No</span>' !!}
                         </td>
-                        <td>
+                        <td class="task-rewards text-base-content/50">
                             @if ($task->reward_id_list)
                                 @foreach ($task->rewards as $item)
                                     <x-item-link
                                         :item_id="$item->id"
                                         :item_name="$item->Name"
                                         :item_icon="$item->icon"
+                                        item_class="flex"
                                     />
                                 @endforeach
                             @endif
@@ -62,6 +63,7 @@
                                         :item_id="$currency->item->id"
                                         :item_name="$currency->item->Name"
                                         :item_icon="$currency->item->icon"
+                                        item_class="flex"
                                     />
                                     <span class="text-accent">x{{ number_format($task->reward_points) }}</span>
                                 </div>

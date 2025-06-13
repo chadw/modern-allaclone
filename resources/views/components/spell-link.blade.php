@@ -1,7 +1,8 @@
 <div x-data class="{{ $spellClass }}">
     <a href="{{ route('spells.show', $spellId) }}"
         @mouseenter="$store.tooltip.loadTooltip('{{ route('spells.popup', $spellId) }}', $el, $event)"
-        @mouseleave="$store.tooltip.hideTooltip()" class="text-base link-info link-hover flex items-center gap-1">
+        @mouseleave="$store.tooltip.hideTooltip()" class="text-base link-info link-hover flex items-center gap-1"
+        title="{{ $spellName }}">
 
         @if ($spellIcon)
             <img src="{{ asset('img/icons/' . $spellIcon . '.png') }}" alt="{{ $spellName }}" width="20"

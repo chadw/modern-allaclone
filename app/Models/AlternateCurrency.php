@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class AlternateCurrency extends Model
 {
@@ -16,5 +18,12 @@ class AlternateCurrency extends Model
     public function item(): BelongsTo
     {
         return $this->belongsTo(Item::class, 'item_id', 'id');
+    }
+
+    public static function allAltCurrency(): Collection
+    {
+        return Cache::remember('alt_currency', now()->addMonth(), function () {
+            return self::with('item:id,Name,icon')->get();
+        });
     }
 }

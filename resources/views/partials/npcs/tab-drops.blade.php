@@ -14,8 +14,8 @@
             <table class="table table-auto md:table-fixed w-full table-zebra">
                 <thead class="text-xs uppercase bg-base-300">
                     <tr>
-                        <th scope="col" width="80%">Item</th>
-                        <th scope="col" width="20%">Chance</th>
+                        <th scope="col" class="w-[80%]">Item</th>
+                        <th scope="col" class="w-[20%]">Chance</th>
                     </tr>
                 </thead>
                 <tbody>

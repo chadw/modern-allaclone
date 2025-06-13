@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Filters\ItemFilter;
 use App\Models\Item;
+use App\Filters\ItemFilter;
 use App\ViewModels\ItemViewModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class ItemController extends Controller
 {
@@ -31,16 +32,22 @@ class ItemController extends Controller
 
     public function show(Item $item)
     {
-        $item = Item::where('id', $item->id)->firstOrFail();
-        $vm = (new ItemViewModel($item))->withEffects();
+        $itemCache = Cache::remember("items.show.{$item->id}", now()->addMonth(), function () use ($item) {
+            $item = Item::where('id', $item->id)->firstOrFail();
+            $vm = (new ItemViewModel($item))->withEffects();
+
+            return [
+                'item' => $item,
+                'recipes' => $vm->recipes(),
+                'used_in_ts' => $vm->usedInTradeskills(),
+                'forage' => $vm->forageZones(),
+                'soldByZone' => $vm->soldInZones(),
+                'ground_spawn' => $vm->itemGroundSpawn(),
+            ];
+        });
 
         return view('items.show', [
-            'item' => $item,
-            'recipes' => $vm->recipes(),
-            'used_in_ts' => $vm->usedInTradeskills(),
-            'forage' => $vm->forageZones(),
-            'soldByZone' => $vm->soldInZones(),
-            'ground_spawn' => $vm->itemGroundSpawn(),
+            ...$itemCache,
             'metaTitle' => config('app.name') . ' - Item: ' . $item->Name,
         ]);
     }
@@ -57,7 +64,9 @@ class ItemController extends Controller
 
     public function drops_by_zone(Item $item)
     {
-        $drops = (new ItemViewModel($item))->dropsByZone();
+        $drops = Cache::remember("items.drops_by_zone.{$item->id}", now()->addMonth(), function () use ($item) {
+            return (new ItemViewModel($item))->dropsByZone();
+        });
 
         return response()->json($drops);
     }

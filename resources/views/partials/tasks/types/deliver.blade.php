@@ -18,7 +18,9 @@
     to
         <div class="flex flex-wrap items-center gap-1">
             @foreach ($activity->cached_npcs as $npc)
-                <a href="{{ route('npcs.show', $npc->id) }}" class="link-info link-hover">
+                <a href="{{ route('npcs.show', $npc->id) }}"
+                    title="{{ $npc->clean_name }}"
+                    class="link-info link-hover">
                     {{ $npc->clean_name }}
                 </a>
                 {{ $loop->last == true ? '' : ',' }}
@@ -29,7 +31,8 @@
     in
         {!!
             $activity->cached_zones->map(function ($zone) {
-                return '<a href="' . route('zones.show', $zone->id) . '" class="link-accent link-hover">' .
+                return '<a href="' . route('zones.show', $zone->id) .
+                    '" title="' . $zone->long_name . '" class="link-accent link-hover">' .
                     $zone->long_name . '</a>';
             })->implode(', ')
         !!}

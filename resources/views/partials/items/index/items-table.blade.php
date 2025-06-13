@@ -2,12 +2,12 @@
     <table class="table table-auto md:table-fixed w-full table-zebra">
         <thead class="text-xs uppercase bg-base-300">
             <tr>
-                <th scope="col" width="40%">Name</th>
-                <th scope="col" width="20%">Type</th>
-                <th scope="col" width="10%">AC</th>
-                <th scope="col" width="10%">HP</th>
-                <th scope="col" width="10%">DMG</th>
-                <th scope="col" width="10%">Delay</th>
+                <th scope="col" class="w-[40%]">Name</th>
+                <th scope="col" class="w-[20%]">Type</th>
+                <th scope="col" class="w-[10%] hidden md:table-cell">AC</th>
+                <th scope="col" class="w-[10%]">HP</th>
+                <th scope="col" class="w-[10%] hidden md:table-cell">DMG</th>
+                <th scope="col" class="w-[10%] hidden md:table-cell">Delay</th>
             </tr>
         </thead>
         <tbody>
@@ -55,10 +55,10 @@
                             @endif
                         </div>
                     </td>
-                    <td>{{ $item->ac ?? '-' }}</td>
+                    <td class="hidden md:table-cell">{{ $item->ac ?? '-' }}</td>
                     <td>{{ $item->hp }}</td>
-                    <td>{{ $item->damage }}</td>
-                    <td>{{ $item->delay }}</td>
+                    <td class="hidden md:table-cell">{{ $item->damage }}</td>
+                    <td class="hidden md:table-cell">{{ $item->delay }}</td>
                 </tr>
             @endforeach
         </tbody>

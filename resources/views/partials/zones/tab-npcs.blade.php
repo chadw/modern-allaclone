@@ -4,11 +4,11 @@
         <table class="table table-auto md:table-fixed w-full table-zebra">
             <thead class="text-xs uppercase bg-base-300">
                 <tr>
-                    <th scope="col" width="20%">Name</th>
-                    <th scope="col" width="10%">Lvl</th>
-                    <th scope="col" width="40%">HP</th>
-                    <th scope="col" width="10%">Rare Spawn</th>
-                    <th scope="col" width="10%">Raid Tgt</th>
+                    <th scope="col" class="w-[30%]"">Name</th>
+                    <th scope="col" class="w-[10%]">Lvl</th>
+                    <th scope="col" class="w-[40%]">HP</th>
+                    <th scope="col" class="w-[10%] hidden md:table-cell">Rare</th>
+                    <th scope="col" class="w-[10%] hidden md:table-cell">Raid Tgt</th>
                 </tr>
             </thead>
             <tbody>
@@ -17,6 +17,7 @@
                         <td scope="row">
                             <div class="flex flex-col">
                                 <a href="{{ route('npcs.show', $npc->id) }}"
+                                    title="{{ $npc->clean_name }}"
                                     class="text-base link-info link-hover">{{ $npc->clean_name }}</a>
                                 <span class="text-xs uppercase text-gray-500">
                                     {{ $npc_race[$npc->race] }} {{ $npc_class[$npc->class] }}
@@ -25,12 +26,12 @@
                         </td>
                         <td>{{ $npc->level }}</td>
                         <td class="text-nowrap">{{ number_format($npc->hp) }}</td>
-                        <td>
+                        <td class="hidden md:table-cell">
                             {!! $npc->rare_spawn
                                 ? '<span class="badge badge-soft badge-accent">Yes</span>'
                                 : '<span class="badge badge-soft badge-warning">No</span>' !!}
                         </td>
-                        <td>
+                        <td class="hidden md:table-cell">
                             {!! $npc->raid_target
                                 ? '<span class="badge badge-soft badge-accent">Yes</span>'
                                 : '<span class="badge badge-soft badge-warning">No</span>' !!}

@@ -6,8 +6,8 @@
             <table class="table table-auto md:table-fixed w-full table-zebra">
                 <thead class="text-xs uppercase bg-base-300">
                     <tr>
-                        <th scope="col" width="90%">Faction raised by killing this npc</th>
-                        <th scope="col" width="10%">Value</th>
+                        <th scope="col" class="w-[90%]">Faction raised by killing this npc</th>
+                        <th scope="col" class="w-[10%]">Value</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -32,8 +32,8 @@
             <table class="table table-auto md:table-fixed w-full table-zebra">
                 <thead class="text-xs uppercase bg-base-300">
                     <tr>
-                        <th scope="col" width="90%">Faction lowered by killing this npc</th>
-                        <th scope="col" width="10%">Value</th>
+                        <th scope="col" class="w-[90%]">Faction lowered by killing this npc</th>
+                        <th scope="col" class="w-[10%]">Value</th>
                     </tr>
                 </thead>
                 <tbody>

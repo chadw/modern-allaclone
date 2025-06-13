@@ -45,7 +45,7 @@ Alpine.data('itemDrops', (itemId) => ({
     }
 }));
 
-Alpine.store('itemsearch', {
+Alpine.store('itemSearch', {
     open: false,
     toggle() {
         this.open = !this.open;
@@ -165,6 +165,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+    // pet class select
     const petSelect = document.getElementById('select-pet-class');
     if (petSelect) {
         petSelect.addEventListener('change', (e) => {
@@ -174,6 +175,14 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     }
+
+    // populate task reward column with something at least
+    const rewardCol = document.querySelectorAll('td.task-rewards');
+    rewardCol.forEach(function (reward) {
+        if (reward.textContent.trim() === '') {
+            reward.textContent = '-';
+        }
+    });
 });
 
 document.body.addEventListener('click', () => {

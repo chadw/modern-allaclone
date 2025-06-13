@@ -208,7 +208,6 @@
             <p>
                 <strong>Bane Dmg: {{ config('everquest.db_races')[$item->banedmgrace] }}</strong>
                 {{ sign($item->banedmgraceamt) }}
-                {{-- if (($item["banedmgrace"] > 0) && ($item["banedmgamt"] != 0)) { --}}
             </p>
             <br>
         @endif
@@ -234,6 +233,11 @@
                 <div class="flex items-center space-x-2">
                     <div class="w-3 h-3 bg-warning"></div>
                     <strong class="mr-2">Slot {{ $i }}:</strong> Type {{ $type }}
+                    {{
+                        config('everquest.aug_type_descriptions.' . $type) !== null
+                            ? '(' . config('everquest.aug_type_descriptions.' . $type) . ')'
+                            : null
+                    }}
                 </div>
             @endif
         @endfor
@@ -241,7 +245,7 @@
         {{-- item proc --}}
         @if ($item->proceffect > 0 && $item->proceffect < 65535)
             <p>
-                <strong>Combat Effect:</strong> <a class="text-sky-600 no-underline hover:underline dark:text-sky-400"
+                <strong>Combat Effect:</strong> <a class="link-info link-hover"
                     href="/spells/{{ $item->proceffect }}">{{ $item->custom_proceffect }}</a>
                 @if ($item->proclevel2 > 0)
                     <br>
@@ -254,7 +258,7 @@
         {{-- worn effect --}}
         @if ($item->worneffect > 0 && $item->worneffect < 65535)
             <p>
-                <strong>Worn Effect:</strong> <a
+                <strong>Worn Effect:</strong> <a class="link-info link-hover"
                     href="/spells/{{ $item->worneffect }}">{{ $item->custom_worneffect }}</a>
                 @if ($item->wornlevel > 0)
                     <br>
@@ -265,7 +269,7 @@
         {{-- focus effect --}}
         @if ($item->focuseffect > 0 && $item->focuseffect < 65535)
             <p>
-                <strong>Focus Effect:</strong> <a
+                <strong>Focus Effect:</strong> <a class="link-info link-hover"
                     href="/spells/{{ $item->focuseffect }}">{{ $item->custom_focuseffect }}</a>
                 @if ($item->focuslevel > 0)
                     <br>
@@ -276,7 +280,7 @@
         {{-- clicky effect --}}
         @if ($item->clickeffect > 0 && $item->clickeffect < 65535)
             <p>
-                <strong>Click Effect:</strong> <a
+                <strong>Click Effect:</strong> <a class="link-info link-hover"
                     href="/spells/{{ $item->clickeffect }}">{{ $item->custom_clickeffect }}</a>
                 (
                 @if ($item->clicktype == 4)

@@ -8,6 +8,7 @@ use App\Models\GroundSpawn;
 use App\Models\LootdropEntry;
 use App\Models\TradeskillRecipe;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 class ItemViewModel
 {
@@ -74,59 +75,22 @@ class ItemViewModel
         $lootdropIds = LootdropEntry::where('item_id', $itemId)->pluck('lootdrop_id');
         if ($lootdropIds->isEmpty()) return collect();//[];
 
-        $ignoreZones = config('everquest.ignore_zones') ?? [];
-        $excludeMerchants = config('everquest.merchants_dont_drop_stuff') ?? true;
+        $drops = $this->getDropData($itemId, $lootdropIds, false);
+        $drops2 = $this->getDropData($itemId, $lootdropIds, true);
 
-        $query = NpcType::select([
-                'npc_types.id',
-                'npc_types.name',
-                'spawn2.zone',
-                'zone.long_name',
-                'loottable_entries.multiplier',
-                'loottable_entries.probability',
-                'lootdrop_entries.chance'
-            ])
-            ->join('spawnentry', 'npc_types.id', '=', 'spawnentry.npcID')
-            ->join('spawn2', 'spawnentry.spawngroupID', '=', 'spawn2.spawngroupID')
-            ->join('zone', 'spawn2.zone', '=', 'zone.short_name')
-            ->join('loottable_entries', function ($join) use ($lootdropIds) {
-                $join->on('npc_types.loottable_id', '=', 'loottable_entries.loottable_id')
-                     ->whereIn('loottable_entries.lootdrop_id', $lootdropIds);
-            })
-            ->join('lootdrop_entries', function($join) use ($itemId) {
-                $join->on('loottable_entries.lootdrop_id', '=', 'lootdrop_entries.lootdrop_id')
-                     ->where('lootdrop_entries.item_id', '=', $itemId);
-            });
+        return $drops->keyBy('zone')->merge($drops2->keyBy('zone'))
+            ->map(function ($zoneGroup, $zoneKey) use ($drops, $drops2) {
+                $npcs = collect($drops->firstWhere('zone', $zoneKey)['npcs'] ?? [])
+                    ->merge($drops2->firstWhere('zone', $zoneKey)['npcs'] ?? [])
+                    ->unique('name')
+                    ->values();
 
-        if ($excludeMerchants) {
-            $query->where('npc_types.merchant_id', '=', 0);
-        }
-
-        if (!empty($ignoreZones)) {
-            $query->whereNotIn('zone.short_name', $ignoreZones);
-        }
-
-        return $query->groupBy([
-                'npc_types.name',
-                //'spawnentry.npcID',
-            ])
-            ->orderBy('zone.long_name')
-            ->get()
-            ->groupBy('zone')
-            ->map(function ($items, $zone) {
                 return [
-                    'zone' => $zone,
-                    'zone_name' => $items->first()['long_name'] ?? '',
-                    'npcs' => $items->map(fn($drop) => [
-                        'id' => $drop['id'],
-                        'name' => $drop['name'],
-                        'clean_name' => $drop['clean_name'],
-                        'multiplier' => $drop['multiplier'],
-                        'probability' => $drop['probability'],
-                        'chance' => $drop['chance'],
-                    ])->values(),
+                    'zone' => $zoneKey,
+                    'zone_name' => $zoneGroup['zone_name'],
+                    'npcs' => $npcs,
                 ];
-            })->values();
+        })->values();
     }
 
     public function recipes(): Collection
@@ -162,7 +126,9 @@ class ItemViewModel
             ->get()
             ->map(function ($forage) use($expansions) {
                 $zone = $forage->zone;
-                $expansionName = $zone && isset($expansions[$zone->expansion]) ? " ({$expansions[$zone->expansion]})" : '';
+                $expansionName = $zone && isset($expansions[$zone->expansion])
+                    ? " ({$expansions[$zone->expansion]})"
+                    : '';
                 return [
                     'zone_id' => $zone->zoneidnumber ?? null,
                     'short_name' => $zone->short_name ?? null,
@@ -236,5 +202,74 @@ class ItemViewModel
                 ];
             })->sortBy('zone_name')
             ->values();
+    }
+
+    protected function getDropData(
+        int $itemId,
+        Collection $lootdropIds,
+        bool $isFallback
+    ): Collection {
+
+        $ignoreZones = config('everquest.ignore_zones') ?? [];
+        $excludeMerchants = config('everquest.merchants_dont_drop_stuff') ?? true;
+
+        $query = NpcType::select([
+            'npc_types.id',
+            'npc_types.name',
+            //'npc_types.clean_name',
+            $isFallback
+                ? DB::raw('CAST(SUBSTRING(npc_types.id, 1, LENGTH(npc_types.id) - 3) AS UNSIGNED) as zone_guess_id')
+                : 'spawn2.zone',
+            'zone.short_name as zone',
+            'zone.long_name',
+            'loottable_entries.multiplier',
+            'loottable_entries.probability',
+            'lootdrop_entries.chance'
+        ]);
+
+        if ($isFallback) {
+            $query->leftJoin('spawnentry', 'npc_types.id', '=', 'spawnentry.npcID')
+                ->whereNull('spawnentry.npcID')
+                ->join('zone', DB::raw('CAST(SUBSTRING(npc_types.id, 1, LENGTH(npc_types.id) - 3) AS UNSIGNED)'), '=', 'zone.zoneidnumber');
+        } else {
+            $query->join('spawnentry', 'npc_types.id', '=', 'spawnentry.npcID')
+                ->join('spawn2', 'spawnentry.spawngroupID', '=', 'spawn2.spawngroupID')
+                ->join('zone', 'spawn2.zone', '=', 'zone.short_name');
+        }
+
+        $query->join('loottable_entries', function ($join) use ($lootdropIds) {
+            $join->on('npc_types.loottable_id', '=', 'loottable_entries.loottable_id')
+                ->whereIn('loottable_entries.lootdrop_id', $lootdropIds);
+        })
+        ->join('lootdrop_entries', function ($join) use ($itemId) {
+            $join->on('loottable_entries.lootdrop_id', '=', 'lootdrop_entries.lootdrop_id')
+                ->where('lootdrop_entries.item_id', '=', $itemId);
+        });
+
+        if ($excludeMerchants) {
+            $query->where('npc_types.merchant_id', '=', 0);
+        }
+
+        if (!empty($ignoreZones)) {
+            $query->whereNotIn('zone.short_name', $ignoreZones);
+        }
+
+        return $query->orderBy('zone.long_name')
+            ->get()
+            ->groupBy('zone')
+            ->map(function ($items, $zone) {
+                return [
+                    'zone' => $zone,
+                    'zone_name' => $items->first()->long_name ?? '',
+                    'npcs' => $items->map(fn ($drop) => [
+                        'id' => $drop->id,
+                        'name' => $drop->name,
+                        'clean_name' => $drop->clean_name,
+                        'multiplier' => $drop->multiplier,
+                        'probability' => $drop->probability,
+                        'chance' => $drop->chance,
+                    ])->values(),
+                ];
+        })->values();
     }
 }

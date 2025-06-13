@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Item;
 use App\Models\Task;
 use App\Filters\TaskFilter;
 use Illuminate\Http\Request;

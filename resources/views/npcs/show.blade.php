@@ -13,15 +13,16 @@
             $npc_class = config('everquest.npc_class');
             $npc_race = config('everquest.db_races');
             $npc_body = config('everquest.db_bodytypes');
-            $zone = $npc->firstSpawnEntries->spawn2->zoneData;
+            $zone = $npc->firstSpawnEntries?->spawn2->zoneData;
         @endphp
         <div class="flex flex-row items-center gap-2 flex-wrap">
             <span>
                 {{ $npc_race[$npc->race] }} {{ $npc_class[$npc->class] }}
                 <small class="text-accent">{{ $npc_body[$npc->bodytype] }}</small>
             </span>
-            @if ($zone->id)
-                <a class="text-base link-info link-hover" href="{{ route('zones.show', $zone->id) }}">
+            @if ($zone?->id)
+                <a class="text-base link-info link-hover" href="{{ route('zones.show', $zone->id) }}"
+                    title="{{ $zone->long_name }}">
                     {{ $zone->long_name }}
                 </a>
             @endif
@@ -30,6 +31,7 @@
             Primary Faction:
             @if ($npc->npcFaction?->primaryFaction)
                 <a class="text-base link-secondary link-hover"
+                    title="{{ $npc->npcFaction->primaryFaction->name ?? 'None' }}"
                     href="{{ route('factions.show', $npc->npcFaction->primaryFaction->id) }}">
                     {{ $npc->npcFaction->primaryFaction->name ?? 'None' }}
                 </a>
@@ -127,11 +129,12 @@
                 @if ($npc->attackProcSpell)
                     <h3 class="block mb-4 font-semibold">Proc ({{ $npc->attackProcSpellProcChance }}%)</h3>
                     <div class="flex items-center gap-2 mb-1 whitespace-nowrap">
-                        <img src="{{ asset('img/icons/' . $npc->attackProcSpell->new_icon . '.png') }}"
-                            alt="{{ $npc->attackProcSpell->name }} Icon" loading="lazy"
-                            class="border border-base-content/50 w-6 h-6 rounded" width="24" height="24">
-                        <a class="text-base link-info link-hover"
-                            href="{{ route('spells.show', $npc->attackProcSpell->id) }}">{{ $npc->attackProcSpell->name }}</a>
+                        <x-spell-link
+                            :spell_id="$npc->attackProcSpell->id"
+                            :spell_name="$npc->attackProcSpell->name"
+                            :spell_icon="$npc->attackProcSpell->new_icon"
+                            spell_class="flex"
+                        />
                     </div>
                     <div class="divider"></div>
                 @endif
@@ -140,14 +143,12 @@
                         @foreach ($npc->filteredSpellEntries as $npcspell)
                             @if ($npcspell->spells)
                                 <div class="flex items-center gap-2 whitespace-nowrap truncate">
-                                    <img src="{{ asset('img/icons/' . $npcspell->spells->new_icon . '.png') }}"
-                                        alt="{{ $npcspell->spells->name }} Icon" loading="lazy"
-                                        class="border border-base-content/50 w-6 h-6 rounded" width="24"
-                                        height="24">
-                                    <a class="text-base link-info link-hover"
-                                        href="{{ route('spells.show', $npcspell->spells->id) }}">
-                                        {{ $npcspell->spells->name }}
-                                    </a>
+                                    <x-spell-link
+                                        :spell_id="$npcspell->spells->id"
+                                        :spell_name="$npcspell->spells->name"
+                                        :spell_icon="$npcspell->spells->new_icon"
+                                        spell_class="flex"
+                                    />
                                 </div>
                             @endif
                         @endforeach
@@ -162,7 +163,7 @@
             @if ($npc->lootTable?->loottableEntries)
                 @include('partials.npcs.tab-drops')
             @endif
-            @if ($npc->spawnEntries)
+            @if ($npc->spawnEntries && $npc->spawnEntries->count() > 0)
                 @include('partials.npcs.tab-spawns')
             @endif
             @if ($raisesFaction || $lowersFaction)

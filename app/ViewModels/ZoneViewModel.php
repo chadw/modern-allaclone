@@ -31,8 +31,11 @@ class ZoneViewModel
 
     public function npcs(): Collection
     {
-        return NpcType::whereHas('spawnentries.spawn2', function ($query) {
-            $query->where('zone', $this->zone->short_name)
+        $zone_short = $this->zone->short_name;
+        $zone_id = $this->zone->zoneidnumber;
+
+        $query = NpcType::whereHas('spawnentries.spawn2', function ($query) use ($zone_short) {
+            $query->where('zone', $zone_short)
                 ->when($this->version > 0, fn ($q) => $q->where('version', $this->version));
             })
             ->whereNotIn('race', [127, 240])
@@ -40,8 +43,20 @@ class ZoneViewModel
                 'id', 'class', 'hp', 'level', 'trackable', 'maxlevel', 'race', 'name',
                 'loottable_id', 'raid_target', 'rare_spawn'
             ])
-            ->groupBy('name')
-            ->get()
+            ->get();
+
+        $query2 = NpcType::select([
+                'id', 'class', 'hp', 'level', 'trackable', 'maxlevel', 'race', 'name',
+                'loottable_id', 'raid_target', 'rare_spawn'
+            ])
+            ->whereNotIn('race', [127, 240])
+            ->whereRaw('CAST(SUBSTRING(id, 1, LENGTH(id) - 3) AS UNSIGNED) = ?', [$zone_id])
+            ->whereDoesntHave('spawnentries')
+            ->get();
+
+        return $query
+            ->merge($query2)
+            ->unique('name')
             ->sortBy(fn ($npc) => $npc->clean_name)
             ->values();
     }

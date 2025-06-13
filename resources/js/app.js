@@ -69,6 +69,11 @@ Alpine.store('tooltip', {
         this.loadingUrl = url;
         this.tooltipEl = document.getElementById('global-tooltip');
 
+        const effectsOnly = triggerEl.dataset.effectsOnly === '1';
+        if (effectsOnly) {
+            url += '?effects-only=1';
+        }
+
         if (this.cache.has(url)) {
             this.content = this.cache.get(url);
             this.loadingUrl = null;

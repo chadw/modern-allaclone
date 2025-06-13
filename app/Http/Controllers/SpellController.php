@@ -96,6 +96,8 @@ class SpellController extends Controller
 
     public function popup(Spell $spell)
     {
+        $effectsOnly = request()->boolean('effects-only');
+
         $spell = Spell::where('id', $spell->id)->firstOrFail();
 
         $allSpells = Cache::remember('all_spells', now()->addWeek(), function () {
@@ -111,6 +113,7 @@ class SpellController extends Controller
                 'spell' => $spell,
                 'allSpells' => $allSpells,
                 'allZones' => $allZones,
+                'effectsOnly' => $effectsOnly,
             ])->render()
         ]);
     }

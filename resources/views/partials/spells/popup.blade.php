@@ -30,6 +30,7 @@
 
     <div class="mt-2 space-y-1">
         <dl class="divide-y divide-gray-800">
+            @if ($effectsOnly === false)
             <div class="px-4 py-1 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                 <dt class="text-sm/6 font-medium">Classes</dt>
                 <dd class="mt-1 text-sm/6 sm:col-span-2 sm:mt-0">{{ $clsOutput }}</dd>
@@ -69,6 +70,7 @@
                 <dt class="text-sm/6 font-medium">Range</dt>
                 <dd class="mt-2 text-sm sm:col-span-2 sm:mt-0">{{ $spell->range }}</dd>
             </div>
+            @endif
             <div class="px-4 py-1 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                 <dt class="text-sm/6 font-medium">Effects</dt>
                 <dd class="mt-2 text-sm sm:col-span-2 sm:mt-0">

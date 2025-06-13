@@ -12,13 +12,20 @@ class SpellLink extends Component
     public $spellName;
     public $spellIcon;
     public string $spellClass;
+    public bool $effectsOnly;
 
-    public function __construct(int $spellId, string $spellName, $spellIcon = null, string $spellClass = '')
-    {
+    public function __construct(
+        int $spellId,
+        string $spellName,
+        $spellIcon = null,
+        string $spellClass = '',
+        bool $effectsOnly = false
+    ) {
         $this->spellId = $spellId;
         $this->spellName = $spellName;
         $this->spellIcon = $spellIcon;
         $this->spellClass = $spellClass;
+        $this->effectsOnly = $effectsOnly;
     }
 
     public function render(): View|Closure|string

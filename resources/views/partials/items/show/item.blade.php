@@ -244,44 +244,68 @@
         <br>
         {{-- item proc --}}
         @if ($item->proceffect > 0 && $item->proceffect < 65535)
-            <p>
-                <strong>Combat Effect:</strong> <a class="link-info link-hover"
-                    href="/spells/{{ $item->proceffect }}">{{ $item->custom_proceffect }}</a>
+            <div>
+                <strong>Combat Effect:</strong>
+                <x-spell-link
+                    :spell_id="$item->proceffect"
+                    :spell_name="$item->custom_proceffect"
+                    :spell_icon="null"
+                    spell_class="inline-flex"
+                    :effects_only="1"
+                />
                 @if ($item->proclevel2 > 0)
                     <br>
                     <strong>Level for effect:</strong> {{ $item->proclevel2 }}
                 @endif
                 <br>
                 <strong>Effect chance modifier:</strong> {{ 100 + $item->procrate }}%
-            </p>
+            </div>
         @endif
         {{-- worn effect --}}
         @if ($item->worneffect > 0 && $item->worneffect < 65535)
-            <p>
-                <strong>Worn Effect:</strong> <a class="link-info link-hover"
-                    href="/spells/{{ $item->worneffect }}">{{ $item->custom_worneffect }}</a>
+            <div>
+                <strong>Worn Effect:</strong>
+                <x-spell-link
+                    :spell_id="$item->worneffect"
+                    :spell_name="$item->custom_worneffect"
+                    :spell_icon="null"
+                    spell_class="inline-flex"
+                    :effects_only="1"
+                />
                 @if ($item->wornlevel > 0)
                     <br>
                     <strong>Level for effect:</strong> {{ $item->wornlevel }}
                 @endif
-            </p>
+            </div>
         @endif
         {{-- focus effect --}}
         @if ($item->focuseffect > 0 && $item->focuseffect < 65535)
-            <p>
-                <strong>Focus Effect:</strong> <a class="link-info link-hover"
-                    href="/spells/{{ $item->focuseffect }}">{{ $item->custom_focuseffect }}</a>
+            <div>
+                <strong>Focus Effect:</strong>
+                <x-spell-link
+                    :spell_id="$item->focuseffect"
+                    :spell_name="$item->custom_focuseffect"
+                    :spell_icon="null"
+                    spell_class="inline-flex"
+                    :effects_only="1"
+                />
                 @if ($item->focuslevel > 0)
                     <br>
                     <strong>Level for effect:</strong> {{ $item->focuslevel }}
                 @endif
-            </p>
+            </div>
         @endif
         {{-- clicky effect --}}
         @if ($item->clickeffect > 0 && $item->clickeffect < 65535)
-            <p>
-                <strong>Click Effect:</strong> <a class="link-info link-hover"
-                    href="/spells/{{ $item->clickeffect }}">{{ $item->custom_clickeffect }}</a>
+            <div>
+                <strong>Click Effect:</strong>
+                <x-spell-link
+                    :spell_id="$item->clickeffect"
+                    :spell_name="$item->custom_clickeffect"
+                    :spell_icon="null"
+                    spell_class="inline-flex"
+                    :effects_only="1"
+                />
                 (
                 @if ($item->clicktype == 4)
                     Must Equip.
@@ -302,14 +326,20 @@
                 @else
                     <br><strong>Charges:</strong> None
                 @endif
-            </p>
+            </div>
         @endif
         {{-- scroll --}}
         @if ($item->scrolleffect > 0 && $item->scrolleffect < 65535)
-            <p>
-                <strong>Spell Scroll Effect:</strong> <a
-                    href="/spells/{{ $item->scrolleffect }}">{{ $item->custom_scrolleffect }}</a>
-            </p>
+            <div>
+                <strong>Spell Scroll Effect:</strong>
+                <x-spell-link
+                    :spell_id="$item->scrolleffect"
+                    :spell_name="$item->custom_scrolleffect"
+                    :spell_icon="null"
+                    spell_class="inline-flex"
+                    :effects_only="0"
+                />
+            </div>
         @endif
         {{-- bard item? --}}
         @if ($item->bardtype > 22 && $item->bardtype < 65535)

@@ -3,11 +3,12 @@
         <thead class="text-xs uppercase bg-base-300">
             <tr>
                 <th scope="col" class="w-[30%]">Tasks</th>
+                <th scope="col" class="w-[10%] hidden md:table-cell">Steps</th>
                 <th scope="col" class="w-[10%] hidden md:table-cell">Type</th>
                 <th scope="col" class="w-[10%] hidden lg:table-cell truncate">Min Lvl</th>
                 <th scope="col" class="w-[10%] hidden lg:table-cell truncate">Max Lvl</th>
                 <th scope="col" class="w-[10%] hidden md:table-cell">Repeat</th>
-                <th scope="col" class="w-[30%]">Rewards</th>
+                <th scope="col" class="w-[20%]">Rewards</th>
             </tr>
         </thead>
         <tbody>
@@ -28,6 +29,7 @@
                             </span>
                         </div>
                     </td>
+                    <td>{{ $task->task_activities_count }}</td>
                     <td class="hidden md:table-cell">{{ $task->task_type }}</td>
                     <td class="hidden lg:table-cell">{{ $task->min_level }}</td>
                     <td class="hidden lg:table-cell">{{ $task->max_level }}</td>

@@ -140,6 +140,7 @@ class ZoneViewModel
                         ->orWhere('zone_version', -1);
             });
         }])
+        ->withCount('taskActivities')
         ->where('min_level', '<=', config('everquest.server_max_level'))
         ->where('enabled', 1)
         ->orderBy('min_level')

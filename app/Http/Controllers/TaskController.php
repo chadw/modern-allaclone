@@ -18,8 +18,9 @@ class TaskController extends Controller
                 ->apply(Task::query())
                 ->select([
                     'id', 'type', 'duration', 'title', 'reward_id_list', 'cash_reward', 'exp_reward',
-                    'reward_points', 'min_level', 'max_level', 'repeatable',
+                    'reward_points', 'reward_point_type', 'min_level', 'max_level', 'repeatable',
                 ])
+                ->withCount('taskActivities')
                 ->where('enabled', 1)
                 ->orderBy('title', 'asc')
                 ->paginate(50)

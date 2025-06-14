@@ -216,7 +216,6 @@ class ItemViewModel
         $query = NpcType::select([
             'npc_types.id',
             'npc_types.name',
-            //'npc_types.clean_name',
             $isFallback
                 ? DB::raw('CAST(SUBSTRING(npc_types.id, 1, LENGTH(npc_types.id) - 3) AS UNSIGNED) as zone_guess_id')
                 : 'spawn2.zone',

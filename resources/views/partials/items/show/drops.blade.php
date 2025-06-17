@@ -3,7 +3,7 @@
 </div>
 
 <div x-data="itemDrops({{ $item->id }})" x-init="load()"
-    class="max-h-96 scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-slate-800 overflow-y-auto mb-7">
+    class="max-h-96 scrollbar-thin scrollbar-thumb-accent scrollbar-track-base-300 overflow-y-auto mb-7">
     <template x-if="loading">
         <div>
             <template x-for="n in 6">

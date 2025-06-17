@@ -2,7 +2,7 @@
     <div class="divider">This item is used in tradeskill recipes</div>
 </div>
 
-<div class="max-h-96 scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-slate-800 overflow-y-auto">
+<div class="max-h-96 scrollbar-thin scrollbar-thumb-accent scrollbar-track-base-300 overflow-y-auto">
     <ul role="list" class="list bg-base-300 divide-y divide-base-200">
     @foreach ($used_in_ts as $ts)
         <li class="flex justify-between gap-x-6 px-3 py-1">

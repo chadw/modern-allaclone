@@ -5,7 +5,7 @@
             class="input input-bordered input-sm text-white w-full focus:outline-none" autocomplete="off" />
         <div x-show="results.length > 0 || loading"
             class="absolute right-0 mt-2 z-50
-                    max-h-90 overflow-y-auto scrollbar-thin scrollbar-thumb-slate-600 scrollbar-track-slate-800
+                    max-h-90 overflow-y-auto scrollbar-thin scrollbar-thumb-accent scrollbar-track-base-300
                     sm:max-h-none sm:overflow-visible sm:scrollbar-none
                     sm:min-w-full sm:w-screen sm:max-w-md lg:max-w-2xl xl:max-w-4xl">
             <div class="bg-base-200 border border-base-content/50 rounded shadow-lg p-2">

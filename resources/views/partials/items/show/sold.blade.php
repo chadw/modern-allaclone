@@ -2,7 +2,7 @@
     <div class="divider">Sold by Merchants</div>
 </div>
 
-<div class="max-h-96 scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-slate-800 overflow-y-auto mb-5">
+<div class="max-h-96 scrollbar-thin scrollbar-thumb-accent scrollbar-track-base-300 overflow-y-auto mb-5">
 @foreach ($sold as $val)
 <div class="px-1">
     <span class="block bg-neutral/80 text-sky-400 mt-2 p-2 font-bold sticky top-0">{{ $val['zone_name'] }}</span>

@@ -19,7 +19,6 @@
             <div class="px-1">
                 <span class="block bg-neutral/80 text-sky-400 mt-2 p-2 font-bold sticky top-0"
                     x-text="drop.zone_name"></span>
-
                 <template x-if="drop.npcs.length > 0">
                     <ul role="list" class="list bg-base-300 divide-y divide-base-200">
                         <template x-for="npc in drop.npcs" :key="npc.id">
@@ -27,7 +26,10 @@
                                 <div class="flex min-w-0 gap-x-4">
                                     <div class="min-w-0 flex-auto">
                                         <p class="text-sm/6 font-semibold text-neutral-content">
-                                            <a :href="`/npcs/${npc.id}`" x-text="npc.clean_name"></a>
+                                            <a
+                                                :href="`/npcs/${npc.id}`"
+                                                x-text="npc.clean_name"
+                                                class="link-info link-hover"></a>
                                         </p>
                                     </div>
                                 </div>

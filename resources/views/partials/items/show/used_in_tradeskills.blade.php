@@ -9,13 +9,15 @@
             <div class="flex min-w-0 gap-x-4">
                 <div class="min-w-0 flex-auto">
                     <p class="text-sm/6 font-semibold text-neutral-content">
-                        <a href="{{ route('recipes.show', $ts->id) }}">{{ ucRomanNumeral($ts->name) }}</a>
+                        <a
+                            href="{{ route('recipes.show', $ts->id) }}"
+                            class="link-info link-hover">{{ ucRomanNumeral($ts->name) }}</a>
                     </p>
                 </div>
             </div>
             <div class="shrink-0 sm:flex sm:flex-col sm:items-end">
                 <p class="mt-1 text-xs/5 font-medium text-accent">
-                    {{ config('everquest.db_skills')[$ts->tradeskill] }}
+                    {{ config('everquest.db_skills.' . $ts->tradeskill) ?? '' }}
                 </p>
             </div>
         </li>

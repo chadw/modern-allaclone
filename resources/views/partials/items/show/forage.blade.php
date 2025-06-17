@@ -9,7 +9,8 @@
         <div class="flex min-w-0 gap-x-4">
             <div class="min-w-0 flex-auto">
                 <p class="text-sm/6 font-semibold text-neutral-content">
-                    <a href="{{ route('zones.show', $val['zone_id']) }}">{{ $val['long_name'] }}</a>
+                    <a href="{{ route('zones.show', $val['zone_id']) }}"
+                        class="link-info link-hover">{{ $val['long_name'] }}</a>
                     @if ($val['expansion'])
                         <span class="text-xs/5 text-gray-500">{{ $val['expansion'] }}</span>
                     @endif

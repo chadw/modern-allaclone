@@ -848,7 +848,9 @@ class SpellEffect extends Component
                     $desc .= $this->getFormatStandard('Worn Proc Rate', '%', $value_min, $value_max, $minlvl, $maxlvl);
                     break;
                 case 201:
-                    $desc .= 'Add Range Proc: <a class="link-accent link-hover" href="/spells/' . $spell->id . '">' . $this->allSpells[$base] . '</a> with ' . $limit . '% Rate Mod';
+                    $desc .= 'Add Range Proc: ';
+                    $desc .= $this->renderSpellEffect($base);
+                    $desc .= 'with ' . $limit . '% Rate Mod';
                     break;
                 case 202:
                     $desc .= 'Project Illusion on Next Spell';

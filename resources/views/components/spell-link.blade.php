@@ -5,14 +5,11 @@
         title="{{ $spellName }}"
         data-effects-only="{{ $effectsOnly ? '1' : '0' }}"
         >
-
         @if ($spellIcon)
             <img src="{{ asset('img/icons/' . $spellIcon . '.png') }}" alt="{{ $spellName }}" width="20"
                 height="20" class="mr-1">
         @endif
-
         {{ $spellName }}
-
         <template x-if="$store.tooltip.loadingUrl === '{{ route('spells.popup', $spellId) }}'">
             <svg class="animate-spin h-3 w-3 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none"
                 viewBox="0 0 24 24">

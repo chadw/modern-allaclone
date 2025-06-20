@@ -41,7 +41,7 @@
                     <span class="label">Level</span>
                     <select name="level" id="level" class="select">
                         <option value="">-</option>
-                        @for ($i = 1; $i <= config('eqemu.max_level', 70); $i++)
+                        @for ($i = 1; $i <= config('everquest.server_max_level', 70); $i++)
                             <option value="{{ $i }}" {{ request('level') == $i ? 'selected' : '' }}>{{ $i }}</option>
                         @endfor
                     </select>

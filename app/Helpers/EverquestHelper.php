@@ -349,7 +349,8 @@ if (!function_exists('getBuffDuration')) {
             case 3600:
                 return ($buffDuration ? $buffDuration : 3600);
             default:
-                return "???";
+                //return "???";
+                return 0;
         }
     }
 }

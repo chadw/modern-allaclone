@@ -415,7 +415,9 @@ class SpellEffect extends Component
                     $desc .= 'Gravity Flux';
                     break;
                 case 85:
-                    $desc .= 'Add Melee Proc <a class="link-accent link-hover" href="/spells/' . $spell->id . '">' . $this->allSpells[$base] . '</a>' . ($limit ? ' with ' . $limit . ' % Rate Mod' : '');
+                    $desc .= 'Add Melee Proc ';
+                    $desc .= $this->renderSpellEffect($base);
+                    $desc .= ($limit ? ' with ' . $limit . ' % Rate Mod' : '');
                     break;
                 case 86:
                     $desc .= 'Decrease Social Radius to ' . $base . $this->getUpToMaxLvl($max);
@@ -627,8 +629,13 @@ class SpellEffect extends Component
                     $desc .= 'Limit Type: ' . ($base ? 'Beneficial' : 'Detrimental');
                     break;
                 case 139:
-                    $spellKey = $this->allSpells[abs($base)] ?? 'Unknown Spell';
-                    $desc .= 'Limit Spell: ' . ($base < 0 ? 'Exclude ' : '') . '<a class="link-accent link-hover" href="/spells/' . $spell->id . '">' . $spellKey . '</a>';
+                    $spellKey = abs($base);
+                    $desc .= 'Limit Spell: ' . ($base < 0 ? 'Exclude ' : '');
+                    if (isset($this->allSpells[$spellKey])) {
+                        $desc .= $this->renderSpellEffect($spellKey);
+                    } else {
+                        $desc .= 'Unknown Spell';
+                    }
                     break;
                 case 140:
                     $desc .= 'Limit Min Duration: ' . ($base * 6) . 's';
@@ -942,8 +949,10 @@ class SpellEffect extends Component
                     $desc .= $this->getFormatStandard('Chance to Stun Bash', '%', $value_min, $value_max, $minlvl, $maxlvl);
                     break;
                 case 232:
-                    $tmp .= $limit ? ' and <a class="link-accent link-hover" href="/spells/' . $spell->id . '">' . $this->allSpells[$limit] . '</a>' : '';
-                    $desc .= 'Cast <a class="link-accent link-hover" href="/spells/' . $spell->id . '">' . $this->allSpells[4789] . '</a>' . $tmp . ' on Death (' . $base . '% Chance Divine Save)';
+                    $tmp .= $limit ? ' and ' . $this->renderSpellEffect($limit) : '';
+                    $desc .= 'Cast ';
+                    $desc .= $this->renderSpellEffect(4789);
+                    $desc .= $tmp . ' on Death (' . $base . '% Chance Divine Save)';
                     break;
                 case 233:
                     $desc .= $this->getFormatStandard('Food Consumption', '%', $value_min, $value_max, $minlvl, $maxlvl);
@@ -1108,10 +1117,13 @@ class SpellEffect extends Component
                     $desc .= $this->getFormatStandard('Spell Duration', 'seconds', ($value_min * 6), ($value_max * 6), $minlvl, $maxlvl);
                     break;
                 case 288:
-                    $desc .= 'Cast ' . ($max) ? $this->allSpells[$max] : 'Get Spell from AA Table' . ' on ' . config('everquest.spell_effects.' . $limit) . ' use' . '(' . ($base / 10) . '% Chance)';
+                    $castwhat = $max ? $this->renderSpellEffect($max) : 'Get Spell from AA Table';
+                    $desc .= "Cast {$castwhat} on " . config('everquest.spell_effects.' . $limit) . ' use (' . ($base / 10) . '% Chance)';
                     break;
                 case 289:
-                    $desc .= 'Cast <a class="link-accent link-hover" href="/spells/' . $spell->id . '">' . $this->allSpells[$base] . '</a> on Duration Fade';
+                    $desc .= 'Cast ';
+                    $desc .= $this->renderSpellEffect($base);
+                    $desc .= 'on Duration Fade';
                     break;
                 case 290:
                     $desc .= $this->getFormatStandard('Movement Speed Cap', '', $value_min, $value_max, $minlvl, $maxlvl);
@@ -1215,7 +1227,9 @@ class SpellEffect extends Component
                     $desc .= 'Gate to Home City';
                     break;
                 case 323:
-                    $desc .= 'Add Defensive Proc: <a class="link-accent link-hover" href="/spells/' . $spell->id . '">' . $this->allSpells[$spell['effect_base_value' . $n]] . '</a>' . ($limit ? ' with ' . $limit . ' % Rate Mod' : '');
+                    $desc .= 'Add Defensive Proc: ';
+                    $desc .= $this->renderSpellEffect($spell['effect_base_value' . $n]);
+                    $desc .= ($limit ? ' with ' . $limit . ' % Rate Mod' : '');
                     break;
                 case 324:
                     $desc .= "Cast from HP with " . $base . "% Penalty";
@@ -1245,7 +1259,9 @@ class SpellEffect extends Component
                     $desc .= "Summon to Corpse";
                     break;
                 case 333:
-                    $desc .= 'Cast <a class="link-accent link-hover" href="/spells/' . $spell->id . '">' . $this->allSpells[$base] . '</a>on Rune Fade';
+                    $desc .= 'Cast ';
+                    $desc .= $this->renderSpellEffect($base);
+                    $desc .= 'on Rune Fade';
                     break;
                 case 334:
                     $desc .= $this->getFormatStandard("Current HP", '%', $value_min, $value_max, $minlvl, $maxlvl) . $pertick . $special_range . " (If Target Not Moving)";
@@ -1263,10 +1279,14 @@ class SpellEffect extends Component
                     $desc .= "Summon and Resurrect All Corpses";
                     break;
                 case 339:
-                    $desc .= 'Cast <a class="link-accent link-hover" href="/spells/' . $spell->id . '">' . $this->allSpells[$limit] . '</a> on Spell Use (' . $base . '% Chance)';
+                    $desc .= 'Cast ';
+                    $desc .= $this->renderSpellEffect($limit);
+                    $desc .= 'on Spell Use (' . $base . '% Chance)';
                     break;
                 case 340: //Only one effect casts if multiple 340s in spell
-                    $desc .= 'Cast <a class="link-accent link-hover" href="/spells/' . $spell->id . '">' . $this->allSpells[$limit] . '</a>' . ($base < 100 ? ' (' . $base . '% Chance)' : '');
+                    $desc .= 'Cast ';
+                    $desc .= $this->renderSpellEffect($limit);
+                    $desc .= ($base < 100 ? ' (' . $base . '% Chance)' : '');
                     break;
                 case 341:
                     $desc .= $this->getFormatStandard('ATK Cap', '', $value_min, $value_max, $minlvl, $maxlvl);
@@ -1298,11 +1318,11 @@ class SpellEffect extends Component
                 case 350:
                     $desc .= 'Manaburn: Consumes up to ' . $base . ' mana to deal ' . -$limit . '% of that mana as direct damage';
                     break;
-                case 351: //TODO
+                case 351:
                     $desc .= 'Aura Effect: ';
                     $aura = $this->getAura($spell->id);
                     if ($aura) {
-                        $desc .= '<a class="link-accent link-hover" href="/spells/' . $aura->spell->id . '">' . $aura->spell->name . '</a>';
+                        $desc .= $this->renderSpellEffect($aura->spell->id, $aura->spell->name);
                     } else {
                         $desc .= 'Uknown Aura Effect';
                     }
@@ -1332,10 +1352,14 @@ class SpellEffect extends Component
                     $desc .= $this->getFormatStandard('Chance to Sense Trap', '%', $value_min, $value_max, $minlvl, $maxlvl);
                     break;
                 case 360:
-                    $desc .= 'Add Killshot Proc: ' . $this->allSpells[$limit] . ' (' . $base . '% Chance)' . ($max ? ' Target Max Lv: ' . $max : '');
+                    $desc .= 'Add Killshot Proc: ';
+                    $desc .= $this->renderSpellEffect($limit);
+                    $desc .= '(' . $base . '% Chance)' . ($max ? ' Target Max Lv: ' . $max : '');
                     break;
                 case 361:
-                    $desc .= 'Cast <a class="link-accent link-hover" href="/spells/' . $spell->id . '">' . $this->allSpells[$limit] . '</a> on Death (' . $base . '% Chance)';
+                    $desc .= 'Cast ';
+                    $desc .= $this->renderSpellEffect($limit);
+                    $desc .= 'on Death (' . $base . '% Chance)';
                     break;
                 case 362:
                     $desc .= $this->getFormatStandard('Potion Belt Slots', '', $value_min, $value_max, $minlvl, $maxlvl);
@@ -1347,7 +1371,9 @@ class SpellEffect extends Component
                     $desc .= $this->getFormatStandard('Chance to Triple Attack', '', $value_min, $value_max, $minlvl, $maxlvl);
                     break;
                 case 365:
-                    $desc .= 'Cast <a class="link-accent link-hover" href="/spells/' . $spell->id . '">' . $this->allSpells[$limit] . '</a> if spell Kills Target (' . $base . '% Chance)';
+                    $desc .= 'Cast ';
+                    $desc .= $this->renderSpellEffect($limit);
+                    $desc .= 'if spell Kills Target (' . $base . '% Chance)';
                     break;
                 case 366:
                     $desc .= 'Error: (' . $spell[$id] . ') not used';
@@ -1371,10 +1397,14 @@ class SpellEffect extends Component
                     $desc .= $this->getFormatStandard('Forage Skill Cap', '', $value_min, $value_max, $minlvl, $maxlvl);
                     break;
                 case 373:
-                    $desc .= 'Cast <a class="link-accent link-hover" href="/spells/' . $spell->id . '">' . $this->allSpells[$base] . '</a> on Duration Fade (v373)';
+                    $desc .= 'Cast ';
+                    $desc .= $this->renderSpellEffect($base);
+                    $desc .= 'on Duration Fade (v373)';
                     break;
                 case 374:
-                    $desc .= 'Cast <a class="link-accent link-hover" href="/spells/' . $spell->id . '">' . $this->allSpells[$limit] . '</a>' . ($base < 100 ? ' (' . $base . '% Chance)' : '');
+                    $desc .= 'Cast ';
+                    $desc .= $this->renderSpellEffect($limit);
+                    $desc .= ($base < 100 ? ' (' . $base . '% Chance)' : '');
                     break;
                 case 375:
                     $desc .= $this->getFormatStandard("Critical DoT Damage", '%', $value_min, $value_max, $minlvl, $maxlvl) . ' of Base Damage';
@@ -1383,7 +1413,9 @@ class SpellEffect extends Component
                     $desc .= 'Fling';
                     break;
                 case 377:
-                    $desc .= 'Cast <a class="link-accent link-hover" href="/spells/' . $spell->id . '">' . $this->allSpells[$base] . '</a> on Duration Fade (v377)';
+                    $desc .= 'Cast ';
+                    $desc .= $this->renderSpellEffect($base);
+                    $desc .= 'on Duration Fade (v377)';
                     break;
                 case 378:
                     $desc .= $this->getFormatStandard('Chance to Resist ' . config('everquest.spell_effects.' . $limit) . ' Effects', '%', $value_min, $value_max, $minlvl, $maxlvl);
@@ -1414,28 +1446,35 @@ class SpellEffect extends Component
                     $desc .= 'Inhibit Effect: ' . config('everquest.spell_effects.' . $limit) . ($base ? ' (From: ' . config('everquest.spell_negatetype.' . $base) . ' Effects)' : '');
                     break;
                 case 383:
-                    $desc .= 'Cast <a class="link-accent link-hover" href="/spells/' . $spell->id . '">' . $this->allSpells[$limit] . '</a> on Spell Use' . ($base !== 100 ? ' (Proc rate mod: ' . ($base - 100) . '%)' : '');
+                    $desc .= 'Cast ';
+                    $desc .= $this->renderSpellEffect($limit);
+                    $desc .= 'on Spell Use' . ($base !== 100 ? ' (Proc rate mod: ' . ($base - 100) . '%)' : '');
                     break;
                 case 384:
                     $desc .= 'Fling to Target (Velocity: ' . $base . ')';
                     break;
                 case 385:
+                    $desc .= 'Limit Spell Group: Nothing to see yet.';
                     break;
                     /*
                 const spellGroupId   = Math.abs(base);
                 const spellGroupName = await this.getSpellGroupNameById(spellGroupId);
 
                 $desc .= util.format(
-                    "Limit Spell Group: %s %s",
+                    " %s %s",
                     (base >= 0 ? "" : "Exclude "),
                     spellGroupName
                 )*/
                 //break;
                 case 386:
-                    $desc .= 'Cast <a class="link-accent link-hover" href="/spells/' . $spell->id . '">' . $this->allSpells[$base] . '</a> on Curer';
+                    $desc .= 'Cast ';
+                    $desc .= $this->renderSpellEffect($base);
+                    $desc .= 'on Curer';
                     break;
                 case 387:
-                    $desc .= 'Cast <a class="link-accent link-hover" href="/spells/' . $spell->id . '">' . $this->allSpells[$base] . '</a> on Cured';
+                    $desc .= 'Cast ';
+                    $desc .= $this->renderSpellEffect($base);
+                    $desc .= 'on Cured';
                     break;
                 case 388:
                     $desc .= 'Summon All Corpses (From Any Zone)';
@@ -1492,10 +1531,14 @@ class SpellEffect extends Component
                     $desc .= $this->getFormatStandard("Staff Block Chance", '%', $value_min, $value_max, $minlvl, $maxlvl);
                     break;
                 case 406:
-                    $desc .= 'Cast <a class="link-accent link-hover" href="/spells/' . $spell->id . '">' . $this->allSpells[$base] . '</a> if Max Hits Used';
+                    $desc .= 'Cast ';
+                    $desc .= $this->renderSpellEffect($base);
+                    $desc .= 'if Max Hits Used';
                     break;
                 case 407:
-                    $desc .= 'Cast <a class="link-accent link-hover" href="/spells/' . $spell->id . '">' . $this->allSpells[$base] . '</a> on Focus Limit Match';
+                    $desc .= 'Cast ';
+                    $desc .= $this->renderSpellEffect($base);
+                    $desc .= 'on Focus Limit Match';
                     break;
                 case 408:
                     $desc .= 'Cap HP at ' . ($limit > 0 ? 'lowest of ' . $base . '% or ' . $limit : +$base . '%');
@@ -1531,7 +1574,9 @@ class SpellEffect extends Component
                     $desc .= $this->getFormatStandard(config('everquest.db_skills.' . $limit) . " Damage bonus", "", $value_min, $value_max, $minlvl, $maxlvl) . $pertick . $special_range . "(v418)";
                     break;
                 case 419:
-                    $desc .= 'Add Melee Proc (v2) <a class="link-accent link-hover" href="/spells/' . $spell->id . '">' . $this->allSpells[$base] . '</a>' . ($limit ? ' with ' . $limit . ' % Rate Mod' : '');
+                    $desc .= 'Add Melee Proc (v2) ';
+                    $desc .= $this->renderSpellEffect($base);
+                    $desc .= ($limit ? ' with ' . $limit . ' % Rate Mod' : '');
                     break;
                 case 420:
                     $desc .= $this->getFormatStandard("Max Hits Count", '%', $value_min, $value_max, $minlvl, $maxlvl);
@@ -1555,13 +1600,17 @@ class SpellEffect extends Component
                     $desc .= $this->getFormatStandard('Extended Target Window Slots', '', $value_min, $value_max, $minlvl, $maxlvl);
                     break;
                 case 427:
-                    $desc .= 'Add Skill Proc: <a class="link-accent link-hover" href="/spells/' . $spell->id . '">' . $this->allSpells[$base] . '</a>' . ($limit ? ' with ' . $limit . ' % Rate Mod' : '');
+                    $desc .= 'Add Skill Proc: ';
+                    $desc .= $this->renderSpellEffect($base);
+                    $desc .= ($limit ? ' with ' . $limit . ' % Rate Mod' : '');
                     break;
                 case 428:
                     $desc .= 'Limit Skill: ' . config('everquest.db_skills.' . $base);
                     break;
                 case 429:
-                    $desc .= 'Add Skill Proc on Successful Hit: <a class="link-accent link-hover" href="/spells/' . $spell->id . '">' . $this->allSpells[$base] . '</a>' . ($limit ? ' with ' . $limit . ' % Rate Mod' : '');
+                    $desc .= 'Add Skill Proc on Successful Hit: ';
+                    $desc .= $this->renderSpellEffect($base);
+                    $desc .= ($limit ? ' with ' . $limit . ' % Rate Mod' : '');
                     break;
                 case 430:
                     $desc .= 'Alter Vision: Base1=' . $base . ' Base2=' . $limit . ' Max=' . $max;
@@ -1622,10 +1671,14 @@ class SpellEffect extends Component
                     $desc .= "Cancel if Moved " . $base . "'";
                     break;
                 case 442:
-                    $desc .= 'Cast <a class="link-accent link-hover" href="/spells/' . $spell->id . '">' . $this->allSpells[$base] . '</a> once if ' .  config('everquest.spell_target_restrictions.' . $limit);
+                    $desc .= 'Cast ';
+                    $desc .= $this->renderSpellEffect($base);
+                    $desc .= 'once if ' .  config('everquest.spell_target_restrictions.' . $limit);
                     break;
                 case 443:
-                    $desc .= 'Cast <a class="link-accent link-hover" href="/spells/' . $spell->id . '">' . $this->allSpells[$base] . '</a> once if Caster ' . config('everquest.spell_target_restrictions.' . $limit);
+                    $desc .= 'Cast ';
+                    $desc .= $this->renderSpellEffect($base);
+                    $desc .= 'once if Caster ' . config('everquest.spell_target_restrictions.' . $limit);
                     break;
                 case 444:
                     $desc .= "Lock Aggro on Caster and " . $this->getFormatStandard("Other Aggro", '%', ($limit - 100), ($limit - 100), $minlvl, $maxlvl) . $this->getUpToMaxLvl($base);
@@ -1655,10 +1708,14 @@ class SpellEffect extends Component
                     $desc .= 'Absorb Spell Damage: ' . $base . '% over ' . $limit . +($max > 0 ? ' Total: ' . $max : '');
                     break;
                 case 453:
-                    $desc .= 'Cast <a class="link-accent link-hover" href="/spells/' . $spell->id . '">' . $this->allSpells[$base] . '</a> if ' . $limit . ' Melee Damage Taken in Single Hit';
+                    $desc .= 'Cast ';
+                    $desc .= $this->renderSpellEffect($base);
+                    $desc .= 'if ' . $limit . ' Melee Damage Taken in Single Hit';
                     break;
                 case 454:
-                    $desc .= 'Cast <a class="link-accent link-hover" href="/spells/' . $spell->id . '">' . $this->allSpells[$base] . '</a> if ' . $limit . ' Spell Damage Taken in Single Hit';
+                    $desc .= 'Cast ';
+                    $desc .= $this->renderSpellEffect($base);
+                    $desc .= 'if ' . $limit . ' Spell Damage Taken in Single Hit';
                     break;
                 case 455:
                     $desc .= $this->getFormatStandard('Current Hate', '%', $value_min, $value_max, $minlvl, $maxlvl);
@@ -1731,7 +1788,9 @@ class SpellEffect extends Component
                     $desc .= $this->getFormatStandard('Pet Critical Hit Damage', '%', $value_min, $value_max, $minlvl, $maxlvl) . ' of Base Damage';
                     break;
                 case 475:
-                    $desc .= 'Cast <a class="link-accent link-hover" href="/spells/' . $spell->id . '">' . $this->allSpells[$limit] . '</a> if Not Cast By Item Click' . ($base ? ' (Chance ' . $base . '%)' : '');
+                    $desc .= 'Cast ';
+                    $desc .= $this->renderSpellEffect($limit);
+                    $desc .= 'if Not Cast By Item Click' . ($base ? ' (Chance ' . $base . '%)' : '');
                     break;
                 case 476:
                     if ($base === 0) {
@@ -1743,7 +1802,9 @@ class SpellEffect extends Component
                     if ($base === 2) {
                         $tmp .= 'Dual Wield';
                     }
-                    $desc .= 'Weapon Stance: Apply spell <a class="link-accent link-hover" href="/spells/' . $spell->id . '">' . $this->allSpells[$limit] . '</a> when using ' . $tmp;
+                    $desc .= 'Weapon Stance: Apply spell ';
+                    $desc .= $this->renderSpellEffect($limit);
+                    $desc .= 'when using ' . $tmp;
                     break;
                 case 477:
                     $desc .= 'Move to Top of Rampage List (' . $base . '% Chance)';
@@ -1758,7 +1819,9 @@ class SpellEffect extends Component
                     $desc .= 'Limit Effect: ' . config('everquest.spell_effects.' . $limit) . ' less than ' . $base;
                     break;
                 case 481:
-                    $desc .= 'Cast <a class="link-accent link-hover" href="/spells/' . $spell->id . '">' . $this->allSpells[$limit] . '</a> if Hit By Spell' . ($base < 100 ? '(' . $base . '% Chance)' : '');
+                    $desc .= 'Cast ';
+                    $desc .= $this->renderSpellEffect($limit);
+                    $desc .= 'if Hit By Spell' . ($base < 100 ? '(' . $base . '% Chance)' : '');
                     break;
                 case 482:
                     $desc .= $this->getFormatStandard('Base ' . config('everquest.db_skills.' . $limit) . ' Damage', '%', $value_min, $value_max, $minlvl, $maxlvl);
@@ -1857,8 +1920,8 @@ class SpellEffect extends Component
                     $desc .= $this->getFormatStandard("Max Mana", '%', $value_min / 100, $value_max / 100, $minlvl, $maxlvl);
                     break;
                 case 514:
-                $desc .= $this->getFormatStandard("Max Endurance", '%', $value_min / 100, $value_max / 100, $minlvl, $maxlvl);
-                break;
+                    $desc .= $this->getFormatStandard("Max Endurance", '%', $value_min / 100, $value_max / 100, $minlvl, $maxlvl);
+                    break;
                 case 515:
                     $desc .= $this->getFormatStandard("Avoidance AC", '%', $value_min / 1000, $value_max / 1000, $minlvl, $maxlvl);
                     break;
@@ -2207,5 +2270,17 @@ class SpellEffect extends Component
         $desc .= $modifier . $effect_name . " by " . abs($min) . "% to " . abs($max) . '%';
 
         return $desc;
-      }
+    }
+
+    protected function renderSpellEffect($spellId, $spellName = null, $class = 'inline-flex')
+    {
+        $name = $spellName ?? ($this->allSpells[$spellId] ?? 'Unknown');
+        return view('components.spell-link', [
+            'spellId' => $spellId,
+            'spellName' => $name,
+            'spellIcon' => null,
+            'spellClass' => $class,
+            'effectsOnly' => 1,
+        ])->render();
+    }
 }

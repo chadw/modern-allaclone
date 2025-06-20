@@ -1479,7 +1479,7 @@ return [
     ], // 150
 
     'db_skills' => [
-        -1   => 'None',
+        -1   => 'Hit',
         0   => '1H Blunt',
         1   => '1H Slashing',
         2   => '2H Blunt',

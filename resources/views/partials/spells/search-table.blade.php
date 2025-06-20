@@ -28,7 +28,7 @@
                                     :spell_id="$sp->id"
                                     :spell_name="$sp->name"
                                     :spell_icon="$sp->new_icon"
-                                    spell_class="flex"
+                                    spell_class="flex text-base"
                                 />
                             </td>
                             <td>{{ config('everquest.classes_abbr.' . $selectedClass) }}/{{ $spell['level'] }}</td>

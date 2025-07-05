@@ -10,13 +10,17 @@
             @endforeach
         </select>
     </label>
+    @if ($bl_pet_data->isNotEmpty())
+        @include('partials.pets.beastlord')
+    @endif
     @if ($pets->isNotEmpty())
     <div class="border border-base-content/5 overflow-x-auto mt-6">
-        <table class="table table-auto md:table-fixed table-sm w-full table-zebra">
+        <table class="table table-auto md:table-fixed w-full table-zebra">
             <thead class="text-xs uppercase bg-base-300">
                 <tr>
                     <th scope="col" class="w-[5%]">Lvl</th>
-                    <th scope="col" class="w-[30%]">Spell</th>
+                    <th scope="col" class="w-[20%]">Spell</th>
+                    <th scope="col" class="w-[10%]">Name</th>
                     <th scope="col" class="w-[10%] hidden lg:table-cell">Race</th>
                     <th scope="col" class="w-[20%]">Class</th>
                     <th scope="col" class="w-[10%] hidden md:table-cell">HP</th>
@@ -29,7 +33,6 @@
                     @if ($pet->pets === null)
                         @continue
                     @endif
-
                     <tr>
                         <td scope="row">{{ $pet->npcs->level }}</td>
                         <td>
@@ -37,7 +40,14 @@
                                 :spell_id="$pet->id"
                                 :spell_name="$pet->name"
                                 :spell_icon="$pet->new_icon"
-                                spell_class="flex"
+                                spell_class="flex text-base"
+                            />
+                        </td>
+                        <td>
+                            <x-pet-link
+                                :pet_id="$pet->pets->id"
+                                :pet_name="$pet->pets->type"
+                                pet_class="flex"
                             />
                         </td>
                         <td class="hidden lg:table-cell">

@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Pet extends Model
 {
@@ -11,4 +12,10 @@ class Pet extends Model
 
     protected $connection = 'eqemu';
     protected $table = 'pets';
+
+    public function npcs(): HasOne
+    {
+        return $this->hasOne(NpcType::class, 'name', 'type');
+            //->select('id', 'name', 'race', 'level', 'class', 'hp', 'mana', 'AC', 'mindmg', 'maxdmg');
+    }
 }

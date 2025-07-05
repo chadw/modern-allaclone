@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Pet;
+use App\Models\PetBeastlordData;
 use App\Models\Spell;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -33,10 +35,40 @@ class PetController extends Controller
                 ->get();
         });
 
+        // show beastlord pet data
+        $bl_pet_data = collect();
+        if ($selClass === 'classes15') {
+            $bl_pet_data = PetBeastlordData::all();
+        }
+
         return view('pets.index', [
             'pets' => $pets,
+            'bl_pet_data' => $bl_pet_data,
             'selClassName' => $selClassName,
             'metaTitle' => config('app.name') . ' - Pets: ' . $selClassName,
+        ]);
+    }
+
+    public function show(Pet $pet)
+    {
+        $pet = Pet::where('id', $pet->id)->with('npcs')->firstOrFail();
+
+        return view('pets.show', [
+            'pet' => $pet,
+            'metaTitle' => config('app.name') . ' - Pet: ' . $pet->type,
+        ]);
+    }
+
+    public function popup($pet)
+    {
+        $pet = Pet::where('id', $pet)
+            ->orWhere('type', $pet)
+            ->firstOrFail();
+
+        return response()->json([
+            'html' => view('partials.pets.popup', [
+                'pet' => $pet,
+            ])->render()
         ]);
     }
 }

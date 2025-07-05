@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Pet;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\NpcController;
 use App\Http\Controllers\PetController;
@@ -52,3 +53,5 @@ Route::get('/tasks/{task}', [TaskController::class, 'show'])->name('tasks.show')
 Route::get('/pets/{id?}', [PetController::class, 'index'])
     ->name('pets.index')
     ->where('id', '[0-9]+');
+Route::get('/pet/{pet}', [PetController::class, 'show'])->name('pets.show');
+Route::get('/pet/popup/{pet}', [PetController::class, 'popup'])->name('pets.popup');

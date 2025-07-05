@@ -3,6 +3,7 @@
 namespace App\View\Components;
 
 use Closure;
+use App\Models\Pet;
 use App\Models\Aura;
 use App\Models\Item;
 use App\Models\Spell;
@@ -39,6 +40,15 @@ class SpellEffect extends Component
 
         return Cache::remember("item:$id", now()->addMonth(), function () use ($id) {
             return Item::select('id', 'Name', 'icon')->find($id);
+        });
+    }
+
+    protected function getPet(string $type)
+    {
+        if (!$type) return null;
+
+        return Cache::remember("pet:$type", now()->addMonth(), function () use ($type) {
+            return Pet::select('id', 'type')->where('type', $type)->first();
         });
     }
 
@@ -241,7 +251,8 @@ class SpellEffect extends Component
                     ])->render();
                     break;
                 case 33:
-                    $desc .= 'Summon Pet: ' . $spell['teleport_zone'];
+                    $pet = $this->getPet($spell['teleport_zone']) ?? 'Unknown Pet';
+                    $desc .= 'Summon Pet: ' . ($pet ? $this->renderPetDetails($pet->id, $pet->type) : $spell['teleport_zone']);
                     break;
                 case 34:
                     $desc .= 'Error: (' . $spell[$id] . ') not used';
@@ -359,7 +370,8 @@ class SpellEffect extends Component
                     $desc .= 'Error: (' . $spell[$id] . ') not used';
                     break;
                 case 71:
-                    $desc .= 'Summon Pet: ' . $spell['teleport_zone'];
+                    $pet = $this->getPet($spell['teleport_zone']) ?? 'Unknown Pet';
+                    $desc .= 'Summon Pet: ' . ($pet ? $this->renderPetDetails($pet->id, $pet->type) : $spell['teleport_zone']);
                     break;
                 case 72:
                     $desc .= "Error: (" . $spell[$id] . ") not used";
@@ -521,18 +533,26 @@ class SpellEffect extends Component
                     $desc .= 'Inhibit Gate (' . $base . ')';
                     break;
                 case 106:
-                    $desc .= 'Summon Warder: ' . $spell['teleport_zone'];
+                    $pet = $this->getPet($spell['teleport_zone']) ?? 'Unknown Pet';
+                    $desc .= 'Summon Warder: ' . ($pet ? $this->renderPetDetails($pet->id, $pet->type) : $spell['teleport_zone']);
                     break;
                 case 107:
                     $desc .= $this->getFormatStandard('NPC Level', '', $value_min, $value_max, $minlvl, $maxlvl);
                     break;
                 case 108:
-                    $desc .= 'Summon Familiar ' . $spell['teleport_zone'];
+                    $pet = $this->getPet($spell['teleport_zone']) ?? 'Unknown Pet';
+                    $desc .= 'Summon Familiar: ' . ($pet ? $this->renderPetDetails($pet->id, $pet->type) : $spell['teleport_zone']);
                     break;
                 case 109:
+                    $item = $this->getItem($spell['effect_base_value' . $n]) ?? 'Unknown Item';
                     $desc .= 'Summon into Bag ';
-                    //const item2 = <any>(await Items.getItem(spell["effect_base_value_" . $n]));
-                break;
+                    $desc .= view('components.item-link', [
+                        'itemId' => $item->id,
+                        'itemName' => $item->Name,
+                        'itemIcon' => $item->icon,
+                        'itemClass' => 'inline-block ml-1',
+                    ])->render();
+                    break;
                 case 110:
                     $desc .= 'Error: (' . $spell[$id] . ') not used';
                     break;
@@ -687,7 +707,8 @@ class SpellEffect extends Component
                     $desc .= 'Suspend Pet' . ($base ? ' with Buffs' : '');
                     break;
                 case 152:
-                    $desc .= 'Summon Temp Pet: ' . $spell['teleport_zone'] . ' x ' . $base . ' for ' . $max . 's';
+                    $pet = $this->getPet($spell['teleport_zone']) ?? 'Unknown Pet';
+                    $desc .= 'Summon Temp Pet: ' . ($pet ? $this->renderPetDetails($pet->id, $pet->type) : $spell['teleport_zone']) . ' x' . $base . ' for ' . $max . 's';
                     break;
                 case 153:
                     $desc .= 'Balance Group HP with ' . $base . '% Penalty (Max HP taken: ' . $limit . ')';
@@ -2282,6 +2303,16 @@ class SpellEffect extends Component
             'spellName' => $name,
             'spellIcon' => null,
             'spellClass' => $class,
+            'effectsOnly' => 1,
+        ])->render();
+    }
+
+    protected function renderPetDetails($petId, $petName = null, $class = 'inline-flex')
+    {
+        return view('components.pet-link', [
+            'petId' => $petId,
+            'petName' => $petName ?? 'Unknown',
+            'petClass' => $class,
             'effectsOnly' => 1,
         ])->render();
     }

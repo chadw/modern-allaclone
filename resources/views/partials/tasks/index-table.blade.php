@@ -63,12 +63,14 @@
                         @endphp
                         @if ($task->reward_points > 0 && $task->reward_point_type)
                             <div class="text-sm flex items-center gap-1">
+                                @if ($currency && $currency->item)
                                 <x-item-link
                                     :item_id="$currency->item->id"
                                     :item_name="$currency->item->Name"
                                     :item_icon="$currency->item->icon"
                                     item_class="flex"
                                 />
+                                @endif
                                 <span class="text-accent">x{{ number_format($task->reward_points) }}</span>
                             </div>
                         @endif

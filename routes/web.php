@@ -4,6 +4,7 @@ use App\Models\Pet;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\NpcController;
 use App\Http\Controllers\PetController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\ZoneController;
@@ -11,9 +12,7 @@ use App\Http\Controllers\SpellController;
 use App\Http\Controllers\RecipeController;
 use App\Http\Controllers\FactionController;
 
-Route::get('/', function () {
-    return view('home');
-});
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 // global search
 Route::get('/search/suggest', [App\Http\Controllers\SearchController::class, 'suggest']);

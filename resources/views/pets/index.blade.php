@@ -30,11 +30,11 @@
             </thead>
             <tbody>
                 @foreach ($pets as $pet)
-                    @if ($pet->pets === null)
+                    @if ($pet->pets === null || $pet->npcs === null)
                         @continue
                     @endif
                     <tr>
-                        <td scope="row">{{ $pet->npcs->level }}</td>
+                        <td scope="row">{{ $pet->npcs ? $pet->npcs->level : 'N/A' }}</td>
                         <td>
                             <x-spell-link
                                 :spell_id="$pet->id"

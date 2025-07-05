@@ -12,37 +12,40 @@ class NpcController extends Controller
 {
     public function index(Request $request)
     {
+        $npcs = collect();
         $currentExpansion = config('everquest.current_expansion');
 
-        $npcs = (new NpcFilter($request))
-            ->apply(NpcType::query())
-            ->select('id', 'name', 'level', 'race', 'class', 'hp', 'maxlevel', 'version')
-            ->whereNotIn('race', [127, 240])
-            ->whereHas('spawnEntries', function ($query) use ($currentExpansion) {
-                $query->whereHas('spawn2', function ($q) use ($currentExpansion) {
-                    $q->whereColumn('spawn2.version', 'npc_types.version')
-                      ->whereIn('zone', function ($sub) use ($currentExpansion) {
-                          $sub->select('short_name')
-                              ->from('zone')
-                              ->where('expansion', '<=', $currentExpansion);
-                      });
-                });
-            })
-            ->with('spawnEntries.spawn2')
-            ->orderBy('name', 'asc')
-            ->paginate(50)
-            ->withQueryString();
+        if ($request->query->count() > 0) {
+            $npcs = (new NpcFilter($request))
+                ->apply(NpcType::query())
+                ->select('id', 'name', 'level', 'race', 'class', 'hp', 'maxlevel', 'version')
+                ->whereNotIn('race', [127, 240])
+                ->whereHas('spawnEntries', function ($query) use ($currentExpansion) {
+                    $query->whereHas('spawn2', function ($q) use ($currentExpansion) {
+                        $q->whereColumn('spawn2.version', 'npc_types.version')
+                        ->whereIn('zone', function ($sub) use ($currentExpansion) {
+                            $sub->select('short_name')
+                                ->from('zone')
+                                ->where('expansion', '<=', $currentExpansion);
+                        });
+                    });
+                })
+                ->with('spawnEntries.spawn2')
+                ->orderBy('name', 'asc')
+                ->paginate(50)
+                ->withQueryString();
 
-        $zones = Zone::select('id', 'zoneidnumber', 'short_name', 'long_name', 'expansion', 'version')->get();
+            $zones = Zone::select('id', 'zoneidnumber', 'short_name', 'long_name', 'expansion', 'version')->get();
 
-        foreach ($npcs as $npc) {
-            foreach ($npc->spawnEntries as $entry) {
-                if (!isset($entry->spawn2)) continue;
+            foreach ($npcs as $npc) {
+                foreach ($npc->spawnEntries as $entry) {
+                    if (!isset($entry->spawn2)) continue;
 
-                $entry->matched_zone = $zones
-                    ->where('short_name', $entry->spawn2->zone)
-                    ->where('version', $entry->spawn2->version)
-                    ->first();
+                    $entry->matched_zone = $zones
+                        ->where('short_name', $entry->spawn2->zone)
+                        ->where('version', $entry->spawn2->version)
+                        ->first();
+                }
             }
         }
 

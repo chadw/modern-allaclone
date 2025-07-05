@@ -52,6 +52,16 @@ class SpellEffect extends Component
         });
     }
 
+    protected function getSpellGroup(int $id)
+    {
+        if (!$id) return null;
+
+        return Cache::remember("spellgroup:$id", now()->addMonth(), function () use ($id) {
+            return Spell::select('id', 'name', 'new_icon')->where('spellgroup', $id)->first();
+
+        });
+    }
+
     protected function getAura(int $id)
     {
         if (!$id) return null;
@@ -1477,18 +1487,13 @@ class SpellEffect extends Component
                     $desc .= 'Fling to Target (Velocity: ' . $base . ')';
                     break;
                 case 385:
-                    $desc .= 'Limit Spell Group: Nothing to see yet.';
+                    $spellGroup = $this->getSpellGroup(abs($base));
+                    if ($spellGroup) {
+                        $desc .= 'Limit Spell Group: ' . ($base >= 0 ? '' : 'Exclude ') . $this->renderSpellEffect($spellGroup->id, $spellGroup->name);
+                    } else {
+                        $desc .= 'Limit Spell Group: ' . ($base >= 0 ? '' : 'Exclude ') . 'Unknown Spell Group';
+                    }
                     break;
-                    /*
-                const spellGroupId   = Math.abs(base);
-                const spellGroupName = await this.getSpellGroupNameById(spellGroupId);
-
-                $desc .= util.format(
-                    " %s %s",
-                    (base >= 0 ? "" : "Exclude "),
-                    spellGroupName
-                )*/
-                //break;
                 case 386:
                     $desc .= 'Cast ';
                     $desc .= $this->renderSpellEffect($base);
@@ -1792,8 +1797,13 @@ class SpellEffect extends Component
                     $desc .= $this->getFormatStandard('Damage Shield Taken', '%', $value_min, $value_max, $minlvl, $maxlvl);
                     break;
                 case 469:
-                    //$desc .= "Cast Highest Rank of [Group " + (await this.getSpellGroupNameById(Math.abs(base))) + "]" + (base < 100 ? " (" + base + "% Chance) " : "");
-                    $desc .= 'Cast Highest Rank of [Group ' . $this->allSpells[abs($base)] . ']' . ($base < 100 ? ' (' . $base . '% Chance) ' : '');
+                    $spellGroup = $this->getSpellGroup(abs($base));
+                    if ($spellGroup) {
+                        $desc .= 'Cast Highest Rank of [Group ' . $this->renderSpellEffect($spellGroup->id, $spellGroup->name) . ']';
+                    } else {
+                        $desc .= 'Cast Highest Rank of [Group ' . 'Unknown Spell Group]';
+                    }
+                    $desc .= ($base < 100 ? ' (' . $base . '% Chance) ' : '');
                     break;
                 case 470:
                     $desc .= 'Cast Highest Rank of [Group ' . $limit . ']' . ($base < 100 ? ' (' . $base . '% Chance)' : '');

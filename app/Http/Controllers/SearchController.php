@@ -20,11 +20,15 @@ class SearchController extends Controller
             return response()->json([]);
         }
 
+        // create a special query for npc type names
+        $qNpcs = str_replace(' ', '_', $q);
+
         $results = collect();
 
         $results = $results
             ->merge(
-                NpcType::where('name', 'like', "%{$q}%")->groupBy('name')->limit(5)->get()->map(function ($npc) {
+                NpcType::where('name', 'like', "%{$q}%")->orWhere('name', 'like', "%{$qNpcs}%")
+                    ->groupBy('name')->limit(5)->get()->map(function ($npc) {
                     return [
                         'type' => 'npc',
                         'name' => $npc->clean_name,

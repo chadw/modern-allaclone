@@ -16,6 +16,9 @@
                 <span class="{{ $recipe->trivial >= 300 ? 'text-error font-semibold' : 'text-accent font-semibold' }}">
                     {{ $recipe->trivial }}
                 </span> trivial
+                @if ($recipe->enabled === 0)
+                 / <span class="text-error font-semibold">Not Enabled</span>
+                @endif
             </p>
         </div>
     </div>

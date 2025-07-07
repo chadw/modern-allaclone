@@ -1,6 +1,9 @@
 # Modern EQEmu Allaclone
 ![Laravel](https://img.shields.io/badge/laravel-%23FF2D20.svg?style=for-the-badge&logo=laravel&logoColor=white)![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)![DaisyUI](https://img.shields.io/badge/daisyui-5A0EF8?style=for-the-badge&logo=daisyui&logoColor=white)
 
+## Live Demo
+You can see this in use on [Project Lazarus](https://www.lazaruseq.com/alla/)
+
 ## 🚧 Work In Progress
 This project is still under early active development and not all planned features are complete.
 

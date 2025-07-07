@@ -75,8 +75,8 @@ class ItemViewModel
         $lootdropIds = LootdropEntry::where('item_id', $itemId)->pluck('lootdrop_id');
         if ($lootdropIds->isEmpty()) return collect();//[];
 
-        $drops = $this->getDropData($itemId, $lootdropIds, false);
-        $drops2 = $this->getDropData($itemId, $lootdropIds, true);
+        $drops = collect($this->getDropData($itemId, $lootdropIds, false));
+        $drops2 = collect($this->getDropData($itemId, $lootdropIds, true));
 
         return $drops->keyBy('zone')->merge($drops2->keyBy('zone'))
             ->map(function ($zoneGroup, $zoneKey) use ($drops, $drops2) {

@@ -7,6 +7,7 @@ use App\Models\NpcType;
 use App\Models\NpcSpell;
 use App\Filters\NpcFilter;
 use Illuminate\Http\Request;
+use App\Models\AlternateCurrency;
 
 class NpcController extends Controller
 {
@@ -64,6 +65,7 @@ class NpcController extends Controller
                 'npcFactionEntries.factionList',
                 'lootTable.loottableEntries.lootdropEntries.item',
                 'spawnEntries.spawn2',
+                'merchantlist.items',
             ])
             ->findOrFail($npc->id);
 
@@ -117,6 +119,8 @@ class NpcController extends Controller
         $defaultTab = null;
         if ($npc->lootTable?->loottableEntries->isNotEmpty()) {
             $defaultTab = 'drops';
+        } elseif ($npc->merchantlist->isNotEmpty()) {
+            $defaultTab = 'merchant';
         } elseif ($npc->spawnEntries->isNotEmpty()) {
             $defaultTab = 'spawns';
         } elseif ($npc->npcFactionEntries->isNotEmpty()) {
@@ -125,11 +129,14 @@ class NpcController extends Controller
 
         $lvl = $npc->level ? ' - Level (' . $npc->level . ')' : '';
 
+        $altCurrency = AlternateCurrency::allAltCurrency();
+
         return view('npcs.show', [
             'npc' => $npc,
             'defaultTab' => $defaultTab,
             'raisesFaction' => $raisesFaction,
             'lowersFaction' => $lowersFaction,
+            'altCurrency' => $altCurrency,
             'metaTitle' => config('app.name') . ' - NPC: ' . $npc->clean_name . $lvl,
         ]);
     }

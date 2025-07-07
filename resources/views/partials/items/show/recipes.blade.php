@@ -20,6 +20,9 @@
                 <p class="mt-1 text-xs/5 font-medium {{ $recipe->trivial > 300 ? 'text-red-500' : 'text-accent' }}">
                     {{ $recipe->trivial }} <span class="text-white">trivial</span>
                 </p>
+                @if ($recipe->enabled === 0)
+                    <span class="text-xs/5 text-error font-semibold">Not Enabled</span>
+                @endif
             </div>
         </li>
     @endforeach

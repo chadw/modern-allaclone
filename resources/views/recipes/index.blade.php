@@ -15,7 +15,8 @@
                 <tr>
                     <th scope="col" class="w-[60%]">Name</th>
                     <th scope="col" class="w-[20%]">Tradeskill</th>
-                    <th scope="col" class="w-[20%] text-right">Trivial</th>
+                    <th scope="col" class="w-[10%] text-right">Enabled</th>
+                    <th scope="col" class="w-[10%] text-right">Trivial</th>
                 </tr>
             </thead>
             <tbody>
@@ -29,6 +30,9 @@
                         </div>
                     </td>
                     <td class="truncate">{{ config('everquest.skills.tradeskill')[$recipe->tradeskill] ?? 'Non-Tradeskill' }}</td>
+                    <td class="text-right {{ $recipe->enabled === 1 ? 'text-success font-semibold' : 'text-error font-semibold' }}">
+                        {{ $recipe->enabled === 1 ? 'Yes': 'No' }}
+                    </td>
                     <td class="text-right {{ $recipe->trivial >= 300 ? 'text-error font-semibold' : 'text-accent font-semibold' }}">
                         {{ $recipe->trivial }}
                     </td>

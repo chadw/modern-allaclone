@@ -27,7 +27,7 @@
                                     <div class="min-w-0 flex-auto">
                                         <p class="text-sm/6 font-semibold text-neutral-content">
                                             <a
-                                                :href="`/npcs/${npc.id}`"
+                                                :href="@js(route('npcs.show', '__ID__')).replace('__ID__', npc.id)"
                                                 x-text="npc.clean_name"
                                                 class="link-info link-hover"></a>
                                         </p>

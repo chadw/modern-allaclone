@@ -163,6 +163,9 @@
             @if ($npc->lootTable?->loottableEntries)
                 @include('partials.npcs.tab-drops')
             @endif
+            @if ($npc->merchantlist->count() > 0)
+                @include('partials.npcs.tab-merchant')
+            @endif
             @if ($npc->spawnEntries && $npc->spawnEntries->count() > 0)
                 @include('partials.npcs.tab-spawns')
             @endif

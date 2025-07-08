@@ -7,7 +7,7 @@
                     @php
                         $currency = $altCurrency->firstWhere('id', $npc->alt_currency_id);
                     @endphp
-                    <span class="mr-1">Items purchashed with</span>
+                    <span class="mr-1">Items purchased with</span>
                     @if ($currency && $currency->item)
                         <x-item-link
                             :item_id="$currency->item->id"
@@ -17,9 +17,9 @@
                         />
                     @endif
                 @elseif ($npc->class === 61)
-                    <span>Items purchashed with LDoN Currency</span>
+                    <span>Items purchased with LDoN Currency</span>
                 @elseif ($npc->class === 67 || $npc->class === 68)
-                    <span>Items purchashed with DoN Currency</span>
+                    <span>Items purchased with DoN Currency</span>
                 @else
                     <span>Items purchasable from vendor</span>
                 @endif

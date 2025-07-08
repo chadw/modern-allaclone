@@ -36,6 +36,11 @@ class NpcFilter
 
     protected function name($value)
     {
+        if ($value === null || $value === '') {
+            return;
+        }
+
+        $value = str_replace(' ', '_', $value);
         $this->builder->where('name', 'like', "%{$value}%");
     }
 

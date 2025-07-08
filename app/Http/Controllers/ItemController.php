@@ -18,11 +18,18 @@ class ItemController extends Controller
             'stat3comp' => 'in:1,2,5',
         ]);
 
-        $items = (new ItemFilter($request))
-            ->apply(Item::query())
-            ->orderBy('id', 'asc')
-            ->paginate(50)
-            ->withQueryString();
+        $items = collect();
+        if ($request->query->count() > 0) {
+            $items = (new ItemFilter($request))
+                ->apply(Item::query())
+                ->select([
+                    'id', 'Name', 'icon', 'itemtype', 'ac', 'hp', 'damage', 'delay',
+                    'augtype', 'slots', 'bagslots', 'bagwr',
+                ])
+                ->orderBy('id', 'asc')
+                ->paginate(50)
+                ->withQueryString();
+        }
 
         return view('items.index', [
             'items' => $items,

@@ -16,27 +16,27 @@ class Item extends Model
 
     public function procEffectSpell(): BelongsTo
     {
-        return $this->belongsTo(Spell::class, 'proceffect', 'id');
+        return $this->belongsTo(Spell::class, 'proceffect', 'id')->select('id', 'name', 'new_icon');
     }
 
     public function wornEffectSpell(): BelongsTo
     {
-        return $this->belongsTo(Spell::class, 'worneffect', 'id');
+        return $this->belongsTo(Spell::class, 'worneffect', 'id')->select('id', 'name', 'new_icon');
     }
 
     public function focusEffectSpell(): BelongsTo
     {
-        return $this->belongsTo(Spell::class, 'focuseffect', 'id');
+        return $this->belongsTo(Spell::class, 'focuseffect', 'id')->select('id', 'name', 'new_icon');
     }
 
     public function clickEffectSpell(): BelongsTo
     {
-        return $this->belongsTo(Spell::class, 'clickeffect', 'id');
+        return $this->belongsTo(Spell::class, 'clickeffect', 'id')->select('id', 'name', 'new_icon');
     }
 
     public function scrollEffectSpell(): BelongsTo
     {
-        return $this->belongsTo(Spell::class, 'scrolleffect', 'id');
+        return $this->belongsTo(Spell::class, 'scrolleffect', 'id')->select('id', 'name', 'new_icon');
     }
 
     public function merchants(): HasMany

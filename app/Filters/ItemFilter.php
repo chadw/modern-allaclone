@@ -153,7 +153,7 @@ class ItemFilter
         $this->builder->where(function ($query) use ($value, $effectRelations) {
             foreach ($effectRelations as $relation) {
                 $query->orWhereHas($relation, function ($q) use ($value) {
-                    $q->where('name', 'like', "%{$value}%");
+                    $q->where('name', 'like', "%{$value}%")->select('id');
                 });
             }
         });

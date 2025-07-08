@@ -3,7 +3,7 @@
         <div>
             <input type="text" id="name" name="name" value="{{ request('name') }}"
                 class="w-full input validator"
-                pattern="[A-Za-z]*" minlength="3"
+                pattern="[A-Za-z ]*" minlength="3"
                 title="Only letters and at least 3 characters"
                 placeholder="Search NPCs by name" />
         </div>

@@ -2,7 +2,7 @@
 @section('title', 'Pet' . ' - ' . $pet->type ?? 'Unknown')
 
 @section('content')
-    @if ($pet)
+    @if ($pet && $pet->npcs)
         <div class="grid grid-cols-1 gap-4">
             <div class="flex flex-col gap-2">
                 <div class="stats stats-vertical lg:stats-horizontal shadow mb-3">

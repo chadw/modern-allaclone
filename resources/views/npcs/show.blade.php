@@ -13,7 +13,7 @@
             $npc_class = config('everquest.npc_class');
             $npc_race = config('everquest.db_races');
             $npc_body = config('everquest.db_bodytypes');
-            $zone = $npc->firstSpawnEntries?->spawn2->zoneData;
+            $zone = $npc->firstSpawnEntries?->spawn2?->zoneData;
         @endphp
         <div class="flex flex-row items-center gap-2 flex-wrap">
             <span>

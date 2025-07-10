@@ -22,6 +22,7 @@ class SearchController extends Controller
 
         // create a special query for npc type names
         $qNpcs = str_replace(' ', '_', $q);
+        $qNpcs = str_replace('`', '-', $q);
 
         $results = collect();
 

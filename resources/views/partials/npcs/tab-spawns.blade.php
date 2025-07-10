@@ -14,15 +14,23 @@
                     @foreach ($npc->spawnEntries as $spawn)
                         <tr>
                             <td scope="row">
-                                {{ floor($spawn->spawn2->x) }},
-                                {{ floor($spawn->spawn2->y) }},
-                                {{ floor($spawn->spawn2->z) }}
+                                @if ($spawn->spawn2)
+                                    {{ floor($spawn->spawn2->x) }},
+                                    {{ floor($spawn->spawn2->y) }},
+                                    {{ floor($spawn->spawn2->z) }}
+                                @else
+                                    -
+                                @endif
                             </td>
                             <td>{{ $spawn->chance }}%</td>
                             <td>
-                                {{ seconds_to_human($spawn->spawn2->respawntime) }}
-                                @if ($spawn->spawn2->variance > 0)
-                                 <span class="text-accent">+/- {{ seconds_to_human($spawn->spawn2->variance) }}</span>
+                                @if ($spawn->spawn2)
+                                    {{ seconds_to_human($spawn->spawn2->respawntime) }}
+                                    @if ($spawn->spawn2->variance > 0)
+                                    <span class="text-accent">+/- {{ seconds_to_human($spawn->spawn2->variance) }}</span>
+                                    @endif
+                                @else
+                                    Unknown
                                 @endif
                             </td>
                         </tr>

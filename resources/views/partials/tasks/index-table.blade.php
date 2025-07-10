@@ -41,12 +41,14 @@
                     <td class="task-rewards text-base-content/50">
                         @if ($task->reward_id_list)
                             @foreach ($task->rewards as $item)
+                                @if ($item)
                                 <x-item-link
                                     :item_id="$item->id"
                                     :item_name="$item->Name"
                                     :item_icon="$item->icon"
                                     item_class="flex"
                                 />
+                                @endif
                             @endforeach
                         @endif
 

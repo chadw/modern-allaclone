@@ -41,6 +41,8 @@ class NpcFilter
         }
 
         $value = str_replace(' ', '_', $value);
+        $value = str_replace('`', '-', $value);
+        
         $this->builder->where('name', 'like', "%{$value}%");
     }
 

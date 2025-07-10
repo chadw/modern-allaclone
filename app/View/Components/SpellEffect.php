@@ -261,8 +261,12 @@ class SpellEffect extends Component
                     ])->render();
                     break;
                 case 33:
-                    $pet = $this->getPet($spell['teleport_zone']) ?? 'Unknown Pet';
-                    $desc .= 'Summon Pet: ' . ($pet ? $this->renderPetDetails($pet->id, $pet->type) : $spell['teleport_zone']);
+                    $pet = $this->getPet($spell['teleport_zone']);
+                    if ($pet instanceof Pet) {
+                        $desc .= 'Summon Pet: ' . $this->renderPetDetails($pet->id, $pet->type);
+                    } else {
+                        $desc .= 'Summon Pet: ' . ($spell['teleport_zone'] ?? 'Unknown Pet');
+                    }
                     break;
                 case 34:
                     $desc .= 'Error: (' . $spell[$id] . ') not used';
@@ -380,8 +384,12 @@ class SpellEffect extends Component
                     $desc .= 'Error: (' . $spell[$id] . ') not used';
                     break;
                 case 71:
-                    $pet = $this->getPet($spell['teleport_zone']) ?? 'Unknown Pet';
-                    $desc .= 'Summon Pet: ' . ($pet ? $this->renderPetDetails($pet->id, $pet->type) : $spell['teleport_zone']);
+                    $pet = $this->getPet($spell['teleport_zone']);
+                    if ($pet instanceof Pet) {
+                        $desc .= 'Summon Pet: ' . $this->renderPetDetails($pet->id, $pet->type);
+                    } else {
+                        $desc .= 'Summon Pet: ' . ($spell['teleport_zone'] ?? 'Unknown Pet');
+                    }
                     break;
                 case 72:
                     $desc .= "Error: (" . $spell[$id] . ") not used";
@@ -543,15 +551,23 @@ class SpellEffect extends Component
                     $desc .= 'Inhibit Gate (' . $base . ')';
                     break;
                 case 106:
-                    $pet = $this->getPet($spell['teleport_zone']) ?? 'Unknown Pet';
-                    $desc .= 'Summon Warder: ' . ($pet ? $this->renderPetDetails($pet->id, $pet->type) : $spell['teleport_zone']);
+                    $pet = $this->getPet($spell['teleport_zone']);
+                    if ($pet instanceof Pet) {
+                        $desc .= 'Summon Warder: ' . $this->renderPetDetails($pet->id, $pet->type);
+                    } else {
+                        $desc .= 'Summon Warder: ' . ($spell['teleport_zone'] ?? 'Unknown Warder');
+                    }
                     break;
                 case 107:
                     $desc .= $this->getFormatStandard('NPC Level', '', $value_min, $value_max, $minlvl, $maxlvl);
                     break;
                 case 108:
-                    $pet = $this->getPet($spell['teleport_zone']) ?? 'Unknown Pet';
-                    $desc .= 'Summon Familiar: ' . ($pet ? $this->renderPetDetails($pet->id, $pet->type) : $spell['teleport_zone']);
+                    $pet = $this->getPet($spell['teleport_zone']);
+                    if ($pet instanceof Pet) {
+                        $desc .= 'Summon Familiar: ' . $this->renderPetDetails($pet->id, $pet->type);
+                    } else {
+                        $desc .= 'Summon Familiar: ' . ($spell['teleport_zone'] ?? 'Unknown Familiar');
+                    }
                     break;
                 case 109:
                     $item = $this->getItem($spell['effect_base_value' . $n]) ?? 'Unknown Item';
@@ -717,8 +733,12 @@ class SpellEffect extends Component
                     $desc .= 'Suspend Pet' . ($base ? ' with Buffs' : '');
                     break;
                 case 152:
-                    $pet = $this->getPet($spell['teleport_zone']) ?? 'Unknown Pet';
-                    $desc .= 'Summon Temp Pet: ' . ($pet ? $this->renderPetDetails($pet->id, $pet->type) : $spell['teleport_zone']) . ' x' . $base . ' for ' . $max . 's';
+                    $pet = $this->getPet($spell['teleport_zone']);
+                    if ($pet instanceof Pet) {
+                        $desc .= 'Summon Temp Pet: ' . $this->renderPetDetails($pet->id, $pet->type) . ' x' . $base . ' for ' . $max . 's';
+                    } else {
+                        $desc .= 'Summon Familiar: ' . ($spell['teleport_zone'] ?? 'Unknown Familiar') . ' x' . $base . ' for ' . $max . 's';
+                    }
                     break;
                 case 153:
                     $desc .= 'Balance Group HP with ' . $base . '% Penalty (Max HP taken: ' . $limit . ')';
@@ -1730,10 +1750,10 @@ class SpellEffect extends Component
                     $desc .= 'Absorb DoT Damage: ' . $base . '%' . ($limit > 0 ? 'Max Per Hit: ' . $limit : '') . ($max > 0 ? ' Total: ' . $max : '');
                     break;
                 case 451:
-                    $desc .= 'Absorb Melee Damage: ' . $base . '% over ' . $limit . +($max > 0 ? ' Total: ' . $max : '');
+                    $desc .= 'Absorb Melee Damage: ' . $base . '% over ' . $limit . ($max > 0 ? ' Total: ' . $max : '');
                     break;
                 case 452:
-                    $desc .= 'Absorb Spell Damage: ' . $base . '% over ' . $limit . +($max > 0 ? ' Total: ' . $max : '');
+                    $desc .= 'Absorb Spell Damage: ' . $base . '% over ' . $limit . ($max > 0 ? ' Total: ' . $max : '');
                     break;
                 case 453:
                     $desc .= 'Cast ';

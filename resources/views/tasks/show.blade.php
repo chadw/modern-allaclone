@@ -39,7 +39,9 @@
                 <h3>Rewards:</h3>
                 @if ($task->reward_id_list)
                     @foreach ($task->rewards as $item)
+                        @if ($item)
                         <x-item-link :item_id="$item->id" :item_name="$item->Name" :item_icon="$item->icon" />,
+                        @endif
                     @endforeach
                 @endif
 
@@ -56,7 +58,9 @@
                 @endphp
                 @if ($task->reward_points > 0 && $task->reward_point_type)
                     <div class="text-sm flex items-center gap-1">
+                        @if ($currency && $currency->item)
                         <x-item-link :item_id="$currency->item->id" :item_name="$currency->item->Name" :item_icon="$currency->item->icon" />
+                        @endif
                         <span class="text-accent">x{{ number_format($task->reward_points) }}</span>
                     </div>
                 @endif

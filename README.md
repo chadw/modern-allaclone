@@ -26,6 +26,15 @@ npm run dev
 
 cp .env.example .env
 ```
+Create a allaclone db utf8mb4/utf8mb4_unicode_ci
+Edit the .env variables to point to your allaclone db
+```
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=allaclone
+DB_USERNAME=root
+DB_PASSWORD=
+```
 
 Edit the .env variables to point to your eqemu db.
 ```
@@ -35,8 +44,19 @@ EQEMU_DB_DATABASE=peq
 EQEMU_DB_USERNAME=user
 EQEMU_DB_PASSWORD=password
 ```
+
+Now run migrations. This will populate your allaclone db with tables used for sessions and caching.
+```
+php artisan migrate
+```
+
 ### To set this up in production
-First build the assets
+Copy over your allaclone db and run the following command on your production server
+```
+php artisan optimize:clear
+```
+
+Next build the assets. Do this on your dev server preferrably.
 ```
 npm run build
 ```

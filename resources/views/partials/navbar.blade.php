@@ -1,3 +1,6 @@
+@php
+    $ddActive = Route::is('recipes.*', 'tasks.*', 'factions.*', 'pets.*');
+@endphp
 <div id="navbar-trigger" class="h-0"></div>
 <nav class="navbar bg-neutral mb-3 sticky top-0 z-50">
     <div class="container mx-auto px-4 flex items-center justify-between w-full">
@@ -16,20 +19,40 @@
                     </svg>
                 </label>
                 <ul tabindex="0" class="dropdown-content mt-3 z-[60] menu p-2 shadow bg-base-200 rounded-box w-52">
-                    <li><a href="{{ route('zones.index') }}" class="uppercase" title="Zones">Zones</a></li>
-                    <li><a href="{{ route('items.index') }}" class="uppercase" title="Items">Items</a></li>
-                    <li><a href="{{ route('spells.index') }}" class="uppercase" title="Spells">Spells</a></li>
-                    <li><a href="{{ route('npcs.index') }}" class="uppercase" title="NPCs">NPCs</a></li>
+                    <li><a href="/" class="uppercase {{ Route::is('home') ? 'bg-base-300' : '' }}"
+                            title="{{ config('app.name') }}">/</a></li>
+                    <li><a href="{{ route('zones.index') }}"
+                            class="uppercase {{ Route::is('zones.*') ? 'bg-base-300' : '' }}" title="Zones">Zones</a>
+                    </li>
+                    <li><a href="{{ route('items.index') }}"
+                            class="uppercase {{ Route::is('items.*') ? 'bg-base-300' : '' }}" title="Items">Items</a>
+                    </li>
+                    <li><a href="{{ route('spells.index') }}"
+                            class="uppercase {{ Route::is('spells.*') ? 'bg-base-300' : '' }}" title="Spells">Spells</a>
+                    </li>
+                    <li><a href="{{ route('npcs.index') }}"
+                            class="uppercase {{ Route::is('npcs.*') ? 'bg-base-300' : '' }}" title="NPCs">NPCs</a>
+                    </li>
                     <li tabindex="0">
                         <details>
-                            <summary class="uppercase flex items-center justify-between cursor-pointer" title="More">
+                            <summary
+                                class="uppercase flex items-center justify-between cursor-pointer {{ $ddActive ? 'bg-base-100' : '' }}"
+                                title="More">
                                 More
                             </summary>
                             <ul class="pl-4">
-                                <li><a href="{{ route('recipes.index') }}" title="Recipes">Recipes</a></li>
-                                <li><a href="{{ route('tasks.index') }}" title="Tasks">Tasks</a></li>
-                                <li><a href="{{ route('factions.index') }}" title="Faction">Faction</a></li>
-                                <li><a href="{{ route('pets.index') }}" title="Pets">Pets</a></li>
+                                <li><a href="{{ route('recipes.index') }}"
+                                        class="{{ Route::is('recipes.*') ? 'bg-base-300' : '' }}"
+                                        title="Recipes">Recipes</a></li>
+                                <li><a href="{{ route('tasks.index') }}"
+                                        class="{{ Route::is('tasks.*') ? 'bg-base-300' : '' }}"
+                                        title="Tasks">Tasks</a></li>
+                                <li><a href="{{ route('factions.index') }}"
+                                        class="{{ Route::is('factions.*') ? 'bg-base-300' : '' }}"
+                                        title="Faction">Faction</a></li>
+                                <li><a href="{{ route('pets.index') }}"
+                                        class="{{ Route::is('pets.*') ? 'bg-base-300' : '' }}" title="Pets">Pets</a>
+                                </li>
                             </ul>
                         </details>
                     </li>
@@ -48,12 +71,20 @@
         </div>
 
         <div class="hidden xl:flex space-x-2 absolute left-5 top-1/2 -translate-y-1/2">
-            <a href="{{ route('zones.index') }}" title="Zones" class="btn btn-ghost uppercase">Zones</a>
-            <a href="{{ route('items.index') }}" title="Items" class="btn btn-ghost uppercase">Items</a>
-            <a href="{{ route('spells.index') }}" title="Spells" class="btn btn-ghost uppercase">Spells</a>
-            <a href="{{ route('npcs.index') }}" title="NPCs" class="btn btn-ghost uppercase">NPCs</a>
+            <a href="/" title="{{ config('app.name') }}"
+                class="btn btn-ghost uppercase {{ Route::is('home') ? 'btn-active' : '' }}">/</a>
+            <a href="{{ route('zones.index') }}" title="Zones"
+                class="btn btn-ghost uppercase {{ Route::is('zones.*') ? 'btn-active' : '' }}">Zones</a>
+            <a href="{{ route('items.index') }}" title="Items"
+                class="btn btn-ghost uppercase {{ Route::is('items.*') ? 'btn-active' : '' }}">Items</a>
+            <a href="{{ route('spells.index') }}" title="Spells"
+                class="btn btn-ghost uppercase {{ Route::is('spells.*') ? 'btn-active' : '' }}">Spells</a>
+            <a href="{{ route('npcs.index') }}" title="NPCs"
+                class="btn btn-ghost uppercase {{ Route::is('npcs.*') ? 'btn-active' : '' }}">NPCs</a>
             <div class="dropdown dropdown-hover">
-                <label tabindex="0" class="btn btn-ghost uppercase flex items-center gap-1" title="More">
+                <label tabindex="0"
+                    class="btn btn-ghost uppercase flex items-center gap-1 {{ $ddActive ? 'btn-active' : '' }}"
+                    title="More">
                     More
                     <svg class="chevron h-4 w-4 transition-transform duration-200" xmlns="http://www.w3.org/2000/svg"
                         fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -61,10 +92,18 @@
                     </svg>
                 </label>
                 <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
-                    <li><a href="{{ route('recipes.index') }}" title="Recipes">Recipes</a></li>
-                    <li><a href="{{ route('tasks.index') }}" title="Tasks">Tasks</a></li>
-                    <li><a href="{{ route('factions.index') }}" title="Faction">Faction</a></li>
-                    <li><a href="{{ route('pets.index') }}" title="Pets">Pets</a></li>
+                    <li><a href="{{ route('recipes.index') }}"
+                            class="{{ Route::is('recipes.*') ? 'active bg-base-200' : '' }}"
+                            title="Recipes">Recipes</a></li>
+                    <li><a href="{{ route('tasks.index') }}"
+                            class="{{ Route::is('tasks.*') ? 'active bg-base-200' : '' }}" title="Tasks">Tasks</a>
+                    </li>
+                    <li><a href="{{ route('factions.index') }}"
+                            class="{{ Route::is('factions.*') ? 'active bg-base-200' : '' }}"
+                            title="Faction">Faction</a></li>
+                    <li><a href="{{ route('pets.index') }}"
+                            class="{{ Route::is('pets.*') ? 'active bg-base-200' : '' }}" title="Pets">Pets</a>
+                    </li>
                 </ul>
             </div>
         </div>

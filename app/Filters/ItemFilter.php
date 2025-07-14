@@ -190,6 +190,10 @@ class ItemFilter
                 default => '>='
             };
 
+            if ($op === '<=') {
+                $this->builder->where($stat, '>=', 1);
+            }
+
             $this->builder->where($stat, $op, $val);
         }
     }

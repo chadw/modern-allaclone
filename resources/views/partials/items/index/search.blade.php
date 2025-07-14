@@ -99,12 +99,27 @@
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
-            <x-item-search-stat-filter id="stat1" :stats="$stats" :selected_stat="request('stat1')" :selected_stat_comp="request('stat1comp')"
-                :stat_value="request('stat1val')" />
-            <x-item-search-stat-filter id="stat2" :stats="$stats" :selected_stat="request('stat2')" :selected_stat_comp="request('stat2comp')"
-                :stat_value="request('stat2val')" />
-            <x-item-search-stat-filter id="stat3" :stats="$stats" :selected_stat="request('stat3')" :selected_stat_comp="request('stat3comp')"
-                :stat_value="request('stat3val')" />
+            <x-item-search-stat-filter
+                id="stat1"
+                :stats="$stats"
+                :selected_stat="request('stat1')"
+                :selected_stat_comp="request('stat1comp')"
+                :stat_value="request('stat1val')"
+            />
+            <x-item-search-stat-filter
+                id="stat2"
+                :stats="$stats"
+                :selected_stat="request('stat2')"
+                :selected_stat_comp="request('stat2comp')"
+                :stat_value="request('stat2val')"
+            />
+            <x-item-search-stat-filter
+                id="stat3"
+                :stats="$stats"
+                :selected_stat="request('stat3')"
+                :selected_stat_comp="request('stat3comp')"
+                :stat_value="request('stat3val')"
+            />
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">

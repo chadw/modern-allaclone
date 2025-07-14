@@ -31,5 +31,14 @@
         </label>
     </div>
 
-    <input type="text" name="{{ $id }}val" value="{{ $stat_value }}" class="input join-item w-[60px]" maxlength="3" />
+    <input
+        type="number"
+        name="{{ $id }}val"
+        value="{{ $stat_value }}"
+        class="input join-item w-[60px]"
+        maxlength="3"
+        min="0"
+        pattern="\d*"
+        inputmode="numeric"
+    />
 </div>

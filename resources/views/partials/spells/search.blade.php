@@ -1,16 +1,25 @@
 <form method="get" action="{{ route('spells.index') }}" class="mb-6">
     <div class="space-y-4">
+        @if ($errors->any())
         <div>
-            <input type="text" id="name" name="name" value="{{ request('name') }}"
-                class="w-full input"
-                placeholder="Searches spells by name" />
+            @error('class')
+                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+            @enderror
+        </div>
+        @endif
+        <div>
+            <label class="input w-full">
+                <span>By Name</span>
+                <input type="text" id="name" name="name" value="{{ request('name') }}"
+                    class="w-full input" placeholder="Searches spells by name" />
+            </label>
         </div>
         <div class="flex flex-wrap gap-4">
             <div class="flex flex-col">
                 <label class="select">
                     <span class="label">Class</span>
                     <select id="classes" name="class" class="select">
-                        <option value="0">-</option>
+                        <option value="">-</option>
                         @foreach([
                             8 => 'Bard',
                             15 => 'Beastlord',
@@ -40,7 +49,6 @@
                 <label class="select">
                     <span class="label">Level</span>
                     <select name="level" id="level" class="select">
-                        <option value="">-</option>
                         @for ($i = 1; $i <= config('everquest.server_max_level', 70); $i++)
                             <option value="{{ $i }}" {{ request('level') == $i ? 'selected' : '' }}>{{ $i }}</option>
                         @endfor
@@ -51,9 +59,9 @@
                 <label class="select">
                     <span class="label">Options</span>
                     <select name="opt" id="opts" class="select">
-                        <option value="1"{{ request('opt') == 1 ? ' selected' : '' }}>Only</option>
-                        <option value="2"{{ request('opt') == 2 ? ' selected' : '' }}>And Higher</option>
-                        <option value="3"{{ request('opt') == 3 ? ' selected' : '' }}>And Lower</option>
+                        <option value="1"{{ request('opt', 2) == 1 ? ' selected' : '' }}>Only</option>
+                        <option value="2"{{ request('opt', 2) == 2 ? ' selected' : '' }}>And Higher</option>
+                        <option value="3"{{ request('opt', 2) == 3 ? ' selected' : '' }}>And Lower</option>
                     </select>
                 </label>
             </div>

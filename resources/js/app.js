@@ -1,13 +1,18 @@
 import './bootstrap';
 import Alpine from 'alpinejs'
 
+const baseUrl = document.querySelector('base')?.getAttribute('href') || '/';
+
 Alpine.data('eqsearch', (initialQuery = '') => ({
     query: initialQuery,
     results: [],
     loading: false,
 
     async load() {
-        if (this.query.length < 2) {
+        const cleanQuery = this.query.replace(/[^a-zA-Z0-9 `]/g, '');
+        this.query = cleanQuery;
+
+        if (cleanQuery.length < 2) {
             this.results = [];
             this.loading = false;
             return;
@@ -16,11 +21,11 @@ Alpine.data('eqsearch', (initialQuery = '') => ({
         this.loading = true;
 
         try {
-            const res = await fetch(`/search/suggest?q=${encodeURIComponent(this.query)}`);
+            const res = await fetch(`${baseUrl}search/suggest?q=${encodeURIComponent(cleanQuery)}`);
             const data = await res.json();
             this.results = data;
         } catch (e) {
-            //console.error('error loading search results:', e);
+
         } finally {
             this.loading = false;
         }
@@ -34,7 +39,7 @@ Alpine.data('itemDrops', (itemId) => ({
     async load() {
         this.loading = true;
         try {
-            const res = await fetch(`/items/drops_by_zone/${this.itemId}`);
+            const res = await fetch(`${baseUrl}items/drops_by_zone/${this.itemId}`);
             const data = await res.json();
             this.drops = data;
         } catch (e) {
@@ -44,6 +49,46 @@ Alpine.data('itemDrops', (itemId) => ({
         }
     }
 }));
+
+Alpine.data('spellLevelSticky', () => ({
+    show: true,
+    init() {
+        const sentinel = document.getElementById('extra');
+        if (!sentinel) return;
+
+        const observer = new IntersectionObserver(([entry]) => {
+            const sentinelAboveViewport = entry.boundingClientRect.top < 0;
+            this.show = !sentinelAboveViewport;
+        }, {
+            root: null,
+            threshold: 0.01,
+        });
+
+        observer.observe(sentinel);
+    }
+}));
+
+Alpine.store('otherSpells', {
+    page: 1,
+    spells: '',
+    exclude: '',
+    load(excludeIds) {
+        this.exclude = excludeIds;
+        this.loadMore(1);
+    },
+    loadMore(page = 1) {
+        this.page = page;
+        let params = new URLSearchParams(window.location.search);
+        params.set('page', page);
+        params.set('exclude', this.exclude);
+
+        return fetch(`${baseUrl}spells/other?${params.toString()}`)
+            .then(res => res.text())
+            .then(html => {
+                this.spells = html;
+            });
+    }
+});
 
 Alpine.store('itemSearch', {
     open: false,
@@ -165,7 +210,7 @@ document.addEventListener("DOMContentLoaded", function () {
         select.addEventListener('change', (e) => {
             const value = e.target.value;
             if (value) {
-                window.location.href = `/factions/${value}`;
+                window.location.href = `${baseUrl}factions/${value}`;
             }
         });
     }
@@ -176,7 +221,7 @@ document.addEventListener("DOMContentLoaded", function () {
         petSelect.addEventListener('change', (e) => {
             const value = e.target.value;
             if (value) {
-                window.location.href = `/pets/${value}`;
+                window.location.href = `${baseUrl}pets/${value}`;
             }
         });
     }

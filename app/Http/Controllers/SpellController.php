@@ -5,59 +5,73 @@ namespace App\Http\Controllers;
 use App\Models\Zone;
 use App\Models\DbStr;
 use App\Models\Spell;
-use App\Filters\SpellFilter;
+use App\Services\SpellSearch;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
 class SpellController extends Controller
 {
-    public function index(Request $request)
+    protected $allSpells;
+    protected $allZones;
+
+    public function __construct()
     {
-        $spells = collect();
-        if ($request->filled('class') && $request->filled('level')) {
-            $spells = (new SpellFilter($request))->apply(Spell::query())->get();
-        }
-
-        $level = 0;
-        if ($request->filled('level')) {
-            $level = $request->input('level');
-        }
-
-        $groupByLevel = collect();
-        if ($request->filled('class') && $request->input('class') != 0 && $level > 0) {
-            $class_col = "classes{$request->class}";
-
-            $groupByLevel = $spells->groupBy(function ($spell) use ($class_col) {
-                return $spell->$class_col;
-            })
-            ->filter(function ($spells, $level) {
-                return is_numeric($level);
-            })
-            ->map(function ($spells, $level) {
-                return [
-                    'level' => (int) $level,
-                    'spells' => $spells,
-                ];
-            })
-            ->sortBy('level')
-            ->values();
-        }
-
-        $allSpells = Cache::remember('all_spells', now()->addWeek(), function () {
+        $this->allSpells = Cache::rememberForever('all_spells', function () {
             return Spell::pluck('name', 'id');
         });
 
-        $allZones = Cache::remember('all_zones', now()->addMonth(), function () {
+        $this->allZones = Cache::rememberForever('all_zones', function () {
             return Zone::select('id', 'short_name', 'long_name')->get()->keyBy('short_name');
         });
 
+        view()->share('allSpells', $this->allSpells);
+        view()->share('allZones', $this->allZones);
+    }
+
+    public function index(Request $request)
+    {
+        if (
+            empty($request->input('name')) &&
+            empty($request->input('class')) &&
+            $request->filled('level') &&
+            $request->filled('opt')
+        ) {
+            return redirect()
+                ->route('spells.index')
+                ->withInput()
+                ->withErrors(['class' => 'Please select a class when filtering by level.']);
+        }
+
+        $search = new SpellSearch($request);
+        $spells = $search->search();
+        $groupedSpells = $search->groupSpells($spells);
+
+        $spellIds = $spells->pluck('id')->all();
+        $extra = $search->extraSpells($spellIds);
+
         return view('spells.index', [
-            'groupedSpells' => $groupByLevel,
+            'groupedSpells' => $groupedSpells,
             'selectedClass' => $request->input('class'),
             'searchName' => $request->input('name'),
-            'allSpells' => $allSpells,
-            'allZones' => $allZones,
+            'extraSpells' => $extra['spells'],
+            'extraSpellsCount' => $extra['count'],
             'metaTitle' => config('app.name') . ' - Spell Search',
+        ]);
+    }
+
+    public function extra(Request $request)
+    {
+        $search = new SpellSearch($request);
+
+        $excludeIds = explode(',', $request->input('exclude', ''));
+        $excludeIds = array_filter(array_map('intval', $excludeIds));
+
+        $query = $search->extraSpellsQuery($excludeIds);
+        $paginated = $query->paginate(25);
+
+        return view('partials.spells.other-spells', [
+            'extraSpells' => $paginated,
+            'extraSpellsCount' => $paginated->total(),
         ]);
     }
 
@@ -77,19 +91,9 @@ class SpellController extends Controller
             'focuseffect',
         ]);
 
-        $allSpells = Cache::remember('all_spells', now()->addWeek(), function () {
-            return Spell::pluck('name', 'id');
-        });
-
-        $allZones = Cache::remember('all_zones', now()->addMonth(), function () {
-            return Zone::select('id', 'short_name', 'long_name')->get()->keyBy('short_name');
-        });
-
         return view('spells.show', [
             'spell' => $spell,
             'description' => $description,
-            'allSpells' => $allSpells,
-            'allZones' => $allZones,
             'metaTitle' => config('app.name') . ' - Spell: ' . $spell->name,
         ]);
     }
@@ -100,19 +104,9 @@ class SpellController extends Controller
 
         $spell = Spell::where('id', $spell->id)->firstOrFail();
 
-        $allSpells = Cache::remember('all_spells', now()->addWeek(), function () {
-            return Spell::pluck('name', 'id');
-        });
-
-        $allZones = Cache::remember('all_zones', now()->addMonth(), function () {
-            return Zone::select('id', 'short_name', 'long_name')->get()->keyBy('short_name');
-        });
-
         return response()->json([
             'html' => view('partials.spells.popup', [
                 'spell' => $spell,
-                'allSpells' => $allSpells,
-                'allZones' => $allZones,
                 'effectsOnly' => $effectsOnly,
             ])->render()
         ]);

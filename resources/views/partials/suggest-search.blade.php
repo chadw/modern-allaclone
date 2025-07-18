@@ -1,8 +1,20 @@
 <form @submit.prevent class="flex items-center space-x-2 w-full justify-end">
     <div x-data="eqsearch()" @click.away="results = []" class="relative w-full max-w-xs">
-        <input type="text" placeholder="Search NPCs, Items, Recipes..." x-model="query"
-            @input.debounce.600ms="load" @focus="if (query.length > 0) load()" @keydown.enter.prevent
-            class="input input-bordered input-sm text-white w-full focus:outline-none" autocomplete="off" />
+        <input type="text" placeholder="Search NPCs, Items, Recipes..."
+            pattern="[A-Za-z0-9 `]*"
+            x-model="query"
+            @input.debounce.600ms="load"
+            @focus="if (query.length > 0) load()"
+            @keydown.enter.prevent
+            @keydown="
+                const allowed = /^[a-zA-Z0-9 `]$/;
+                if (!allowed.test($event.key) && !['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight', 'Delete'].includes($event.key)) {
+                    $event.preventDefault();
+                }
+            "
+            class="input input-bordered text-white w-full focus:outline-none"
+            autocomplete="off"
+        />
         <div x-show="results.length > 0 || loading"
             class="absolute right-0 mt-2 z-50
                     max-h-90 overflow-y-auto scrollbar-thin scrollbar-thumb-accent scrollbar-track-base-300

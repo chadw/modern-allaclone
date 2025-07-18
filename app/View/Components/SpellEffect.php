@@ -241,9 +241,9 @@ class SpellEffect extends Component
                     $desc .= 'Mesmerize' . $this->getUpToMaxLvl($max) . ' (Stack Type: ' . $base . ')';
                     break;
                 case 32:
+                    $item = $this->getItem($spell['effect_base_value' . $n]);
                     $desc .= 'Summon Item ';
-                    $item = $this->getItem($spell['effect_base_value' . $n]) ?? 'Unknown Item';
-                    if ($item->Name) {
+                    if ($item instanceof Item && isset($item->Name)) {
                         if ($max > 1) {
                             $desc .= ' (Stacks: ' . $max . ') ';
                         } elseif ($spell['formula' . $n] >= 1 && $spell['spell_category'] == 60) { // enchant item
@@ -251,14 +251,16 @@ class SpellEffect extends Component
                         } elseif ($spell['spell_category'] == 217) { // summon weapon
                             $desc .= ' ';
                         }
-                    }
 
-                    $desc .= view('components.item-link', [
-                        'itemId' => $item->id,
-                        'itemName' => $item->Name,
-                        'itemIcon' => $item->icon,
-                        'itemClass' => 'inline-block ml-1',
-                    ])->render();
+                        $desc .= view('components.item-link', [
+                            'itemId' => $item->id,
+                            'itemName' => $item->Name,
+                            'itemIcon' => $item->icon,
+                            'itemClass' => 'inline-block ml-1',
+                        ])->render();
+                    } else {
+                        $desc .= 'Unknown Item';
+                    }
                     break;
                 case 33:
                     $pet = $this->getPet($spell['teleport_zone']);
@@ -570,14 +572,18 @@ class SpellEffect extends Component
                     }
                     break;
                 case 109:
-                    $item = $this->getItem($spell['effect_base_value' . $n]) ?? 'Unknown Item';
+                    $item = $this->getItem($spell['effect_base_value' . $n]);
                     $desc .= 'Summon into Bag ';
-                    $desc .= view('components.item-link', [
-                        'itemId' => $item->id,
-                        'itemName' => $item->Name,
-                        'itemIcon' => $item->icon,
-                        'itemClass' => 'inline-block ml-1',
-                    ])->render();
+                    if ($item instanceof Item && isset($item->id)) {
+                        $desc .= view('components.item-link', [
+                            'itemId' => $item->id,
+                            'itemName' => $item->Name,
+                            'itemIcon' => $item->icon,
+                            'itemClass' => 'inline-block ml-1',
+                        ])->render();
+                    } else {
+                        $desc .= 'Unknown Item';
+                    }
                     break;
                 case 110:
                     $desc .= 'Error: (' . $spell[$id] . ') not used';

@@ -22,6 +22,24 @@
         </div>
     </div>
     @vite(['resources/js/app.js'])
+    <div
+        x-data="{ show: false }"
+        x-init="window.addEventListener('scroll', () => show = window.scrollY > 200)"
+        x-show="show"
+        x-transition
+        class="fixed bottom-6 right-6 z-50"
+    >
+        <button
+            @click="window.scrollTo({ top: 0, behavior: 'smooth' })"
+            class="bg-base-200 text-base-content hover:bg-base-300 p-3 rounded-full shadow-lg"
+            aria-label="Back to top"
+        >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7" />
+            </svg>
+        </button>
+    </div>
     <div x-data x-show="$store.tooltip.visible" x-html="$store.tooltip.content" x-ref="tooltip" x-transition x-cloak
         id="global-tooltip"
         class="fixed z-50 bg-base-200 border border-base-content rounded shadow-lg max-w-lg text-sm pointer-events-none"

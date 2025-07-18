@@ -28,6 +28,7 @@ Route::get('/zones', [ZoneController::class, 'index'])->name('zones.index');
 Route::get('/zones/{zone}', [ZoneController::class, 'show'])->name('zones.show');
 
 // spells
+Route::get('/spells/other', [SpellController::class, 'extra'])->name('spells.extra');
 Route::get('/spells', [SpellController::class, 'index'])->name('spells.index');
 Route::get('/spells/{spell}', [SpellController::class, 'show'])->name('spells.show');
 Route::get('/spells/popup/{spell}', [SpellController::class, 'popup'])->name('spells.popup');

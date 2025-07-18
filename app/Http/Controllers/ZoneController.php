@@ -30,7 +30,7 @@ class ZoneController extends Controller
     {
         $version = (int) $request->query('v', 0);
 
-        $zoneCache = Cache::remember("zones.show.{$zone->id}_v{$version}", now()->addMonth(), function () use ($zone, $version) {
+        $zoneCache = Cache::rememberForever("zones.show.{$zone->id}_v{$version}", function () use ($zone, $version) {
             $zone = Zone::where('id', $zone->id)
                 ->with('zonepoints', function ($q) use ($version) {
                     $q->when($version > 0, fn ($q) => $q->where('version', $version))

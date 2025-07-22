@@ -2,5 +2,5 @@
 @section('title', 'Home')
 
 @section('content')
-    <p>Welcome to Project Lazarus Allaclone</p>
+    <p>Welcome to {{ config('app.name') }}</p>
 @endsection

@@ -1,7 +1,7 @@
 @extends('layouts.default')
 
 @php
-    $title = $zone->long_name;
+    $title = $zone->long_name . ' (' . $zone->short_name . ')';
     if ($zone->version) {
         $title .= ' - v' . $zone->version;
     }

@@ -59,6 +59,7 @@ class CacheZones extends Command
                     'drops' => $vm->drops(),
                     'spawnGroups' => $vm->spawnGroups(),
                     'foraged' => $vm->foraged(),
+                    'fished' => $vm->fished(),
                     'connectedZones' => $vm->connectedZones(),
                     'tasks' => $vm->tasks(),
                 ];

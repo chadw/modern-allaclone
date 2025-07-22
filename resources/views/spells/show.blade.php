@@ -43,7 +43,7 @@
             @endif
 
             <div class="gap-4 text-sm">
-                @include('partials.spells.show.details')
+                @include('spells.partials.show.details')
             </div>
         </div>
 
@@ -69,13 +69,14 @@
             </div>
             <div class="card bg-base-100 shadow-sm">
                 <div class="card-body">
-                    <h2 class="card-title text-info/70"">items with this effect</h2>
+                    <h2 class="card-title text-info/70"">Items with this effect</h2>
                     <div class="space-y-2">
                         @if (
                                 $spell->clickeffect->isNotEmpty() ||
                                 $spell->proceffect->isNotEmpty() ||
                                 $spell->focuseffect->isNotEmpty() ||
-                                $spell->worneffect->isNotEmpty())
+                                $spell->worneffect->isNotEmpty()
+                            )
                             @foreach ($spell->clickeffect as $click)
                                 <span class="inline-flex w-full items-center gap-1 whitespace-nowrap">
                                     <x-item-link :item_id="$click->id" :item_name="$click->Name" :item_icon="$click->icon" item_class="flex" />

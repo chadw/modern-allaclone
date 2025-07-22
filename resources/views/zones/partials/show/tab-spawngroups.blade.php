@@ -6,7 +6,7 @@
                 <tr>
                     <th scope="col" class="w-[40%] hidden md:table-cell">Spawn Grp (x,y,z)</th>
                     <th scope="col" class="w-[40%]">NPCs</th>
-                    <th scope="col" class="w-[20%]">Respawn</th>
+                    <th scope="col" class="w-[20%] text-right">Respawn</th>
                 </tr>
             </thead>
             <tbody>
@@ -34,7 +34,7 @@
                                 @endforeach
                             </ul>
                         </td>
-                        <td class="text-nowrap">
+                        <td class="text-nowrap text-right">
                             {{ seconds_to_human($grp->respawntime) }}
                         </td>
                     </tr>

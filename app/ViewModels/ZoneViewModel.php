@@ -141,6 +141,16 @@ class ZoneViewModel
         ->get();
     }
 
+    public function fished(): Collection
+    {
+        return Item::whereHas('fished.zone', function ($query) {
+            $query->where('zoneid', $this->zone->zoneidnumber);
+        })
+        ->select('Name', 'id', 'icon', 'itemtype', 'bagslots')
+        ->orderBy('name', 'asc')
+        ->get();
+    }
+
     public function tasks(): Collection
     {
         $tasks = Task::whereHas('taskActivities', function ($query) {

@@ -53,4 +53,9 @@ class Item extends Model
     {
         return $this->hasMany(Forage::class, 'itemid', 'id');
     }
+
+    public function fished(): HasMany
+    {
+        return $this->hasMany(Fishing::class, 'itemid', 'id');
+    }
 }

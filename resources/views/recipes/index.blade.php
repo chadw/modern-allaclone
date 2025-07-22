@@ -2,7 +2,7 @@
 @section('title', 'Recipes')
 
 @section('content')
-    @include('partials.recipes.search')
+    @include('recipes.partials.search')
 
     @if ($recipes->isNotEmpty())
     <div class="flex w-full flex-col">

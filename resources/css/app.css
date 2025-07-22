@@ -53,3 +53,9 @@
 @media (max-width: 768px) {
     .task-loot-link a { font-size: var(--text-sm); }
 }
+
+@layer components {
+    .table-zebra tbody tr:nth-child(odd) {
+        @apply bg-base-100;
+    }
+}

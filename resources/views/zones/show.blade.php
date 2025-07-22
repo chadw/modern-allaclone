@@ -81,19 +81,22 @@
         </div>
         <div class="tabs tabs-lift">
             @if ($npcs->isNotEmpty())
-                @include('partials.zones.tab-npcs')
+                @include('zones.partials.show.tab-npcs')
             @endif
             @if ($drops)
-                @include('partials.zones.tab-drops')
+                @include('zones.partials.show.tab-drops')
             @endif
             @if ($spawnGroups->isNotEmpty())
-                @include('partials.zones.tab-spawngroups')
+                @include('zones.partials.show.tab-spawngroups')
             @endif
             @if ($foraged->isNotEmpty())
-                @include('partials.zones.tab-foraged')
+                @include('zones.partials.show.tab-foraged')
+            @endif
+            @if ($fished->isNotEmpty())
+                @include('zones.partials.show.tab-fished')
             @endif
             @if ($tasks->isNotEmpty())
-                @include('partials.zones.tab-tasks')
+                @include('zones.partials.show.tab-tasks')
             @endif
         </div>
     @endif

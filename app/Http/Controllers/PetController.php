@@ -66,7 +66,7 @@ class PetController extends Controller
             ->firstOrFail();
 
         return response()->json([
-            'html' => view('partials.pets.popup', [
+            'html' => view('pets.partials.popup', [
                 'pet' => $pet,
             ])->render()
         ]);

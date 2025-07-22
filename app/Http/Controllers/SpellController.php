@@ -105,7 +105,7 @@ class SpellController extends Controller
         $spell = Spell::where('id', $spell->id)->firstOrFail();
 
         return response()->json([
-            'html' => view('partials.spells.popup', [
+            'html' => view('spells.partials.popup', [
                 'spell' => $spell,
                 'effectsOnly' => $effectsOnly,
             ])->render()

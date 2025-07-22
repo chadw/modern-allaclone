@@ -4,7 +4,7 @@
         @mouseleave="$store.tooltip.hideTooltip()" class="text-base link-info link-hover flex items-center gap-1"
         title="{{ $itemName }}">
 
-        @if ($itemIcon)
+        @if (isset($itemIcon))
             <img src="{{ asset('img/icons/' . $itemIcon . '.png') }}" alt="{{ $itemName }}" width="20"
                 height="20" class="mr-1">
         @endif

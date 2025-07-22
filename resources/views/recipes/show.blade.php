@@ -2,7 +2,7 @@
 @section('title', 'Recipe - ' . ucRomanNumeral($recipe->name))
 
 @section('content')
-    @include('partials.recipes.search')
+    @include('recipes.partials.search')
 
     <div class="flex w-full flex-col">
         <div class="divider uppercase text-xl font-bold text-sky-400">Recipe</div>
@@ -43,6 +43,9 @@
                             }
                             if ($val->custom_is_foraged) {
                                 $sources[] = 'Foraged';
+                            }
+                            if ($val->custom_is_fished) {
+                                $sources[] = 'Fished';
                             }
                             if (!empty($failCount[$val->item->id])) {
                                 $sources[] = $failCount[$val->item->id] . 'x Returned on Fail';

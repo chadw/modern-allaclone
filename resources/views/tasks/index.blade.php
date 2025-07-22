@@ -2,11 +2,15 @@
 @section('title', 'Tasks')
 
 @section('content')
-    @include('partials.tasks.search')
+    @include('tasks.partials.search')
 
     @if ($tasks->isNotEmpty())
-        @include('partials.tasks.index-table')
+        @include('tasks.partials.index.index-table')
 
         {{ $tasks->onEachSide(2)->links() }}
+    @else
+        <div class="alert alert-warning alert-soft">
+            <span>No tasks found.</span>
+        </div>
     @endif
 @endsection

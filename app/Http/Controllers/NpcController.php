@@ -21,7 +21,7 @@ class NpcController extends Controller
                 ->apply(NpcType::query())
                 ->select('id', 'name', 'level', 'race', 'class', 'hp', 'maxlevel', 'version')
                 ->whereNotIn('race', [127, 240])
-                ->whereHas('spawnEntries', function ($query) use ($currentExpansion) {
+                /* ->whereHas('spawnEntries', function ($query) use ($currentExpansion) {
                     $query->whereHas('spawn2', function ($q) use ($currentExpansion) {
                         $q->whereColumn('spawn2.version', 'npc_types.version')
                         ->whereIn('zone', function ($sub) use ($currentExpansion) {
@@ -30,12 +30,11 @@ class NpcController extends Controller
                                 ->where('expansion', '<=', $currentExpansion);
                         });
                     });
-                })
+                }) */
                 ->with('spawnEntries.spawn2')
                 ->orderBy('name', 'asc')
                 ->paginate(50)
                 ->withQueryString();
-
             $zones = Zone::select('id', 'zoneidnumber', 'short_name', 'long_name', 'expansion', 'version')->get();
 
             foreach ($npcs as $npc) {

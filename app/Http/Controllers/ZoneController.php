@@ -48,6 +48,7 @@ class ZoneController extends Controller
                 'drops' => $vm->drops(),
                 'spawnGroups' => $vm->spawnGroups(),
                 'foraged' => $vm->foraged(),
+                'fished' => $vm->fished(),
                 'connectedZones' => $vm->connectedZones(),
                 'tasks' => $vm->tasks(),
             ];

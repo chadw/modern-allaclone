@@ -1,4 +1,4 @@
-@include('partials.spells.search-table', [
+@include('spells.partials.search-table', [
     'groupedSpells' => collect([[ 'level' => null, 'spells' => $extraSpells ]]),
     'title' => "Other Matching Spells ({$extraSpellsCount})",
 ])

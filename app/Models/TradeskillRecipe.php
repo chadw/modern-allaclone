@@ -42,6 +42,7 @@ class TradeskillRecipe extends Model
             $component->custom_is_merchant = \App\Models\Merchantlist::where('item', $itemId)->exists();
             $component->custom_is_drop = \App\Models\LootdropEntry::where('item_id', $itemId)->exists();
             $component->custom_is_foraged = \App\Models\Forage::where('itemid', $itemId)->exists();
+            $component->custom_is_fished = \App\Models\Fishing::where('itemid', $itemId)->exists();
         }
 
         return $components;

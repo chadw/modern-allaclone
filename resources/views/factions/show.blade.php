@@ -16,11 +16,11 @@
     @if ($factions)
         <div class="flex flex-col md:flex-row gap-4">
             <div class="w-full md:w-1/2">
-                @include('partials.factions.show.raised')
+                @include('factions.partials.show.raised')
             </div>
 
             <div class="w-full md:w-1/2">
-                @include('partials.factions.show.lowered')
+                @include('factions.partials.show.lowered')
             </div>
         </div>
     @endif

@@ -11,7 +11,7 @@
         </select>
     </label>
     @if ($bl_pet_data->isNotEmpty())
-        @include('partials.pets.beastlord')
+        @include('pets.partials.beastlord')
     @endif
     @if ($pets->isNotEmpty())
     <div class="border border-base-content/5 overflow-x-auto mt-6">

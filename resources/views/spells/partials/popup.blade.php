@@ -21,7 +21,7 @@
     $duration = $duration == 0 ? 'Instant' : seconds_to_human($duration * 6);
 @endphp
 
-<div class="w-full p-4 bg-base-200 rounded-lg border-1 border-base-content sticky top-120">
+<div class="w-full p-4 bg-base-200 rounded-lg border-1 border-base-content/20">
     <div class="flex justify-between items-start">
         <h1 class="text-2xl font-bold">{{ $spell->name }}</h1>
         <img src="{{ asset('img/icons/' . $spell->new_icon . '.png') }}" alt="{{ $spell->name }}"

@@ -17,13 +17,13 @@
             </button>
         </div>
         <div x-show="$store.itemSearch.open" x-cloak x-transition class="mt-4">
-            @include('partials.items.index.search')
+            @include('items.partials.index.search')
         </div>
     </div>
     @if ($items->isNotEmpty())
         <div class="flex w-full flex-col">
             <div class="divider uppercase text-xl font-bold text-sky-400">Items ({{ $items->total() }} Found)</div>
         </div>
-        @include('partials.items.index.items-table')
+        @include('items.partials.index.items-table')
     @endif
 @endsection

@@ -161,16 +161,16 @@
 
         <div class="tabs tabs-lift mt-6">
             @if ($npc->lootTable?->loottableEntries)
-                @include('partials.npcs.tab-drops')
+                @include('npcs.partials.show.tab-drops')
             @endif
             @if ($npc->merchantlist->count() > 0)
-                @include('partials.npcs.tab-merchant')
+                @include('npcs.partials.show.tab-merchant')
             @endif
             @if ($npc->spawnEntries && $npc->spawnEntries->count() > 0)
-                @include('partials.npcs.tab-spawns')
+                @include('npcs.partials.show.tab-spawns')
             @endif
             @if ($raisesFaction || $lowersFaction)
-                @include('partials.npcs.tab-faction')
+                @include('npcs.partials.show.tab-faction')
             @endif
         </div>
     @endif

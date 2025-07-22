@@ -2,13 +2,14 @@
 @section('title', 'NPCs')
 
 @section('content')
-    @include('partials.npcs.search')
+    @include('npcs.partials.index.search')
 
     @if ($npcs->isNotEmpty())
         @php
             $npc_class = config('everquest.npc_class');
             $npc_race = config('everquest.db_races');
             $expansions = config('everquest.expansions');
+            $currentExpansion = config('everquest.current_expansion');
         @endphp
         <div class="flex w-full flex-col">
             <div class="divider uppercase text-xl font-bold text-sky-400">NPCs ({{ $npcs->total() }} Found)</div>
@@ -27,9 +28,9 @@
                 <tbody>
                     @foreach ($npcs as $npc)
                         @php
-                            $zone = $npc->spawnEntries[0]->matched_zone;
+                            $zone = $npc->spawnEntries[0]->matched_zone ?? null;
                         @endphp
-                        @if (!$zone || !$npc->clean_name)
+                        @if (!$npc->clean_name)
                             @continue
                         @endif
                         <tr>
@@ -44,7 +45,7 @@
                             </td>
                             <td>
                                 <div class="flex flex-col">
-                                    @if ($zone)
+                                    @if (is_object($zone) && $zone->expansion <= $currentExpansion)
                                         <a href="{{ route('zones.show', $zone->id) }}{{ $zone->version > 0 ? '?v=' . $zone->version : '' }}"
                                             class="text-base link-info link-hover">
                                             {{ $zone->long_name }}

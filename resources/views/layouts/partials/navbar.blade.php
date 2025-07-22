@@ -67,7 +67,7 @@
         </div>
 
         <div class="flex items-center justify-end xl:w-1/3 w-full">
-            @include('partials.suggest-search')
+            @include('layouts.partials.suggest-search')
         </div>
 
         <div class="hidden xl:flex space-x-2 absolute left-5 top-1/2 -translate-y-1/2">

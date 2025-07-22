@@ -48,6 +48,7 @@ class ItemController extends Controller
                 'recipes' => $vm->recipes(),
                 'used_in_ts' => $vm->usedInTradeskills(),
                 'forage' => $vm->forageZones(),
+                'fishing' => $vm->fishingZones(),
                 'soldByZone' => $vm->soldInZones(),
                 'ground_spawn' => $vm->itemGroundSpawn(),
             ];
@@ -65,7 +66,7 @@ class ItemController extends Controller
         (new ItemViewModel($item))->withEffects();
 
         return response()->json([
-            'html' => view('partials.items.popup', ['item' => $item])->render()
+            'html' => view('items.partials.popup', ['item' => $item])->render()
         ]);
     }
 

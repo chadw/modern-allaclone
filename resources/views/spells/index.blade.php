@@ -2,10 +2,10 @@
 @section('title', 'Spells')
 
 @section('content')
-    @include('partials.spells.search')
+    @include('spells.partials.search')
 
     @if ($groupedSpells->isNotEmpty())
-        @include('partials.spells.search-table', [
+        @include('spells.partials.search-table', [
             'groupedSpells' => $groupedSpells,
             'title' => 'Spells',
         ])

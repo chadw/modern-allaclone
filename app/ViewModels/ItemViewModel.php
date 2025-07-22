@@ -3,6 +3,7 @@ namespace App\ViewModels;
 
 use App\Models\Item;
 use App\Models\Forage;
+use App\Models\Fishing;
 use App\Models\NpcType;
 use App\Models\GroundSpawn;
 use App\Models\LootdropEntry;
@@ -130,12 +131,39 @@ class ItemViewModel
                     ? " ({$expansions[$zone->expansion]})"
                     : '';
                 return [
-                    'zone_id' => $zone->zoneidnumber ?? null,
+                    'zone_id' => $zone->id ?? null,
                     'short_name' => $zone->short_name ?? null,
                     'long_name' => $zone->long_name ?? 'Unknown',
                     'expansion' => $expansionName,
                     'chance' => $forage->chance,
                     'level' => $forage->level,
+                ];
+            })->sortBy('long_name')
+            ->values();
+    }
+
+    public function fishingZones(): Collection
+    {
+        $expansions = config('everquest.expansions');
+
+        return Fishing::with('zone')
+            ->where('itemid', $this->item->id)
+            ->where('zoneid', '>', 0)
+            ->select('zoneid', 'chance', 'skill_level')
+            ->groupBy('zoneid', 'chance', 'skill_level')
+            ->get()
+            ->map(function ($fishing) use($expansions) {
+                $zone = $fishing->zone;
+                $expansionName = $zone && isset($expansions[$zone->expansion])
+                    ? " ({$expansions[$zone->expansion]})"
+                    : '';
+                return [
+                    'zone_id' => $zone->id ?? null,
+                    'short_name' => $zone->short_name ?? null,
+                    'long_name' => $zone->long_name ?? 'Unknown',
+                    'expansion' => $expansionName,
+                    'chance' => $fishing->chance,
+                    'level' => $fishing->skill_level,
                 ];
             })->sortBy('long_name')
             ->values();

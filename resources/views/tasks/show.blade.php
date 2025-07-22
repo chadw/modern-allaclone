@@ -2,7 +2,7 @@
 @section('title', 'Task - ' . $task->title)
 
 @section('content')
-    @include('partials.tasks.search')
+    @include('tasks.partials.search')
 
     <div class="flex w-full flex-col">
         <div class="divider uppercase text-xl font-bold text-sky-400">Task</div>
@@ -59,7 +59,11 @@
                 @if ($task->reward_points > 0 && $task->reward_point_type)
                     <div class="text-sm flex items-center gap-1">
                         @if ($currency && $currency->item)
-                        <x-item-link :item_id="$currency->item->id" :item_name="$currency->item->Name" :item_icon="$currency->item->icon" />
+                        <x-item-link
+                            :item_id="$currency->item->id"
+                            :item_name="$currency->item->Name"
+                            :item_icon="$currency->item->icon"
+                        />
                         @endif
                         <span class="text-accent">x{{ number_format($task->reward_points) }}</span>
                     </div>
@@ -92,48 +96,48 @@
                     @endif
                     @switch($activity->activitytype)
                         @case(1)
-                            @include('partials.tasks.types.deliver')
+                            @include('tasks.partials.show.types.deliver')
                         @break
 
                         @case(2)
-                            @include('partials.tasks.types.kill')
+                            @include('tasks.partials.show.types.kill')
                         @break
 
                         @case(3)
-                            @include('partials.tasks.types.loot')
+                            @include('tasks.partials.show.types.loot')
                         @break
 
                         @case(4)
-                            @include('partials.tasks.types.speakwith')
+                            @include('tasks.partials.show.types.speakwith')
                         @break
 
                         @case(5)
-                            @include('partials.tasks.types.explore')
+                            @include('tasks.partials.show.types.explore')
                         @break
 
                         @case(6)
-                            @include('partials.tasks.types.tradeskill')
+                            @include('tasks.partials.show.types.tradeskill')
                         @break
 
                         @case(7)
-                            @include('partials.tasks.types.fish')
+                            @include('tasks.partials.show.types.fish')
                         @break
 
                         @case(8)
-                            @include('partials.tasks.types.forage')
+                            @include('tasks.partials.show.types.forage')
                         @break
 
                         @case(9)
                         @case(10)
-                            @include('partials.tasks.types.use')
+                            @include('tasks.partials.show.types.use')
                         @break
 
                         @case(11)
-                            @include('partials.tasks.types.touch')
+                            @include('tasks.partials.show.types.touch')
                         @break
 
                         @case(100)
-                            @include('partials.tasks.types.givecash')
+                            @include('tasks.partials.show.types.givecash')
                         @break
 
                         @default

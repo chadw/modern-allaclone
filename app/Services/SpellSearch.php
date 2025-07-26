@@ -85,8 +85,7 @@ class SpellSearch
         if ($class) {
             $classCol = "classes{$class}";
 
-            $query->where($classCol, '>', 0)
-                ->where($classCol, '<', 255);
+            $query->where($classCol, '>', 0)->where($classCol, '<', 255);
 
             match ($opt) {
                 1 => $query->where($classCol, '=', $level),
@@ -99,8 +98,8 @@ class SpellSearch
                 for ($i = 1; $i <= 16; $i++) {
                     $classCol = "classes{$i}";
                     $q->orWhere(function ($sub) use ($classCol, $level, $opt, $max) {
-                        $sub->where($classCol, '>', 0)
-                            ->where($classCol, '<', 255);
+                        $sub->where($classCol, '>', 0);
+                            //->where($classCol, '<', 255);
 
                         match ($opt) {
                             1 => $sub->where($classCol, '=', $level),
@@ -122,65 +121,6 @@ class SpellSearch
 
         return [
             'spells' => $query->limit(25)->get(),
-            'count' => $query->count(),
-        ];
-    }
-
-    public function ZZextraSpells(array $spellIds): array
-    {
-        $name = trim($this->request->input('name'));
-        $class = $this->request->input('class');
-        $level = $this->request->filled('level')
-            ? (int) $this->request->input('level')
-            : config('everquest.server_max_level');
-        $opt = (int) $this->request->input('opt', 2);
-        $max = config('everquest.server_max_level');
-
-        if (
-            !$this->request->filled('name') ||
-            ($this->request->filled('class') && (int) $class !== 0 && $name === '')
-        ) {
-            return ['spells' => collect(), 'count' => 0];
-        }
-
-        $query = Spell::query()
-            ->where('name', 'like', "%{$name}%")
-            ->whereNotIn('id', $spellIds);
-
-        if ($class) {
-            $classCol = "classes{$class}";
-
-            $query->where($classCol, '>', 0)
-                ->where($classCol, '<', 255);
-
-            match ($opt) {
-                1 => $query->where($classCol, '=', $level),
-                2 => $query->where($classCol, '>=', $level),
-                3 => $query->where($classCol, '<=', $level),
-                default => null,
-            };
-        } else {
-            $query->where(function ($q) use ($level, $opt, $max) {
-                for ($i = 1; $i <= 16; $i++) {
-                    $classCol = "classes{$i}";
-
-                    $q->orWhere(function ($sub) use ($classCol, $level, $opt, $max) {
-                        $sub->where($classCol, '>', 0)
-                            ->where($classCol, '<', 255);
-
-                        match ($opt) {
-                            1 => $sub->where($classCol, '=', $level),
-                            2 => $sub->where($classCol, '>=', $level),
-                            3 => $sub->where($classCol, '<=', $level),
-                            default => null,
-                        };
-                    });
-                }
-            });
-        }
-
-        return [
-            'spells' => $query->limit(50)->get(),
             'count' => $query->count(),
         ];
     }

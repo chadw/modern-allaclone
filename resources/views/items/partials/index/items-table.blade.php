@@ -36,9 +36,11 @@
                             {{-- augment --}}
                             @if ($item->itemtype == 54)
                                 @php
+                                    $augSlots = [];
+
                                     if (($item->augtype ?? 0) > 0) {
                                         $augType = $item->augtype;
-                                        $augSlots = [];
+
                                         for ($i = 1, $bit = 1; $i <= 24; $i++, $bit *= 2) {
                                             if ($bit <= $augType && ($augType & $bit)) {
                                                 $augSlots[] = $i;

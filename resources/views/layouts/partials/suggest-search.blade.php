@@ -1,13 +1,13 @@
 <form @submit.prevent class="flex items-center space-x-2 w-full justify-end">
     <div x-data="eqsearch()" @click.away="results = []" class="relative w-full max-w-xs">
         <input type="text" placeholder="Search NPCs, Items, Recipes..."
-            pattern="[A-Za-z0-9 `]*"
+            pattern="[A-Za-z0-9 .'`]*"
             x-model="query"
             @input.debounce.600ms="load"
             @focus="if (query.length > 0) load()"
             @keydown.enter.prevent
             @keydown="
-                const allowed = /^[a-zA-Z0-9 `]$/;
+                const allowed = /^[a-zA-Z0-9 .'`]$/;
                 if (!allowed.test($event.key) && !['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight', 'Delete'].includes($event.key)) {
                     $event.preventDefault();
                 }

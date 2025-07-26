@@ -69,7 +69,7 @@ class SpellController extends Controller
         $query = $search->extraSpellsQuery($excludeIds);
         $paginated = $query->paginate(25);
 
-        return view('partials.spells.other-spells', [
+        return view('spells.partials.other-spells', [
             'extraSpells' => $paginated,
             'extraSpellsCount' => $paginated->total(),
         ]);

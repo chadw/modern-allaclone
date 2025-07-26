@@ -1,4 +1,4 @@
-<div class="w-full p-4 bg-base-200 rounded-lg">
+<div class="w-full p-4 bg-base-200 rounded-lg border-1 border-base-content/20">
     <div class="flex justify-between items-start">
         <h1 class="text-2xl font-bold">{{ $pet->type }}</h1>
     </div>

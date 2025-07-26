@@ -9,7 +9,7 @@ Alpine.data('eqsearch', (initialQuery = '') => ({
     loading: false,
 
     async load() {
-        const cleanQuery = this.query.replace(/[^a-zA-Z0-9 `]/g, '');
+        const cleanQuery = this.query.replace(/[^a-zA-Z0-9 .'`]/g, '');
         this.query = cleanQuery;
 
         if (cleanQuery.length < 2) {

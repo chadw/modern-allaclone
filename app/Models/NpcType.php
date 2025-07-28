@@ -97,7 +97,7 @@ class NpcType extends Model
         );
     }
 
-    function npcFixName(string $npc): string
+    public static function npcFixName(string $npc): string
     {
         $name = str_replace(['#', '!', '~'], '', $npc);
         $name = str_replace('_', ' ', $name);

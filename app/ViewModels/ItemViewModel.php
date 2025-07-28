@@ -9,6 +9,7 @@ use App\Models\NpcType;
 use App\Models\GroundSpawn;
 use App\Models\TradeskillRecipe;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 
 class ItemViewModel
@@ -75,96 +76,107 @@ class ItemViewModel
         $excludeMerchants = config('everquest.merchants_dont_drop_stuff') ?? true;
         $currentExpansion = config('everquest.current_expansion');
 
-        $allZones = Cache::rememberForever('all_zones', function () {
-            return Zone::select('id', 'short_name', 'long_name', 'expansion')
+        $allZones = Cache::rememberForever('all_zones_drops', function () {
+            return Zone::select('id', 'short_name', 'long_name', 'version', 'expansion')
                 ->orderBy('id')
-                ->get()
-                ->unique('short_name')
-                ->keyBy('short_name');
+                ->get();
         });
 
         $itemId = $this->item->id;
 
-        $item = Item::with([
-            'lootdropEntries.lootdrop.loottableEntries.npcs.spawnEntries.spawn2'
-        ])
-        ->where('id', $itemId)
-        ->select('id')
-        ->first();
+        $results = DB::connection('eqemu')->table('items')
+            ->join('lootdrop_entries', 'items.id', '=', 'lootdrop_entries.item_id')
+            ->join('lootdrop', 'lootdrop_entries.lootdrop_id', '=', 'lootdrop.id')
+            ->join('loottable_entries', 'lootdrop.id', '=', 'loottable_entries.lootdrop_id')
+            ->join('npc_types', 'loottable_entries.loottable_id', '=', 'npc_types.loottable_id')
+            ->join('spawnentry', 'npc_types.id', '=', 'spawnentry.npcID')
+            ->join('spawn2', 'spawnentry.spawngroupID', '=', 'spawn2.spawngroupID')
+            ->where('items.id', $itemId)
+            ->where('spawnentry.chance', '>', 0)
+            ->when($excludeMerchants, fn($q) => $q->where('npc_types.merchant_id', 0))
+            ->when(!empty($ignoreZones), fn($q) => $q->whereNotIn('spawn2.zone', $ignoreZones))
+            ->select([
+                'spawn2.zone',
+                'spawn2.version',
+                'npc_types.id as npc_id',
+                'npc_types.name as npc_name',
+                'lootdrop_entries.chance as lootdrop_chance',
+                'loottable_entries.probability',
+                'loottable_entries.multiplier',
+                'loottable_entries.loottable_id',
+            ])
+            ->distinct()
+            ->get();
 
-        $results = [];
-        foreach ($item->lootdropEntries as $lde) {
-            $lootdrop = $lde->lootdrop;
-            foreach ($lootdrop->loottableEntries as $lte) {
-                foreach ($lte->npcs as $npc) {
-                    foreach ($npc->spawnEntries as $se) {
+        $grouped = $results->groupBy(function ($row) {
+            return strtolower($row->zone) . '-' . $row->version;
+        });
 
-                        $spawn2 = $se->spawn2;
-                        $npcCleanName = $npc->clean_name;
-                        if (empty(trim($npcCleanName ?? ''))) {
-                            continue;
-                        }
 
-                        // ignore merchants
-                        if ($excludeMerchants && $npc->merchant_id !== 0) {
-                            continue;
-                        }
+        $drops = [];
+        foreach ($grouped as $zoneKey => $npcs) {
+            [$zoneShortName, $version] = explode('-', $zoneKey);
 
-                        if ($se->chance <= 0) {
-                            continue;
-                        }
+            $zoneData = $allZones->where('short_name', $zoneShortName)
+                                 ->where('version', (int) $version)
+                                 ->first();
 
-                        // ignore zones
-                        if (!$spawn2 || !$spawn2->zone || in_array($spawn2->zone, $ignoreZones)) {
-                            continue;
-                        }
-
-                        $zone = strtolower($spawn2->zone);
-
-                        if (($allZones[$zone]['expansion'] ?? 0) > $currentExpansion) {
-                            continue;
-                        }
-
-                        $results[] = [
-                            'zone'          => $zone,
-                            'zone_name'     => $allZones[$zone]['long_name'] ?? $zone,
-                            'npc_id'        => $npc->id,
-                            'npc_name'      => $npc->name,
-                            'clean_name'    => $npcCleanName,
-                            'multiplier'    => $lte->multiplier,
-                            'chance'        => $lde->chance,
-                            'probability'   => $lte->probability,
-                        ];
-                    }
-                }
+            if (!$zoneData || ($zoneData->expansion ?? 0) > $currentExpansion) {
+                continue;
             }
+
+            $drops[] = [
+                'zone' => $zoneShortName,
+                'zone_name' => $zoneData->long_name ?? $zoneShortName,
+                'version' => (int) $version,
+                'npcs' => $npcs
+                    ->unique('npc_name')
+                    ->filter(function ($npc) {
+                        $npcCleanName = NpcType::npcFixName($npc->npc_name);
+                        return !empty(trim($npcCleanName ?? ''));
+                    })
+                    ->map(function ($npc) {
+                        $npcCleanName = NpcType::npcFixName($npc->npc_name);
+                        return [
+                            'id'            => $npc->npc_id,
+                            'name'          => $npc->npc_name,
+                            'clean_name'    => $npcCleanName,
+                            'chance'        => $npc->lootdrop_chance,
+                            'probability'   => $npc->probability,
+                            'multiplier'    => $npc->multiplier,
+                            'loottable_id'  => $npc->loottable_id,
+                        ];
+                })->sortBy('clean_name', SORT_NATURAL | SORT_FLAG_CASE)->values(),
+            ];
         }
 
-        return collect($results)
-            ->groupBy('zone')
-            ->map(function ($zoneDrops, $zone) {
-                return [
-                    'zone'      => $zone,
-                    'zone_name' => $zoneDrops->first()['zone_name'],
-                    'npcs'      => $zoneDrops->groupBy('npc_name')->map(function ($group) {
-                        $npc = $group->first();
-                        return [
-                            'id'          => $npc['npc_id'],
-                            'name'        => $npc['npc_name'],
-                            'clean_name'  => $npc['clean_name'],
-                            'multiplier'  => $npc['multiplier'],
-                            'probability' => $npc['probability'],
-                            'chance'      => $npc['chance'],
-                        ];
-                    })
-                    ->unique('id')
-                    ->sortBy('clean_name', SORT_NATURAL | SORT_FLAG_CASE)
-                    ->values(),
-                ];
-            })
-            ->sortBy('zone_name', SORT_NATURAL | SORT_FLAG_CASE)
+        $drops_by_zone = collect($drops)->sortBy(fn($group) => $group['zone_name'])->values();
+
+        $allNpcs = collect($drops_by_zone)->flatMap(function ($zone) {
+            return collect($zone['npcs'])->map(function ($npc) use ($zone) {
+                return array_merge($npc, [
+                    'zone'      => $zone['zone'],
+                    'zone_name' => $zone['zone_name'],
+                    'version'   => $zone['version'],
+                ]);
+            });
+        });
+
+        $sanitizedNpcs = $allNpcs->filter(function ($npc) {
+            return isset($npc['id'], $npc['clean_name'], $npc['zone_name'], $npc['chance']);
+        });
+
+        $top_npcs = $sanitizedNpcs
+            ->sortByDesc('chance')
+            ->unique('id')
+            ->take(10)
             ->values()
-            ->toArray();
+            ->all();
+
+        return [
+            'drops_by_zone' => $drops_by_zone,
+            'top_npcs'      => $top_npcs ?? [],
+        ];
     }
 
     public function recipes(): Collection

@@ -77,6 +77,9 @@ class ItemController extends Controller
             return (new ItemViewModel($item))->dropsByZone();
         });
 
-        return response()->json($drops);
+        return response()->json([
+            'drops_by_zone' => $drops['drops_by_zone'],
+            'top_npcs' => $drops['top_npcs'],
+        ]);
     }
 }

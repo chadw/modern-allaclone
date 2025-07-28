@@ -36,16 +36,40 @@ Alpine.data('itemDrops', (itemId) => ({
     itemId,
     loading: true,
     drops: [],
+    top_npcs: [],
+    zoneList: [],
+    selectedZone: '',
     async load() {
         this.loading = true;
         try {
             const res = await fetch(`${baseUrl}items/drops_by_zone/${this.itemId}`);
             const data = await res.json();
-            this.drops = data;
+            this.drops = data.drops_by_zone;
+            this.top_npcs = data.top_npcs;
+
+            this.zoneList = data.drops_by_zone.map(z => ({
+                key: `${z.zone}:${z.version}`,
+                label: `${z.zone_name} (${z.zone})`,
+            }));
         } catch (e) {
             console.error('error loading npc droppers:', e);
         } finally {
             this.loading = false;
+        }
+    },
+    scrollToZone(event) {
+        if (event && event.preventDefault) event.preventDefault();
+        if (!this.selectedZone) return;
+
+        const targetId = this.selectedZone === 'zone-top-npcs' ? 'zone-top-npcs' : `zone-${this.selectedZone}`;
+        const container = document.querySelector('.drops-by-zone');
+        const el = document.getElementById(targetId);
+
+        if (container && el) {
+            container.scrollTo({
+                top: el.offsetTop - container.offsetTop - 5,
+                behavior: 'smooth',
+            });
         }
     }
 }));

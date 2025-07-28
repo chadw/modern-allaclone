@@ -2,14 +2,14 @@
 namespace App\ViewModels;
 
 use App\Models\Item;
+use App\Models\Zone;
 use App\Models\Forage;
 use App\Models\Fishing;
 use App\Models\NpcType;
 use App\Models\GroundSpawn;
-use App\Models\LootdropEntry;
 use App\Models\TradeskillRecipe;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 
 class ItemViewModel
 {
@@ -69,29 +69,102 @@ class ItemViewModel
         return $this;
     }
 
-    public function dropsByZone(): Collection
+    public function dropsByZone(): array
     {
+        $ignoreZones = config('everquest.ignore_zones') ?? [];
+        $excludeMerchants = config('everquest.merchants_dont_drop_stuff') ?? true;
+        $currentExpansion = config('everquest.current_expansion');
+
+        $allZones = Cache::rememberForever('all_zones', function () {
+            return Zone::select('id', 'short_name', 'long_name', 'expansion')
+                ->orderBy('id')
+                ->get()
+                ->unique('short_name')
+                ->keyBy('short_name');
+        });
+
         $itemId = $this->item->id;
 
-        $lootdropIds = LootdropEntry::where('item_id', $itemId)->pluck('lootdrop_id');
-        if ($lootdropIds->isEmpty()) return collect();//[];
+        $item = Item::with([
+            'lootdropEntries.lootdrop.loottableEntries.npcs.spawnEntries.spawn2'
+        ])
+        ->where('id', $itemId)
+        ->select('id')
+        ->first();
 
-        $drops = collect($this->getDropData($itemId, $lootdropIds, false));
-        $drops2 = collect($this->getDropData($itemId, $lootdropIds, true));
+        $results = [];
+        foreach ($item->lootdropEntries as $lde) {
+            $lootdrop = $lde->lootdrop;
+            foreach ($lootdrop->loottableEntries as $lte) {
+                foreach ($lte->npcs as $npc) {
+                    foreach ($npc->spawnEntries as $se) {
 
-        return $drops->keyBy('zone')->merge($drops2->keyBy('zone'))
-            ->map(function ($zoneGroup, $zoneKey) use ($drops, $drops2) {
-                $npcs = collect($drops->firstWhere('zone', $zoneKey)['npcs'] ?? [])
-                    ->merge($drops2->firstWhere('zone', $zoneKey)['npcs'] ?? [])
-                    ->unique('name')
-                    ->values();
+                        $spawn2 = $se->spawn2;
+                        $npcCleanName = $npc->clean_name;
+                        if (empty(trim($npcCleanName ?? ''))) {
+                            continue;
+                        }
 
+                        // ignore merchants
+                        if ($excludeMerchants && $npc->merchant_id !== 0) {
+                            continue;
+                        }
+
+                        if ($se->chance <= 0) {
+                            continue;
+                        }
+
+                        // ignore zones
+                        if (!$spawn2 || !$spawn2->zone || in_array($spawn2->zone, $ignoreZones)) {
+                            continue;
+                        }
+
+                        $zone = strtolower($spawn2->zone);
+
+                        if (($allZones[$zone]['expansion'] ?? 0) > $currentExpansion) {
+                            continue;
+                        }
+
+                        $results[] = [
+                            'zone'        => $zone,
+                            'zone_name'   => $allZones[$zone]['long_name'] ?? $zone,
+                            'npc_id'      => $npc->id,
+                            'npc_name'    => $npc->name,
+                            'clean_name'  => $npcCleanName,
+                            'multiplier'  => $lte->multiplier,
+                            'probability' => $lde->chance,
+                            'chance'      => round($se->chance, 3),
+                        ];
+                    }
+                }
+            }
+        }
+
+        return collect($results)
+            ->groupBy('zone')
+            ->map(function ($zoneDrops, $zone) {
                 return [
-                    'zone' => $zoneKey,
-                    'zone_name' => $zoneGroup['zone_name'],
-                    'npcs' => $npcs,
+                    'zone'      => $zone,
+                    'zone_name' => $zoneDrops->first()['zone_name'],
+                    'npcs'      => $zoneDrops->groupBy('npc_name')->map(function ($group) {
+                        $npc = $group->first();
+                        return [
+                            'id'          => $npc['npc_id'],
+                            'name'        => $npc['npc_name'],
+                            'clean_name'  => $npc['clean_name'],
+                            'multiplier'  => $npc['multiplier'],
+                            'probability' => $npc['probability'],
+                            'chance'      => $npc['chance'],
+                        ];
+                    })
+                    ->unique('id')
+                    ->sortBy('clean_name', SORT_NATURAL | SORT_FLAG_CASE)
+                    ->values(),
                 ];
-        })->values();
+            })
+            ->sortBy('zone_name', SORT_NATURAL | SORT_FLAG_CASE)
+            ->values()
+            ->toArray();
     }
 
     public function recipes(): Collection
@@ -230,73 +303,5 @@ class ItemViewModel
                 ];
             })->sortBy('zone_name')
             ->values();
-    }
-
-    protected function getDropData(
-        int $itemId,
-        Collection $lootdropIds,
-        bool $isFallback
-    ): Collection {
-
-        $ignoreZones = config('everquest.ignore_zones') ?? [];
-        $excludeMerchants = config('everquest.merchants_dont_drop_stuff') ?? true;
-
-        $query = NpcType::select([
-            'npc_types.id',
-            'npc_types.name',
-            $isFallback
-                ? DB::raw('CAST(SUBSTRING(npc_types.id, 1, LENGTH(npc_types.id) - 3) AS UNSIGNED) as zone_guess_id')
-                : 'spawn2.zone',
-            'zone.short_name as zone',
-            'zone.long_name',
-            'loottable_entries.multiplier',
-            'loottable_entries.probability',
-            'lootdrop_entries.chance'
-        ]);
-
-        if ($isFallback) {
-            $query->leftJoin('spawnentry', 'npc_types.id', '=', 'spawnentry.npcID')
-                ->whereNull('spawnentry.npcID')
-                ->join('zone', DB::raw('CAST(SUBSTRING(npc_types.id, 1, LENGTH(npc_types.id) - 3) AS UNSIGNED)'), '=', 'zone.zoneidnumber');
-        } else {
-            $query->join('spawnentry', 'npc_types.id', '=', 'spawnentry.npcID')
-                ->join('spawn2', 'spawnentry.spawngroupID', '=', 'spawn2.spawngroupID')
-                ->join('zone', 'spawn2.zone', '=', 'zone.short_name');
-        }
-
-        $query->join('loottable_entries', function ($join) use ($lootdropIds) {
-            $join->on('npc_types.loottable_id', '=', 'loottable_entries.loottable_id')
-                ->whereIn('loottable_entries.lootdrop_id', $lootdropIds);
-        })
-        ->join('lootdrop_entries', function ($join) use ($itemId) {
-            $join->on('loottable_entries.lootdrop_id', '=', 'lootdrop_entries.lootdrop_id')
-                ->where('lootdrop_entries.item_id', '=', $itemId);
-        });
-
-        if ($excludeMerchants) {
-            $query->where('npc_types.merchant_id', '=', 0);
-        }
-
-        if (!empty($ignoreZones)) {
-            $query->whereNotIn('zone.short_name', $ignoreZones);
-        }
-
-        return $query->orderBy('zone.long_name')
-            ->get()
-            ->groupBy('zone')
-            ->map(function ($items, $zone) {
-                return [
-                    'zone' => $zone,
-                    'zone_name' => $items->first()->long_name ?? '',
-                    'npcs' => $items->map(fn ($drop) => [
-                        'id' => $drop->id,
-                        'name' => $drop->name,
-                        'clean_name' => $drop->clean_name,
-                        'multiplier' => $drop->multiplier,
-                        'probability' => $drop->probability,
-                        'chance' => $drop->chance,
-                    ])->values(),
-                ];
-        })->values();
     }
 }

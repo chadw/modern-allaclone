@@ -58,4 +58,9 @@ class Item extends Model
     {
         return $this->hasMany(Fishing::class, 'itemid', 'id');
     }
+
+    public function lootdropEntries(): HasMany
+    {
+        return $this->hasMany(LootdropEntry::class, 'item_id', 'id');
+    }
 }

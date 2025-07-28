@@ -21,7 +21,11 @@ class SpellController extends Controller
         });
 
         $this->allZones = Cache::rememberForever('all_zones', function () {
-            return Zone::select('id', 'short_name', 'long_name')->get()->keyBy('short_name');
+            return Zone::select('id', 'short_name', 'long_name', 'expansion')
+                ->orderBy('id')
+                ->get()
+                ->unique('short_name')
+                ->keyBy('short_name');
         });
 
         view()->share('allSpells', $this->allSpells);

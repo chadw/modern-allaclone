@@ -13,6 +13,11 @@ class LootdropEntry extends Model
     protected $connection = 'eqemu';
     protected $table = 'lootdrop_entries';
 
+    public function lootdrop(): BelongsTo
+    {
+        return $this->belongsTo(Lootdrop::class, 'lootdrop_id', 'id');
+    }
+
     public function item(): BelongsTo
     {
         return $this->belongsTo(Item::class, 'item_id', 'id')

@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Item;
+use App\Models\Zone;
 use App\Filters\ItemFilter;
-use App\ViewModels\ItemViewModel;
 use Illuminate\Http\Request;
+use App\ViewModels\ItemViewModel;
 use Illuminate\Support\Facades\Cache;
 
 class ItemController extends Controller
@@ -72,7 +73,7 @@ class ItemController extends Controller
 
     public function drops_by_zone(Item $item)
     {
-        $drops = Cache::remember("items.drops_by_zone.{$item->id}", now()->addMonth(), function () use ($item) {
+        $drops = Cache::rememberForever("items.drops_by_zone.{$item->id}", function () use ($item) {
             return (new ItemViewModel($item))->dropsByZone();
         });
 

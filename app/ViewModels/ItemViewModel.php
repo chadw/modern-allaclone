@@ -126,14 +126,14 @@ class ItemViewModel
                         }
 
                         $results[] = [
-                            'zone'        => $zone,
-                            'zone_name'   => $allZones[$zone]['long_name'] ?? $zone,
-                            'npc_id'      => $npc->id,
-                            'npc_name'    => $npc->name,
-                            'clean_name'  => $npcCleanName,
-                            'multiplier'  => $lte->multiplier,
-                            'probability' => $lde->chance,
-                            'chance'      => round($se->chance, 3),
+                            'zone'          => $zone,
+                            'zone_name'     => $allZones[$zone]['long_name'] ?? $zone,
+                            'npc_id'        => $npc->id,
+                            'npc_name'      => $npc->name,
+                            'clean_name'    => $npcCleanName,
+                            'multiplier'    => $lte->multiplier,
+                            'chance'        => $lde->chance,
+                            'probability'   => $lte->probability,
                         ];
                     }
                 }

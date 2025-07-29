@@ -28,7 +28,7 @@
                 <tbody>
                     @foreach ($npcs as $npc)
                         @php
-                            $zone = $npc->spawnEntries[0]->matched_zone ?? null;
+                            $zone = $npc->firstSpawnEntries?->spawn2?->zoneData;
                         @endphp
                         @if (!$npc->clean_name)
                             @continue

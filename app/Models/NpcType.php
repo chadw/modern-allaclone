@@ -46,7 +46,15 @@ class NpcType extends Model
 
     public function firstSpawnEntries(): HasOne
     {
-        return $this->hasOne(SpawnEntry::class, 'npcID', 'id');
+        $ignoreZones = config('everquest.ignore_zones') ?? [];
+
+        return $this->hasOne(SpawnEntry::class, 'npcID', 'id')
+            ->whereHas('spawn2', function ($q) use ($ignoreZones) {
+                if (!empty($ignoreZones)) {
+                    $q->whereNotIn('zone', $ignoreZones);
+                }
+            })
+            ->orderBy('spawngroupID');
     }
 
     public function spawnEntries(): HasMany

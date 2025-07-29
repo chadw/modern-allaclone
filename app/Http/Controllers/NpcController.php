@@ -21,20 +21,13 @@ class NpcController extends Controller
                 ->apply(NpcType::query())
                 ->select('id', 'name', 'level', 'race', 'class', 'hp', 'maxlevel', 'version')
                 ->whereNotIn('race', [127, 240])
-                /* ->whereHas('spawnEntries', function ($query) use ($currentExpansion) {
-                    $query->whereHas('spawn2', function ($q) use ($currentExpansion) {
-                        $q->whereColumn('spawn2.version', 'npc_types.version')
-                        ->whereIn('zone', function ($sub) use ($currentExpansion) {
-                            $sub->select('short_name')
-                                ->from('zone')
-                                ->where('expansion', '<=', $currentExpansion);
-                        });
-                    });
-                }) */
-                ->with('spawnEntries.spawn2')
+                ->with([
+                    'firstSpawnEntries.spawn2.zoneData',
+                ])
                 ->orderBy('name', 'asc')
                 ->paginate(50)
                 ->withQueryString();
+
             $zones = Zone::select('id', 'zoneidnumber', 'short_name', 'long_name', 'expansion', 'version')->get();
 
             foreach ($npcs as $npc) {
@@ -57,13 +50,19 @@ class NpcController extends Controller
 
     public function show(NpcType $npc)
     {
+        $ignoreZones = config('everquest.ignore_zones') ?? [];
+
         $npc = NpcType::with('npcSpellset.attackProcSpell')
             ->with([
                 'firstSpawnEntries.spawn2.zoneData',
                 'npcFaction.primaryFaction',
                 'npcFactionEntries.factionList',
                 'lootTable.loottableEntries.lootdropEntries.item',
-                'spawnEntries.spawn2',
+                'spawnEntries.spawn2' => function ($q) use ($ignoreZones) {
+                    if (!empty($ignoreZones)) {
+                        $q->whereNotIn('zone', $ignoreZones);
+                    }
+                },
                 'merchantlist.items',
             ])
             ->findOrFail($npc->id);

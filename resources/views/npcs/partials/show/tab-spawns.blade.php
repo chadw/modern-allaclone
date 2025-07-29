@@ -12,6 +12,9 @@
             <tbody>
                 @if ($npc->spawnEntries)
                     @foreach ($npc->spawnEntries as $spawn)
+                        @if (!$spawn->spawn2)
+                            @continue
+                        @endif
                         <tr>
                             <td scope="row">
                                 @if ($spawn->spawn2)

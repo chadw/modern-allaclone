@@ -1,4 +1,5 @@
 <div class="w-full p-4 bg-base-200 rounded-lg border-1 border-base-content/20">
+    @if ($pet->npcs)
     <div class="flex justify-between items-start">
         <h1 class="text-2xl font-bold">{{ $pet->type }}</h1>
     </div>
@@ -7,7 +8,7 @@
         <dl class="divide-y divide-gray-800">
             <div class="px-4 py-1 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                 <dt class="text-sm/6 font-medium">Race</dt>
-                <dd class="mt-1 text-sm/6 sm:col-span-2 sm:mt-0">{{ config('everquest.db_races.' . $pet->npcs->race) ?? 'Unknown' }}</dd>
+                <dd class="mt-1 text-sm/6 sm:col-span-2 sm:mt-0">{{ config('everquest.db_races.' . ($pet->npcs?->race)) ?? 'Unknown' }}</dd>
             </div>
             <div class="px-4 py-1 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                 <dt class="text-sm/6 font-medium">Class</dt>
@@ -74,4 +75,9 @@
             </div>
         </div>
     </div>
+    @else
+        <div role="alert" class="alert alert-warning alert-soft">
+            No data available for this pet.
+        </div>
+    @endif
 </div>

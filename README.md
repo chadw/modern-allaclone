@@ -4,9 +4,6 @@
 ## Live Demo
 You can see this in use on [Project Lazarus](https://www.lazaruseq.com/alla/)
 
-## 🚧 Work In Progress
-This project is still under early active development and not all planned features are complete.
-
 ## Requirements
 
 - PHP >= 8.2, Composer, Mysql/MariaDB, and an EQemu DB.

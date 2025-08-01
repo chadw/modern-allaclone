@@ -41,6 +41,18 @@
                 <dd class="mt-1 text-sm/6 sm:col-span-2 sm:mt-0">{{ $spell->mana }}</dd>
             </div>
             @endif
+            @if ($spell->EndurCost)
+                <div class="px-4 py-1 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                    <dt class="text-sm/6 font-medium">Endurance Cost</dt>
+                    <dd class="mt-1 text-sm/6 sm:col-span-2 sm:mt-0">{{ $spell->EndurCost }}</dd>
+                </div>
+            @endif
+            @if ($spell->EndurUpkeep)
+                <div class="px-4 py-1 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                    <dt class="text-sm/6 font-medium">Endurance Upkeep</dt>
+                    <dd class="mt-1 text-sm/6 sm:col-span-2 sm:mt-0">{{ $spell->EndurUpkeep }}</dd>
+                </div>
+            @endif
             <div class="px-4 py-1 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                 <dt class="text-sm/6 font-medium">Skill</dt>
                 <dd class="mt-1 text-sm/6 sm:col-span-2 sm:mt-0">

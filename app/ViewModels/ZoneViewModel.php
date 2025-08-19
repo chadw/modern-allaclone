@@ -41,13 +41,13 @@ class ZoneViewModel
             ->whereNotIn('race', [127, 240])
             ->select([
                 'id', 'class', 'hp', 'level', 'trackable', 'maxlevel', 'race', 'name',
-                'loottable_id', 'raid_target', 'rare_spawn'
+                'loottable_id', 'raid_target', 'rare_spawn', 'special_abilities',
             ])
             ->get();
 
         $query2 = NpcType::select([
                 'id', 'class', 'hp', 'level', 'trackable', 'maxlevel', 'race', 'name',
-                'loottable_id', 'raid_target', 'rare_spawn'
+                'loottable_id', 'raid_target', 'rare_spawn', 'special_abilities',
             ])
             ->whereNotIn('race', [127, 240])
             ->whereRaw('CAST(SUBSTRING(id, 1, LENGTH(id) - 3) AS UNSIGNED) = ?', [$zone_id])

@@ -1,14 +1,15 @@
 <input type="radio" name="zone_details" class="tab" aria-label="NPCs ({{ count($npcs) ?? 0 }})" checked="checked" />
 <div class="tab-content bg-base-100 border-base-300">
     <div class="border border-base-content/5 overflow-x-auto">
-        <table class="table table-auto md:table-fixed w-full table-zebra">
+        <table class="table table-auto md:table-fixed w-full table-zebra" id="zone-npcs-table">
             <thead class="text-xs uppercase bg-base-300">
                 <tr>
-                    <th scope="col" class="w-[30%]"">Name</th>
+                    <th scope="col" class="w-[30%]">Name</th>
                     <th scope="col" class="w-[10%]">Lvl</th>
-                    <th scope="col" class="w-[40%]">HP</th>
-                    <th scope="col" class="w-[10%] hidden md:table-cell">Rare</th>
-                    <th scope="col" class="w-[10%] hidden md:table-cell">Raid Tgt</th>
+                    <th scope="col" class="w-[30%]">HP</th>
+                    <th scope="col" class="w-[10%] hidden md:table-cell truncate" title="Charmable">Charmable</th>
+                    <th scope="col" class="w-[10%] hidden md:table-cell" title="Rare">Rare</th>
+                    <th scope="col" class="w-[10%] hidden md:table-cell truncate" title="Raid Target">Raid Tgt</th>
                 </tr>
             </thead>
             <tbody>
@@ -26,6 +27,11 @@
                         </td>
                         <td>{{ $npc->level }}</td>
                         <td class="text-nowrap">{{ number_format($npc->hp) }}</td>
+                        <td class="hidden md:table-cell">
+                            {!! !in_array('Uncharmable', $npc->parsed_special_abilities)
+                                ? '<span class="badge badge-soft badge-accent">Yes</span>'
+                                : '<span class="badge badge-soft badge-warning">No</span>' !!}
+                        </td>
                         <td class="hidden md:table-cell">
                             {!! $npc->rare_spawn
                                 ? '<span class="badge badge-soft badge-accent">Yes</span>'

@@ -190,11 +190,15 @@ class ItemFilter
                 default => '>='
             };
 
-            if ($op === '<=') {
-                $this->builder->where($stat, '>=', 1);
-            }
+            if ($stat === 'ratio') {
+                $this->builder->whereRaw('(damage > 0 AND delay / damage ' . $op . ' ?)', [$val]);
+            } else {
+                if ($op === '<=') {
+                    $this->builder->where($stat, '>=', 1);
+                }
 
-            $this->builder->where($stat, $op, $val);
+                $this->builder->where($stat, $op, $val);
+            }
         }
     }
 

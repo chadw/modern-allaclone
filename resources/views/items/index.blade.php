@@ -25,5 +25,12 @@
             <div class="divider uppercase text-xl font-bold text-sky-400">Items ({{ $items->total() }} Found)</div>
         </div>
         @include('items.partials.index.items-table')
+    @else
+        <div class="flex flex-col items-center justify-center h-64">
+            <div class="text-center text-gray-500">
+                <p class="text-lg font-semibold">No items found.</p>
+                <p class="mt-2">Try adjusting the search criteria.</p>
+            </div>
+        </div>
     @endif
 @endsection

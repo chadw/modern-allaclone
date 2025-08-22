@@ -2,12 +2,13 @@
     <table class="table table-auto md:table-fixed w-full table-zebra">
         <thead class="text-xs uppercase bg-base-300">
             <tr>
-                <th scope="col" class="w-[40%]">Name</th>
+                <th scope="col" class="w-[30%]">Name</th>
                 <th scope="col" class="w-[20%]">Type</th>
                 <th scope="col" class="w-[10%] hidden md:table-cell">AC</th>
                 <th scope="col" class="w-[10%]">HP</th>
                 <th scope="col" class="w-[10%] hidden md:table-cell">DMG</th>
                 <th scope="col" class="w-[10%] hidden md:table-cell">Delay</th>
+                <th scope="col" class="w-[10%] hidden md:table-cell">Ratio</th>
             </tr>
         </thead>
         <tbody>
@@ -61,6 +62,9 @@
                     <td>{{ $item->hp }}</td>
                     <td class="hidden md:table-cell">{{ $item->damage }}</td>
                     <td class="hidden md:table-cell">{{ $item->delay }}</td>
+                    <td class="hidden md:table-cell">
+                        {{ $item->damage > 0 ? number_format($item->delay / $item->damage, 2) : '-' }}
+                    </td>
                 </tr>
             @endforeach
         </tbody>

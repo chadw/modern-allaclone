@@ -54,15 +54,19 @@ class NpcController extends Controller
 
         $npc = NpcType::with('npcSpellset.attackProcSpell')
             ->with([
-                'firstSpawnEntries.spawn2.zoneData',
-                'npcFaction.primaryFaction',
-                'npcFactionEntries.factionList',
-                'lootTable.loottableEntries.lootdropEntries.item',
                 'spawnEntries.spawn2' => function ($q) use ($ignoreZones) {
                     if (!empty($ignoreZones)) {
                         $q->whereNotIn('zone', $ignoreZones);
                     }
+
+                    $q->with(['npcs' => function ($npcs) {
+                        $npcs->select('id', 'name', 'level', 'race', 'class');
+                    }]);
                 },
+                'firstSpawnEntries.spawn2.zoneData',
+                'npcFaction.primaryFaction',
+                'npcFactionEntries.factionList',
+                'lootTable.loottableEntries.lootdropEntries.item',
                 'merchantlist.items',
             ])
             ->findOrFail($npc->id);

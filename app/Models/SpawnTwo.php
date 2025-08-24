@@ -22,4 +22,21 @@ class SpawnTwo extends Model
     {
         return $this->belongsTo(SpawnGroup::class, 'spawngroupID', 'id');
     }
+
+    public function spawnentries()
+    {
+        return $this->hasMany(SpawnEntry::class, 'spawngroupID', 'spawngroupID');
+    }
+
+    public function npcs()
+    {
+        return $this->hasManyThrough(
+            NpcType::class,
+            SpawnEntry::class,
+            'spawngroupID',
+            'id',
+            'spawngroupID',
+            'npcID'
+        );
+    }
 }

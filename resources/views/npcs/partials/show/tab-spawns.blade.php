@@ -4,8 +4,9 @@
         <table class="table table-auto md:table-fixed w-full table-zebra">
             <thead class="text-xs uppercase bg-base-300">
                 <tr>
-                    <th scope="col" class="w-[60%]">Coords (x,y,z)</th>
-                    <th scope="col" class="w-[20%]">Chance</th>
+                    <th scope="col" class="w-[20%]">Coords (x,y,z)</th>
+                    <th scope="col" class="w-[50%]">Placeholders</th>
+                    <th scope="col" class="w-[10%]">Chance</th>
                     <th scope="col" class="w-[20%]">Respawn</th>
                 </tr>
             </thead>
@@ -23,6 +24,15 @@
                                     {{ floor($spawn->spawn2->z) }}
                                 @else
                                     -
+                                @endif
+                            </td>
+                            <td>
+                                @if ($spawn->spawn2->npcs)
+                                    @foreach ($spawn->spawn2->npcs->where('id', '!=', $npc->id) as $phs)
+                                        <a href="{{ route('npcs.show', $phs) }}" class="link-info link-hover">
+                                            {{ $phs->clean_name }}
+                                        </a>@if (!$loop->last),@endif
+                                    @endforeach
                                 @endif
                             </td>
                             <td>{{ $spawn->chance }}%</td>

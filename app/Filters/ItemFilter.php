@@ -132,7 +132,15 @@ class ItemFilter
         if ($value !== null && is_numeric($value)) {
             $bitmask = (int) $value;
 
-            $this->builder->whereRaw("(classes & ?) != 0", [$bitmask]);
+            // all class.. and any (to fetch without class associated)
+            if ($bitmask === 65535) {
+                $this->builder->where(function ($q) use ($bitmask) {
+                    $q->whereRaw("(classes & ?) != 0", [$bitmask])
+                    ->orWhere('classes', 0);
+                });
+            } else {
+                $this->builder->whereRaw("(classes & ?) != 0", [$bitmask]);
+            }
         }
     }
 

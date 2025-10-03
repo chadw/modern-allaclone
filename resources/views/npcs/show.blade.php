@@ -30,8 +30,7 @@
         <div class="flex flex-row items-center gap-2 mb-4 flex-wrap">
             Primary Faction:
             @if ($npc->npcFaction?->primaryFaction)
-                <a class="text-base link-secondary link-hover"
-                    title="{{ $npc->npcFaction->primaryFaction->name ?? 'None' }}"
+                <a class="text-base link-secondary link-hover" title="{{ $npc->npcFaction->primaryFaction->name ?? 'None' }}"
                     href="{{ route('factions.show', $npc->npcFaction->primaryFaction->id) }}">
                     {{ $npc->npcFaction->primaryFaction->name ?? 'None' }}
                 </a>
@@ -99,6 +98,39 @@
                         <div class="stat-value">{{ $npc->mindmg }}-{{ $npc->maxdmg }}</div>
                     </div>
                 </div>
+                <div class="stats stats-vertical lg:stats-horizontal shadow mb-3">
+                    <div class="stat w-full">
+                        <div class="flex items-center w-full">
+                            <div class="stat-title w-24 text-2xl">Resists</div>
+                            <div class="grid grid-cols-6 gap-2 flex-1 text-center">
+                                <div>
+                                    <div class="text-xs truncate text-violet-500">Magic</div>
+                                    <div class="font-bold">{{ $npc->MR ?: 'Unknown' }}</div>
+                                </div>
+                                <div>
+                                    <div class="text-xs truncate text-sky-500">Cold</div>
+                                    <div class="font-bold">{{ $npc->CR ?: 'Unknown' }}</div>
+                                </div>
+                                <div>
+                                    <div class="text-xs truncate text-red-500">Fire</div>
+                                    <div class="font-bold">{{ $npc->FR ?: 'Unknown' }}</div>
+                                </div>
+                                <div>
+                                    <div class="text-xs truncate text-green-600">Poison</div>
+                                    <div class="font-bold">{{ $npc->PR ?: 'Unknown' }}</div>
+                                </div>
+                                <div>
+                                    <div class="text-xs truncate text-lime-600">Disease</div>
+                                    <div class="font-bold">{{ $npc->DR ?: 'Unknown' }}</div>
+                                </div>
+                                <div>
+                                    <div class="text-xs truncate text-rose-600">Corrupt</div>
+                                    <div class="font-bold">{{ $npc->Corrup ?: 'Unknown' }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 @if ($npc->special_abilities)
                     <div class="stats stats-horizontal shadow">
                         <div class="stat w-full">
@@ -129,12 +161,7 @@
                 @if ($npc->attackProcSpell)
                     <h3 class="block mb-4 font-semibold">Proc ({{ $npc->attackProcSpellProcChance }}%)</h3>
                     <div class="flex items-center gap-2 mb-1 whitespace-nowrap">
-                        <x-spell-link
-                            :spell_id="$npc->attackProcSpell->id"
-                            :spell_name="$npc->attackProcSpell->name"
-                            :spell_icon="$npc->attackProcSpell->new_icon"
-                            spell_class="flex"
-                        />
+                        <x-spell-link :spell_id="$npc->attackProcSpell->id" :spell_name="$npc->attackProcSpell->name" :spell_icon="$npc->attackProcSpell->new_icon" spell_class="flex" />
                     </div>
                     <div class="divider"></div>
                 @endif
@@ -142,13 +169,9 @@
                     @if ($npc->filteredSpellEntries->isNotEmpty())
                         @foreach ($npc->filteredSpellEntries as $npcspell)
                             @if ($npcspell->spells)
-                                <div class="flex items-center gap-2 whitespace-nowrap truncate">
-                                    <x-spell-link
-                                        :spell_id="$npcspell->spells->id"
-                                        :spell_name="$npcspell->spells->name"
-                                        :spell_icon="$npcspell->spells->new_icon"
-                                        spell_class="flex"
-                                    />
+                                <div class="flex items-center gap-2 truncate">
+                                    <x-spell-link :spell_id="$npcspell->spells->id" :spell_name="$npcspell->spells->name" :spell_icon="$npcspell->spells->new_icon"
+                                        spell_class="flex" />
                                 </div>
                             @endif
                         @endforeach

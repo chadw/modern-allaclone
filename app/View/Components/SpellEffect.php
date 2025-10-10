@@ -613,15 +613,7 @@ class SpellEffect extends Component
                     $desc .= $this->getFormatStandard('Singing Amplification', '%', ($value_min * 10), ($value_max * 10), $minlvl, $maxlvl);
                     break;
                 case 119:
-                    if ($base < 100) {
-                        $value_max = (100 - $value_max) * -1;
-                        $value_min = (100 - $value_min) * -1;
-                    } else {
-                        $value_max = $value_max - 100;
-                        $value_min = $value_min - 100;
-                    }
-
-                    $desc .= $this->getFormatStandard('Attack Speed', '%', $value_min, $value_max, $minlvl, $maxlvl) . '(v119 over cap)';
+                    $desc .= $this->getFormatStandard('Melee Overhaste', '%', $value_min, $value_max, $minlvl, $maxlvl);
                     break;
                 case 120:
                     $desc .= $this->getFormatStandard('Healing Received', '%', $value_min, $value_max, $minlvl, $maxlvl);

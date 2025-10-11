@@ -194,7 +194,9 @@ class ItemViewModel
     {
         return TradeskillRecipe::whereHas('entries', function ($q) {
             $q->where('item_id', $this->item->id)
-                ->where('componentcount', '>', 0);
+                ->where(function ($sub) {
+                    $sub->where('componentcount', '>', 0)->orWhere('iscontainer', '=', 1);
+                });
         })
         ->select('id', 'name', 'tradeskill')
         ->groupBy('id', 'name', 'tradeskill')

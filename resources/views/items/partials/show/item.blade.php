@@ -382,6 +382,27 @@
     {!! item_aug_data($item) !!}
 
     <div class="mt-4 text-sm">
+        {{-- evolve item --}}
+        @if ($item->evolvinglevel > 0 && $item->evoid != 0)
+            <span class="inline-flex items-center gap-1 mb-2">
+                Evolving Level: {{ $item->evolvinglevel }}/{{ $item->evomax ?? 'UNK'  }}
+
+                @php
+                    $final = $item->evolvingDetails->sortByDesc('item_evolve_level')->first();
+                @endphp
+
+                @if ($final && $final->item && ($item->id != $final->item_id))
+                    — Final Result:
+                    <x-item-link
+                        :item_id="$final->item->id"
+                        :item_name="$final->item->Name"
+                        :item_icon="$final->item->icon"
+                        item_class="inline-flex"
+                    />
+                @endif
+            </span>
+            </span>
+        @endif
         {{-- food/drink type --}}
         @if (($item->itemtype == 14 || $item->itemtype == 15) && $item->casttime_)
             <span class="block mb-2">{{ get_food_drink_desc($item->casttime_, $item->itemtype) }}</span>
@@ -391,17 +412,19 @@
             <strong>Stackable Count:</strong> {{ $item->stacksize }}<br>
         @endif
         {{-- item value --}}
-        <strong>Value:</strong>
-        <span class="inline-flex">
-            <span>{{ $itemValue['platinum'] }} pp</span>
-            <span class="ml-2">{{ $itemValue['gold'] }} gp</span>
-            <span class="ml-2">{{ $itemValue['silver'] }} sp</span>
-            <span class="ml-2">{{ $itemValue['copper'] }} cp</span>
+        <span class="block">
+            <strong>Value:</strong>
+            <span class="inline-flex">
+                <span>{{ $itemValue['platinum'] }} pp</span>
+                <span class="ml-2">{{ $itemValue['gold'] }} gp</span>
+                <span class="ml-2">{{ $itemValue['silver'] }} sp</span>
+                <span class="ml-2">{{ $itemValue['copper'] }} cp</span>
+            </span>
+            {{-- tribute --}}
+            @if ($item->favor > 0)
+                <br><strong>Tribute Value:</strong> {{ $item->favor }}
+            @endif
         </span>
-        {{-- tribute --}}
-        @if ($item->favor > 0)
-            <br><strong>Tribute Value:</strong> {{ $item->favor }}
-        @endif
     </div>
 
     @if (!empty($item->lore))

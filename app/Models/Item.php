@@ -63,4 +63,9 @@ class Item extends Model
     {
         return $this->hasMany(LootdropEntry::class, 'item_id', 'id');
     }
+
+    public function evolvingDetails(): HasMany
+    {
+        return $this->hasMany(ItemEvolvingDetail::class, 'item_evo_id', 'evoid')->orderBy('item_evolve_level');
+    }
 }

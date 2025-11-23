@@ -41,7 +41,7 @@ class ItemController extends Controller
     public function show(Item $item)
     {
         $itemCache = Cache::remember("items.show.{$item->id}", now()->addMonth(), function () use ($item) {
-            $item = Item::where('id', $item->id)->firstOrFail();
+            $item = Item::with('evolvingDetails.item')->where('id', $item->id)->firstOrFail();
             $vm = (new ItemViewModel($item))->withEffects();
 
             return [

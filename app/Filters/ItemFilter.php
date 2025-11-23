@@ -18,6 +18,7 @@ class ItemFilter
         'class',
         'bagslots',
         'effect',
+        'evo',
         /* stats */
         'stat1',
         'stat1comp',
@@ -165,6 +166,18 @@ class ItemFilter
                 });
             }
         });
+    }
+
+    protected function evo($value)
+    {
+        if ($value === null || $value === '') {
+            return;
+        }
+
+        if ($value == 1) {
+            $this->builder->where('evolvinglevel', '>=', 1)
+                ->where('evoid', '!=', 0);
+        }
     }
 
     protected function stat1()

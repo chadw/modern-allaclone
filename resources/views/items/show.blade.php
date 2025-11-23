@@ -14,6 +14,29 @@
     </div>
 
     <div class="sm:basis-2/3 md:basis-1/2 xl:basis-2/3 w-full">
+        @if ($item->evolvinglevel > 0 && $item->evoid != 0 && $item->evolvingDetails->isNotEmpty())
+        <div class="mb-4">
+            <h2 class="text-xl font-bold mb-3">Evolving Levels</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+                @foreach ($item->evolvingDetails as $detail)
+                    <div class="p-4 rounded-lg border border-base-300 bg-base-100 shadow-sm">
+                        <div class="text-lg font-semibold">
+                            Level {{ $detail->item_evolve_level }}
+                        </div>
+                        <div class="flex items-center gap-3 mt-3">
+                            <x-item-link
+                                :item_id="$detail->item->id"
+                                :item_name="$detail->item->Name"
+                                :item_icon="$detail->item->icon"
+                                item_class="flex"
+                            />
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+        @endif
+
         @include('items.partials.show.drops')
 
         @if ($recipes->isNotEmpty())

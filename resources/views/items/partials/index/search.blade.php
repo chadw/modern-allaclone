@@ -144,6 +144,19 @@
                 </div>
             </div>
         </div>
+
+        <div class="mt-4">
+            <label class="flex items-center gap-2 cursor-pointer">
+                <input
+                    type="checkbox"
+                    name="evo"
+                    class="checkbox"
+                    value="1"
+                    {{ request('evo') ? 'checked' : '' }}
+                />
+                <span>Evolution Items</span>
+            </label>
+        </div>
     </div>
 
     <div class="pt-4">

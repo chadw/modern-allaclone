@@ -24,7 +24,13 @@
                             <tr>
                                 <td scope="row">
                                     <div class="flex items-center space-x-3">
-                                        <x-item-link :item_id="$loot->item->id" :item_name="$loot->item->Name" :item_icon="$loot->item->icon" />
+                                        @if ($loot->item)
+                                            <x-item-link
+                                                :item_id="$loot->item->id"
+                                                :item_name="$loot->item->Name"
+                                                :item_icon="$loot->item->icon"
+                                            />
+                                        @endif
                                     </div>
                                 </td>
                                 <td>

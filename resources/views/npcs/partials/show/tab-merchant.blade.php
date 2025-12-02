@@ -64,27 +64,31 @@
                         </td>
                         <td>
                             <div class="flex flex-col">
-                                {{ config('everquest.item_types.' . $sell->items->itemtype) }}
-                                {{-- augment --}}
-                                @if ($sell->items->itemtype == 54)
-                                    @php
-                                        $augSlots = [];
+                                @if ($sell->items)
+                                    {{ config('everquest.item_types.' . $sell->items->itemtype) }}
+                                    {{-- augment --}}
+                                    @if ($sell->items->itemtype == 54)
+                                        @php
+                                            $augSlots = [];
 
-                                        if (($sell->items->augtype ?? 0) > 0) {
-                                            $augType = $sell->items->augtype;
-                                            for ($i = 1, $bit = 1; $i <= 24; $i++, $bit *= 2) {
-                                                if ($bit <= $augType && ($augType & $bit)) {
-                                                    $augSlots[] = $i;
+                                            if (($sell->items->augtype ?? 0) > 0) {
+                                                $augType = $sell->items->augtype;
+                                                for ($i = 1, $bit = 1; $i <= 24; $i++, $bit *= 2) {
+                                                    if ($bit <= $augType && ($augType & $bit)) {
+                                                        $augSlots[] = $i;
+                                                    }
                                                 }
+                                                $slotsText = implode(', ', $augSlots);
                                             }
-                                            $slotsText = implode(', ', $augSlots);
-                                        }
-                                    @endphp
-                                    @if (count($augSlots))
-                                        <span class="text-xs text-gray-500 truncate">
-                                            Type: {{ $slotsText }}
-                                        </span>
+                                        @endphp
+                                        @if (count($augSlots))
+                                            <span class="text-xs text-gray-500 truncate">
+                                                Type: {{ $slotsText }}
+                                            </span>
+                                        @endif
                                     @endif
+                                @else
+                                    <span class="text-gray-400 italic text-xs">Unknown item</span>
                                 @endif
                             </div>
                         </td>

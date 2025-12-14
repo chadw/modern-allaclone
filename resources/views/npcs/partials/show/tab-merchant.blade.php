@@ -95,13 +95,17 @@
                         <td class="text-right">
                             @if ($sell->alt_currency_cost)
                                 {{ $sell->alt_currency_cost }}
-                            @elseif ($sell->items->pointtype === 1 && $sell->items->ldonsold !== 0)
-                                {{ $sell->items->ldonprice }} /
-                                {{ config('everquest.ldon_themes.' . $sell->items->ldontheme) }}
-                            @elseif ($sell->items->pointtype === 4 || $sell->items->pointtype === 5)
-                                {{ $sell->items->ldonprice }}
+                            @elseif ($sell->items)
+                                @if ($sell->items->pointtype === 1 && $sell->items->ldonsold !== 0)
+                                    {{ $sell->items->ldonprice }} /
+                                    {{ config('everquest.ldon_themes.' . $sell->items->ldontheme) }}
+                                @elseif (in_array($sell->items->pointtype, [4, 5]))
+                                    {{ $sell->items->ldonprice }}
+                                @else
+                                    {{ price($sell->items->price) }}
+                                @endif
                             @else
-                                {{ price($sell->items->price) }}
+                                —
                             @endif
                         </td>
                     </tr>

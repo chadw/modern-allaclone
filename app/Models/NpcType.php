@@ -64,7 +64,7 @@ class NpcType extends Model
 
     public function lootTable(): HasOne
     {
-        return $this->hasOne(Loottable::class, 'id', 'loottable_id');
+        return $this->hasOne(LootTable::class, 'id', 'loottable_id');
     }
 
     public function loottableEntries(): HasMany

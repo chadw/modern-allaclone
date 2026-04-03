@@ -95,9 +95,11 @@
                     <li><a href="{{ route('recipes.index') }}"
                             class="{{ Route::is('recipes.*') ? 'active bg-base-200' : '' }}"
                             title="Recipes">Recipes</a></li>
-                    <li><a href="{{ route('tasks.index') }}"
-                            class="{{ Route::is('tasks.*') ? 'active bg-base-200' : '' }}" title="Tasks">Tasks</a>
-                    </li>
+                    @if (config('everquest.tasks.enable'))
+                        <li><a href="{{ route('tasks.index') }}"
+                                class="{{ Route::is('tasks.*') ? 'active bg-base-200' : '' }}" title="Tasks">Tasks</a>
+                        </li>
+                    @endif
                     <li><a href="{{ route('factions.index') }}"
                             class="{{ Route::is('factions.*') ? 'active bg-base-200' : '' }}"
                             title="Faction">Faction</a></li>

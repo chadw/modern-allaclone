@@ -24,7 +24,7 @@
     if ($item->magic == 1) {
         $tags[] = 'Magic';
     }
-    if ($item->loreflag == 1) {
+    if ($item->loregroup == -1) {
         $tags[] = 'Lore';
     }
     if ($item->nodrop == 0) {

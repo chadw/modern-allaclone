@@ -44,7 +44,11 @@
                                 </div>
                             </div>
                             <div class="shrink-0 sm:flex sm:flex-col sm:items-end">
-                                <p class="mt-1 text-xs/5 font-medium text-lime-300" x-text="`${npc.chance}%`"></p>
+                                @if (config('everquest.npc.display.loot_chance'))
+                                    <p class="mt-1 text-xs/5 font-medium text-lime-300" x-text="`${npc.chance}%`"></p>
+                                @else
+                                    <p class="mt-1 text-xs/5 font-medium text-base-content/50">Hidden %</p>
+                                @endif
                             </div>
                         </li>
                     </template>
@@ -73,7 +77,11 @@
                                         </div>
                                     </div>
                                     <div class="shrink-0 sm:flex sm:flex-col sm:items-end">
-                                        <p class="mt-1 text-xs/5 font-medium text-accent" x-text="`${npc.chance}%`"></p>
+                                        @if (config('everquest.npc.display.loot_chance'))
+                                            <p class="mt-1 text-xs/5 font-medium text-accent" x-text="`${npc.chance}%`"></p>
+                                        @else
+                                            <p class="mt-1 text-xs/5 font-medium text-base-content/50">Hidden %</p>
+                                        @endif
                                     </div>
                                 </li>
                             </template>

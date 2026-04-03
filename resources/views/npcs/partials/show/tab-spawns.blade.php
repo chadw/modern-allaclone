@@ -18,12 +18,16 @@
                         @endif
                         <tr>
                             <td scope="row">
-                                @if ($spawn->spawn2)
-                                    {{ floor($spawn->spawn2->x) }},
-                                    {{ floor($spawn->spawn2->y) }},
-                                    {{ floor($spawn->spawn2->z) }}
+                                @if (config('everquest.npc.display.spawn_locs'))
+                                    @if ($spawn->spawn2)
+                                        {{ floor($spawn->spawn2->x) }},
+                                        {{ floor($spawn->spawn2->y) }},
+                                        {{ floor($spawn->spawn2->z) }}
+                                    @else
+                                        -
+                                    @endif
                                 @else
-                                    -
+                                    <span class="text-base-content/50">Hidden</span>
                                 @endif
                             </td>
                             <td>
@@ -33,17 +37,23 @@
                                             {{ $phs->clean_name }}
                                         </a>@if (!$loop->last),@endif
                                     @endforeach
+                                @else
+                                    None
                                 @endif
                             </td>
                             <td>{{ $spawn->chance }}%</td>
                             <td>
-                                @if ($spawn->spawn2)
-                                    {{ seconds_to_human($spawn->spawn2->respawntime) }}
-                                    @if ($spawn->spawn2->variance > 0)
-                                    <span class="text-accent">+/- {{ seconds_to_human($spawn->spawn2->variance) }}</span>
+                                @if (config('everquest.npc.display.respawn'))
+                                    @if ($spawn->spawn2)
+                                        {{ seconds_to_human($spawn->spawn2->respawntime) }}
+                                        @if ($spawn->spawn2->variance > 0)
+                                        <span class="text-accent">+/- {{ seconds_to_human($spawn->spawn2->variance) }}</span>
+                                        @endif
+                                    @else
+                                        Unknown
                                     @endif
                                 @else
-                                    Unknown
+                                    <span class="text-base-content/50">Hidden</span>
                                 @endif
                             </td>
                         </tr>

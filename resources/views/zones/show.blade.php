@@ -95,7 +95,7 @@
             @if ($fished->isNotEmpty())
                 @include('zones.partials.show.tab-fished')
             @endif
-            @if ($tasks->isNotEmpty())
+            @if ($tasks->isNotEmpty() && config('everquest.tasks.enable'))
                 @include('zones.partials.show.tab-tasks')
             @endif
         </div>

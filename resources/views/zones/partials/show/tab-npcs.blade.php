@@ -26,7 +26,13 @@
                             </div>
                         </td>
                         <td>{{ $npc->level }}</td>
-                        <td class="text-nowrap">{{ number_format($npc->hp) }}</td>
+                        <td class="text-nowrap">
+                            @if (config('everquest.npc.display.hp'))
+                                {{ number_format($npc->hp) }}
+                            @else
+                                <span class="text-base-content/50">Hidden</span>
+                            @endif
+                        </td>
                         <td class="hidden md:table-cell">
                             {!! !in_array('Uncharmable', $npc->parsed_special_abilities)
                                 ? '<span class="badge badge-soft badge-accent">Yes</span>'

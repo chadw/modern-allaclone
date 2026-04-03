@@ -54,7 +54,13 @@
                             </svg>
                         </div>
                         <div class="stat-title">AC</div>
-                        <div class="stat-value">{{ number_format($npc->AC) }}</div>
+                        <div class="stat-value">
+                            @if (config('everquest.npc.display.ac'))
+                                {{ number_format($npc->AC) }}
+                            @else
+                                <span class="italic text-base-content/50">Hidden</span>
+                            @endif
+                        </div>
                     </div>
                     <div class="stat">
                         <div class="stat-figure">
@@ -67,7 +73,13 @@
                             </svg>
                         </div>
                         <div class="stat-title">HP</div>
-                        <div class="stat-value">{{ number_format($npc->hp) }}</div>
+                        <div class="stat-value">
+                            @if (config('everquest.npc.display.hp'))
+                                {{ number_format($npc->hp) }}
+                            @else
+                                <span class="italic text-base-content/50">Hidden</span>
+                            @endif
+                        </div>
                     </div>
                     <div class="stat">
                         <div class="stat-figure">
@@ -82,7 +94,13 @@
                             </svg>
                         </div>
                         <div class="stat-title">ATK</div>
-                        <div class="stat-value">{{ $npc->ATK }}</div>
+                        <div class="stat-value">
+                            @if (config('everquest.npc.display.atk'))
+                                {{ $npc->ATK }}
+                            @else
+                                <span class="italic text-base-content/50">Hidden</span>
+                            @endif
+                        </div>
                     </div>
                     <div class="stat">
                         <div class="stat-figure">
@@ -95,43 +113,51 @@
                             </svg>
                         </div>
                         <div class="stat-title">HIT</div>
-                        <div class="stat-value">{{ $npc->mindmg }}-{{ $npc->maxdmg }}</div>
+                        <div class="stat-value">
+                            @if (config('everquest.npc.display.dmg'))
+                                {{ $npc->mindmg }}-{{ $npc->maxdmg }}
+                            @else
+                                <span class="italic text-base-content/50">Hidden</span>
+                            @endif
+                        </div>
                     </div>
                 </div>
-                <div class="stats stats-vertical lg:stats-horizontal shadow mb-3">
-                    <div class="stat w-full">
-                        <div class="flex items-center w-full">
-                            <div class="stat-title w-24 text-2xl">Resists</div>
-                            <div class="grid grid-cols-6 gap-2 flex-1 text-center">
-                                <div>
-                                    <div class="text-xs truncate text-violet-500">Magic</div>
-                                    <div class="font-bold">{{ $npc->MR ?: 'Unknown' }}</div>
-                                </div>
-                                <div>
-                                    <div class="text-xs truncate text-sky-500">Cold</div>
-                                    <div class="font-bold">{{ $npc->CR ?: 'Unknown' }}</div>
-                                </div>
-                                <div>
-                                    <div class="text-xs truncate text-red-500">Fire</div>
-                                    <div class="font-bold">{{ $npc->FR ?: 'Unknown' }}</div>
-                                </div>
-                                <div>
-                                    <div class="text-xs truncate text-green-600">Poison</div>
-                                    <div class="font-bold">{{ $npc->PR ?: 'Unknown' }}</div>
-                                </div>
-                                <div>
-                                    <div class="text-xs truncate text-lime-600">Disease</div>
-                                    <div class="font-bold">{{ $npc->DR ?: 'Unknown' }}</div>
-                                </div>
-                                <div>
-                                    <div class="text-xs truncate text-rose-600">Corrupt</div>
-                                    <div class="font-bold">{{ $npc->Corrup ?: 'Unknown' }}</div>
+                @if (config('everquest.npc.display.resists'))
+                    <div class="stats stats-vertical lg:stats-horizontal shadow mb-3">
+                        <div class="stat w-full">
+                            <div class="flex items-center w-full">
+                                <div class="stat-title w-24 text-2xl">Resists</div>
+                                <div class="grid grid-cols-6 gap-2 flex-1 text-center">
+                                    <div>
+                                        <div class="text-xs truncate text-violet-500">Magic</div>
+                                        <div class="font-bold">{{ $npc->MR ?: 'Unknown' }}</div>
+                                    </div>
+                                    <div>
+                                        <div class="text-xs truncate text-sky-500">Cold</div>
+                                        <div class="font-bold">{{ $npc->CR ?: 'Unknown' }}</div>
+                                    </div>
+                                    <div>
+                                        <div class="text-xs truncate text-red-500">Fire</div>
+                                        <div class="font-bold">{{ $npc->FR ?: 'Unknown' }}</div>
+                                    </div>
+                                    <div>
+                                        <div class="text-xs truncate text-green-600">Poison</div>
+                                        <div class="font-bold">{{ $npc->PR ?: 'Unknown' }}</div>
+                                    </div>
+                                    <div>
+                                        <div class="text-xs truncate text-lime-600">Disease</div>
+                                        <div class="font-bold">{{ $npc->DR ?: 'Unknown' }}</div>
+                                    </div>
+                                    <div>
+                                        <div class="text-xs truncate text-rose-600">Corrupt</div>
+                                        <div class="font-bold">{{ $npc->Corrup ?: 'Unknown' }}</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                @if ($npc->special_abilities)
+                @endif
+                @if ($npc->special_abilities && config('everquest.npc.display.abilities'))
                     <div class="stats stats-horizontal shadow">
                         <div class="stat w-full">
                             <div class="flex items-start gap-3">
@@ -157,29 +183,35 @@
                     </div>
                 @endif
             </div>
-            <div class="bg-base-200">
-                @if ($npc->attackProcSpell)
-                    <h3 class="block mb-4 font-semibold">Proc ({{ $npc->attackProcSpellProcChance }}%)</h3>
-                    <div class="flex items-center gap-2 mb-1 whitespace-nowrap">
-                        <x-spell-link :spell_id="$npc->attackProcSpell->id" :spell_name="$npc->attackProcSpell->name" :spell_icon="$npc->attackProcSpell->new_icon" spell_class="flex" />
-                    </div>
-                    <div class="divider"></div>
-                @endif
-                <div class="grid grid-cols-2 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-2 gap-x-6 gap-y-4">
-                    @if ($npc->filteredSpellEntries->isNotEmpty())
-                        @foreach ($npc->filteredSpellEntries as $npcspell)
-                            @if ($npcspell->spells)
-                                <div class="flex items-center gap-2 truncate">
-                                    <x-spell-link :spell_id="$npcspell->spells->id" :spell_name="$npcspell->spells->name" :spell_icon="$npcspell->spells->new_icon"
-                                        spell_class="flex" />
-                                </div>
-                            @endif
-                        @endforeach
-                    @else
-                        <p>No spells assigned.</p>
+            @if (config('everquest.npc.display.spells'))
+                <div class="bg-base-200">
+                    @if ($npc->attackProcSpell)
+                        <h3 class="block mb-4 font-semibold">Proc ({{ $npc->attackProcSpellProcChance }}%)</h3>
+                        <div class="flex items-center gap-2 mb-1 whitespace-nowrap">
+                            <x-spell-link :spell_id="$npc->attackProcSpell->id" :spell_name="$npc->attackProcSpell->name" :spell_icon="$npc->attackProcSpell->new_icon" spell_class="flex" />
+                        </div>
+                        <div class="divider"></div>
                     @endif
+                    <div class="grid grid-cols-1 gap-x-6 gap-y-4">
+                        @if ($npc->filteredSpellEntries->isNotEmpty())
+                            @foreach ($npc->filteredSpellEntries as $npcspell)
+                                @if ($npcspell->spells)
+                                    <div class="flex items-center gap-2 truncate">
+                                        <x-spell-link :spell_id="$npcspell->spells->id" :spell_name="$npcspell->spells->name" :spell_icon="$npcspell->spells->new_icon"
+                                            spell_class="flex" />
+                                    </div>
+                                @endif
+                            @endforeach
+                        @else
+                            <p>No spells assigned.</p>
+                        @endif
+                    </div>
                 </div>
-            </div>
+            @else
+                <div class="bg-base-200 text-center py-6 text-base-content/50">
+                    <p>Spells hidden</p>
+                </div>
+            @endif
         </div>
 
         <div class="tabs tabs-lift mt-6">

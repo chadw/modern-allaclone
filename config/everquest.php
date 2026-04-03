@@ -7,31 +7,47 @@ return [
     'current_expansion'                 => 9,   // dragons of norrath
     'server_max_level'                  => 70,  // server max level
 
-    // copying some of the allaclone settings for now (NOT ALL OF THESE ARE TIED BACK IN YET)
-
     /**
      * NPC
      */
+    'npc' => [
+        'display' => [
+            'ac'          => true,      // show npc ac
+            'hp'          => true,      // show npc hp
+            'atk'         => true,      // show npc attack value
+            'dmg'         => true,      // show npc min/max dmg
+            'resists'     => true,      // show npc resist values
+            'abilities'   => true,      // show npc abilities (summon, enrage, etc)
+            'spells'      => true,      // show npc spells
+            'loot_chance' => true,      // show the drop chance % for each item
+            'spawn_locs'  => true,      // show exact x,y,z
+            'respawn'     => true,      // hide respawn time + variance
+        ],
+    ],
+
+    /**
+     * Tasks
+     */
+    'tasks' => [
+        'enable'          => true,      // disable tasks completely. Will 404 when accessed
+        'display' => [
+            'activities'  => true,      // show task activities
+            'rewards'     => true,      // show task rewards
+        ],
+    ],
+
+    // copying some of the allaclone settings for now (NOT ALL OF THESE ARE TIED BACK IN YET)
 
     'allow_quests_npc'                  => false, // quests for npcs are available from NPC's page
     'server_max_npc_level'              => 95, // Max Level for any NPCs on the Server
-    'show_npc_drop_chances'             => true, // if TRUE, chances of droping of each item will be shown when browsing npcs
-    'show_npcs_attack_speed'            => true, // shows informations about NPCs' attack speed
     'spawngroup_around_range'           => 100, // range of surrounding spawngroups, spawngroups page
     'trackable_npcs_only'               => true, // If TRUE, will only display NPCs that are set to be trackable in search results
 
     /**
      * Items
      */
-    'item_add_chance_to_drop'           => true, // shows what are the chances to see the item droped by the npcs
     'discovered_items_max_status'       => 20, // Max account status for a discovered item entry
     'discovered_items_only'             => false, // If TRUE, only Discovered Items will be displayed
-
-    /**
-     * Tasks
-     */
-    'display_task_activities'           => true, // If TRUE, will display all task activities
-    'display_task_info'                 => true, // If TRUE, will allow search results to show tasks and rewards
 
     /**
      * Misc

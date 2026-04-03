@@ -34,7 +34,11 @@
                                     </div>
                                 </td>
                                 <td>
-                                    {{ $loot->chance }}% ({{ ($loot->chance * $drop->probability) / 100 }}% Global)
+                                    @if (config('everquest.npc.display.loot_chance'))
+                                        {{ $loot->chance }}% ({{ ($loot->chance * $drop->probability) / 100 }}% Global)
+                                    @else
+                                        <span class="text-base-content/50">Hidden</span>
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach

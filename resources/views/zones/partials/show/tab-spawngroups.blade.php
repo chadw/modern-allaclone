@@ -16,7 +16,11 @@
                             <div class="flex flex-col">
                                 {{ $grp->name }}
                                 <span class="text-xs uppercase text-gray-500">
-                                    {{ floor($grp->x) }}, {{ floor($grp->y) }}, {{ floor($grp->z) }}
+                                    @if (config('everquest.npc.display.spawn_locs'))
+                                        {{ floor($grp->x) }}, {{ floor($grp->y) }}, {{ floor($grp->z) }}
+                                    @else
+                                        Hidden
+                                    @endif
                                 </span>
                             </div>
                         </td>
@@ -35,7 +39,11 @@
                             </ul>
                         </td>
                         <td class="text-nowrap text-right">
-                            {{ seconds_to_human($grp->respawntime) }}
+                            @if (config('everquest.npc.display.respawn'))
+                                {{ seconds_to_human($grp->respawntime) }}
+                            @else
+                                <span class="text-base-content/50">Hidden</span>
+                            @endif
                         </td>
                     </tr>
                 @endforeach

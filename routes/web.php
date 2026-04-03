@@ -1,21 +1,22 @@
 <?php
 
-use App\Models\Pet;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\NpcController;
-use App\Http\Controllers\PetController;
+use App\Http\Controllers\FactionController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\NpcController;
+use App\Http\Controllers\PetController;
+use App\Http\Controllers\RecipeController;
+use App\Http\Controllers\SearchController;
+use App\Http\Controllers\SpellController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\ZoneController;
-use App\Http\Controllers\SpellController;
-use App\Http\Controllers\RecipeController;
-use App\Http\Controllers\FactionController;
+use App\Http\Middleware\TasksEnabled;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 // global search
-Route::get('/search/suggest', [App\Http\Controllers\SearchController::class, 'suggest']);
+Route::get('/search/suggest', [SearchController::class, 'suggest']);
 
 // items
 Route::get('/items', [ItemController::class, 'index'])->name('items.index');
@@ -45,9 +46,13 @@ Route::get('/npcs/{npc}', [NpcController::class, 'show'])->name('npcs.show');
 Route::get('/factions', [FactionController::class, 'index'])->name('factions.index');
 Route::get('/factions/{faction}', [FactionController::class, 'show'])->name('factions.show');
 
-// tasks
-Route::get('/tasks', [TaskController::class, 'index'])->name('tasks.index');
-Route::get('/tasks/{task}', [TaskController::class, 'show'])->name('tasks.show');
+Route::get('/tasks', [TaskController::class, 'index'])
+    ->name('tasks.index')
+    ->middleware(TasksEnabled::class);
+
+Route::get('/tasks/{task}', [TaskController::class, 'show'])
+    ->name('tasks.show')
+    ->middleware(TasksEnabled::class);
 
 // pets
 Route::get('/pets/{id?}', [PetController::class, 'index'])

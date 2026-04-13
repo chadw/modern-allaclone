@@ -3,7 +3,7 @@
 
 @section('content')
     @if ($pet && $pet->npcs)
-        <div class="grid grid-cols-1 gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-[3fr_1fr] gap-4">
             <div class="flex flex-col gap-2">
                 <div class="stats stats-vertical lg:stats-horizontal shadow mb-3">
                     <div class="stat">
@@ -88,6 +88,38 @@
                         </div>
                     </div>
                 @endif
+            </div>
+            <div class="bg-base-200">
+                @if ($pet->attackProcSpell)
+                    <h3 class="block mb-4 font-semibold">Proc ({{ $pet->attackProcSpellProcChance }}%)</h3>
+                    <div class="flex items-center gap-2 mb-1 whitespace-nowrap">
+                        <x-spell-link
+                            :spell_id="$pet->attackProcSpell->id"
+                            :spell_name="$pet->attackProcSpell->name"
+                            :spell_icon="$pet->attackProcSpell->new_icon"
+                            spell_class="flex"
+                        />
+                    </div>
+                    <div class="divider"></div>
+                @endif
+                <div class="grid grid-cols-1 gap-x-6 gap-y-4">
+                    @if ($pet->filteredSpellEntries->isNotEmpty())
+                        @foreach ($pet->filteredSpellEntries as $npcspell)
+                            @if ($npcspell->spells)
+                                <div class="flex items-center gap-2 truncate">
+                                    <x-spell-link
+                                        :spell_id="$npcspell->spells->id"
+                                        :spell_name="$npcspell->spells->name"
+                                        :spell_icon="$npcspell->spells->new_icon"
+                                        spell_class="flex"
+                                    />
+                                </div>
+                            @endif
+                        @endforeach
+                    @else
+                        <p>No spells assigned.</p>
+                    @endif
+                </div>
             </div>
         </div>
         <div class="divider"></div>

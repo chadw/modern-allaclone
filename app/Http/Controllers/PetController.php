@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pet;
-use App\Models\PetBeastlordData;
 use App\Models\Spell;
+use App\Models\NpcSpell;
 use Illuminate\Http\Request;
+use App\Models\PetBeastlordData;
 use Illuminate\Support\Facades\Cache;
 
 class PetController extends Controller
@@ -51,7 +52,30 @@ class PetController extends Controller
 
     public function show(Pet $pet)
     {
-        $pet = Pet::where('id', $pet->id)->with('npcs')->firstOrFail();
+        $pet = Pet::where('id', $pet->id)->with('npcs.npcSpellset.attackProcSpell')->firstOrFail();
+
+        if ($pet->npcs->npcSpellset) {
+            $pet->attackProcSpell = $pet->npcs->npcSpellset->attackProcSpell;
+            $pet->attackProcSpellProcChance = $pet->npcs->npcSpellset->proc_chance;
+        }
+
+        $npcSpellset = $pet->npcs->npcSpellset;
+        if ($npcSpellset && $npcSpellset->parent_list > 0) {
+            $pet->npcSpellset = NpcSpell::with('npcSpellEntries.spells', 'attackProcSpell')
+                ->where('id', $npcSpellset->parent_list)
+                ->first();
+        }
+
+        if ($pet->npcs->npcSpellset) {
+            $pet->filteredSpellEntries = $pet->npcs->npcSpellset->npcSpellEntries()
+                ->where('minlevel', '<=', $pet->npcs->level)
+                ->where('maxlevel', '>=', $pet->npcs->level)
+                ->orderBy('priority', 'desc')
+                ->with('spells')
+                ->get();
+        } else {
+            $pet->filteredSpellEntries = collect();
+        }
 
         return view('pets.show', [
             'pet' => $pet,

@@ -15,7 +15,13 @@ class Pet extends Model
 
     public function npcs(): HasOne
     {
-        return $this->hasOne(NpcType::class, 'name', 'type');
+        return $this->hasOne(NpcType::class, 'id', 'npcID');
             //->select('id', 'name', 'race', 'level', 'class', 'hp', 'mana', 'AC', 'mindmg', 'maxdmg');
+    }
+
+    public function npcSpellset(): HasOne
+    {
+        return $this->hasOne(NpcSpell::class, 'id', 'npc_spells_id')
+            ->select('id', 'name', 'parent_list', 'attack_proc', 'proc_chance');
     }
 }

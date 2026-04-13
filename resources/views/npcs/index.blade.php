@@ -22,7 +22,9 @@
                         <th scope="col" class="w-[30%]">Name</th>
                         <th scope="col" class="w-[30%]">Zone</th>
                         <th scope="col" class="w-[20%]">Lvl</th>
-                        <th scope="col" class="w-[20%] hidden md:table-cell">HP</th>
+                        @if (config('everquest.npc.display.hp'))
+                            <th scope="col" class="w-[20%] hidden md:table-cell">HP</th>
+                        @endif
                     </tr>
                 </thead>
                 <tbody>
@@ -61,7 +63,9 @@
                             <td>
                                 {{ $npc->level }}{{ $npc->maxlevel && $npc->maxlevel > $npc->level ? '-' . $npc->maxlevel : '' }}
                             </td>
-                            <td class="hidden md:table-cell text-nowrap">{{ number_format($npc->hp) }}</td>
+                            @if (config('everquest.npc.display.hp'))
+                                <td class="hidden md:table-cell text-nowrap">{{ number_format($npc->hp) }}</td>
+                            @endif
                         </tr>
                     @endforeach
                 </tbody>

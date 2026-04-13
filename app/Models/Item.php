@@ -4,12 +4,57 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Kyslik\ColumnSortable\Sortable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Item extends Model
 {
     use HasFactory;
+    use Sortable;
+
+    public array $sortable = [
+        'Name',
+        'itemtype',
+        'ac',
+        'hp',
+        'damage',
+        'ratio',
+        // dynamic columns from stats#comp fields.
+        'mana',
+        'endur',
+        'haste',
+        'aagi',
+        'acha',
+        'adex',
+        'aint',
+        'asta',
+        'astr',
+        'awis',
+        'heroic_agi',
+        'heroic_cha',
+        'heroic_dex',
+        'heroic_int',
+        'heroic_sta',
+        'heroic_str',
+        'heroic_wis',
+        'attack',
+        'delay',
+        'regen',
+        'manaregen',
+        'enduranceregen',
+        'spellshield',
+        'combateffects',
+        'shielding',
+        'damageshield',
+        'dotshielding',
+        'dsmitigation',
+        'avoidance',
+        'accuracy',
+        'stunresist',
+        'strikethrough',
+        'spelldmg',
+    ];
 
     protected $connection = 'eqemu';
     protected $table = 'items';
@@ -67,5 +112,12 @@ class Item extends Model
     public function evolvingDetails(): HasMany
     {
         return $this->hasMany(ItemEvolvingDetail::class, 'item_evo_id', 'evoid')->orderBy('item_evolve_level');
+    }
+
+    public function ratioSortable($query, $direction)
+    {
+        $raw = "CASE WHEN damage = 0 THEN 1e9 ELSE (delay / NULLIF(damage,0)) END";
+
+        return $query->orderByRaw($raw . ' ' . $direction)->select('items.*');
     }
 }

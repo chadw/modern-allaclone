@@ -21,15 +21,18 @@ class ItemController extends Controller
 
         $items = collect();
         if ($request->query->count() > 0) {
-            $items = (new ItemFilter($request))
-                ->apply(Item::query())
-                ->select([
-                    'id', 'Name', 'icon', 'itemtype', 'ac', 'hp', 'damage', 'delay',
-                    'augtype', 'slots', 'bagslots', 'bagwr',
-                ])
-                ->orderBy('id', 'asc')
-                ->paginate(50)
-                ->withQueryString();
+            $query = (new ItemFilter($request))->apply(Item::query())
+            ->select([
+                'id', 'Name', 'icon', 'itemtype', 'ac', 'hp', 'damage', 'delay',
+                'augtype', 'slots', 'bagslots', 'bagwr',
+                'mana', 'endur', 'haste', 'aagi', 'acha', 'adex', 'aint', 'asta', 'astr', 'awis',
+                'heroic_agi', 'heroic_cha', 'heroic_dex', 'heroic_int', 'heroic_sta', 'heroic_str', 'heroic_wis',
+                'attack', 'regen', 'manaregen', 'enduranceregen', 'spellshield', 'combateffects', 'shielding',
+                'damageshield', 'dotshielding', 'dsmitigation', 'avoidance', 'accuracy', 'stunresist',
+                'strikethrough', 'spelldmg',
+            ]);
+
+            $items = $query->sortable()->paginate(50)->withQueryString();
         }
 
         return view('items.index', [

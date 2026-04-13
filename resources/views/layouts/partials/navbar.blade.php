@@ -79,6 +79,8 @@
                 class="btn btn-ghost uppercase {{ Route::is('items.*') ? 'btn-active' : '' }}">Items</a>
             <a href="{{ route('spells.index') }}" title="Spells"
                 class="btn btn-ghost uppercase {{ Route::is('spells.*') ? 'btn-active' : '' }}">Spells</a>
+            <a href="{{ route('aa.index') }}" title="AAs"
+                class="btn btn-ghost uppercase {{ Route::is('aa.*') ? 'btn-active' : '' }}">AAs</a>
             <a href="{{ route('npcs.index') }}" title="NPCs"
                 class="btn btn-ghost uppercase {{ Route::is('npcs.*') ? 'btn-active' : '' }}">NPCs</a>
             <div class="dropdown dropdown-hover">

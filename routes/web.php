@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AaAbilityController;
 use App\Http\Controllers\FactionController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ItemController;
@@ -17,6 +18,10 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 
 // global search
 Route::get('/search/suggest', [SearchController::class, 'suggest']);
+
+// aa abilitys
+Route::get('/aa', [AaAbilityController::class, 'index'])->name('aa.index');
+Route::get('/aa/{ability}', [AaAbilityController::class, 'show'])->name('aa.show');;
 
 // items
 Route::get('/items', [ItemController::class, 'index'])->name('items.index');

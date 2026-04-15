@@ -26,6 +26,26 @@
                       </label>
                 </div>
             </div>
+            <div class="flex flex-col w-full sm:w-auto">
+                <div class="flex flex-col w-full sm:w-auto">
+                    <label class="select">
+                        <span class="label">Zone</span>
+                        <select id="zone" name="zone" class="w-full">
+                            <option value="">Select Zone</option>
+                            @foreach($zones->groupBy('expansion') as $expansion => $group)
+                                @php $label = config('everquest.expansions')[$expansion] ?? 'Unknown'; @endphp
+                                <optgroup label="{{ $label }}">
+                                    @foreach($group as $zone)
+                                        <option value="{{ $zone->zoneidnumber }}" {{ request('zone') == $zone->zoneidnumber ? 'selected' : '' }}>
+                                            {{ $zone->long_name }} ({{ $zone->short_name }})
+                                        </option>
+                                    @endforeach
+                                </optgroup>
+                            @endforeach
+                        </select>
+                      </label>
+                </div>
+            </div>
         </div>
         <div class="pt-4">
             <button type="submit" class="btn btn-soft">

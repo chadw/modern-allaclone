@@ -30,6 +30,9 @@
                     <li><a href="{{ route('spells.index') }}"
                             class="uppercase {{ Route::is('spells.*') ? 'bg-base-300' : '' }}" title="Spells">Spells</a>
                     </li>
+                    <li><a href="{{ route('aa.index') }}"
+                            class="uppercase {{ Route::is('aa.*') ? 'bg-base-300' : '' }}" title="AAs">AAs</a>
+                    </li>
                     <li><a href="{{ route('npcs.index') }}"
                             class="uppercase {{ Route::is('npcs.*') ? 'bg-base-300' : '' }}" title="NPCs">NPCs</a>
                     </li>

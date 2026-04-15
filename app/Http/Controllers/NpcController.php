@@ -16,10 +16,24 @@ class NpcController extends Controller
         $npcs = collect();
         $currentExpansion = config('everquest.current_expansion');
 
+        $ignoreZones = config('everquest.ignore_zones') ?? [];
+        $zones = Zone::select('id', 'zoneidnumber', 'short_name', 'long_name', 'expansion', 'version')
+            ->when(!empty($ignoreZones), function ($q) use ($ignoreZones) {
+                $q->whereNotIn('short_name', $ignoreZones);
+            })
+            ->where('expansion', '<=', $currentExpansion)
+            ->orderBy('expansion')
+            ->orderBy('long_name')
+            ->get()
+            ->unique('zoneidnumber')
+            ->values();
+
         if ($request->query->count() > 0) {
             $npcs = (new NpcFilter($request))
                 ->apply(NpcType::query())
                 ->select('id', 'name', 'level', 'race', 'class', 'hp', 'maxlevel', 'version')
+                ->whereNotNull('name')
+                ->where('name', '<>', '')
                 ->whereNotIn('race', [127, 240])
                 ->with([
                     'firstSpawnEntries.spawn2.zoneData',
@@ -27,8 +41,6 @@ class NpcController extends Controller
                 ->orderBy('name', 'asc')
                 ->paginate(50)
                 ->withQueryString();
-
-            $zones = Zone::select('id', 'zoneidnumber', 'short_name', 'long_name', 'expansion', 'version')->get();
 
             foreach ($npcs as $npc) {
                 foreach ($npc->spawnEntries as $entry) {
@@ -45,6 +57,7 @@ class NpcController extends Controller
         return view('npcs.index', [
             'npcs' => $npcs,
             'metaTitle' => config('app.name') . ' - NPC Search',
+            'zones' => $zones,
         ]);
     }
 

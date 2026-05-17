@@ -23,12 +23,14 @@ class SearchController extends Controller
         // create a special query for npc type names
         $qNpcs = str_replace(' ', '_', $q);
         $qNpcs = str_replace('`', '-', $qNpcs);
+        $qId = $q;
 
         $results = collect();
 
         $results = $results
             ->merge(
                 NpcType::where('name', 'like', "%{$q}%")->orWhere('name', 'like', "%{$qNpcs}%")
+                    ->orWhereRaw('CAST(id AS CHAR) LIKE ?', ["%{$qId}%"])
                     ->groupBy('name')->limit(5)->get()->map(function ($npc) {
                     return [
                         'type' => 'npc',
@@ -38,7 +40,9 @@ class SearchController extends Controller
                     ];
                 })
             )->merge(
-                Item::where('name', 'like', "%{$q}%")->limit(10)->get()->map(function ($item) {
+                Item::where('Name', 'like', "%{$q}%")
+                    ->orWhereRaw('CAST(id AS CHAR) LIKE ?', ["%{$qId}%"])
+                    ->limit(10)->get()->map(function ($item) {
                     return [
                         'type' => 'item',
                         'name' => $item->Name,
@@ -58,6 +62,7 @@ class SearchController extends Controller
             )->merge(
                 Zone::where('long_name', 'like', "%{$q}%")
                     ->orWhere('short_name', 'like', "%{$q}%")
+                    ->orWhereRaw('CAST(zoneidnumber AS CHAR) LIKE ?', ["%{$qId}%"])
                     ->groupBy('short_name', 'long_name')->limit(5)->get()->map(function ($z) {
                     return [
                         'type' => 'zone',
@@ -76,7 +81,8 @@ class SearchController extends Controller
                     ];
                 })
             )->merge(
-                Spell::where('name', 'like', "%{$q}%")->groupBy('name')->limit(5)->get()->map(function ($s) {
+                Spell::where('name', 'like', "%{$q}%")->orWhereRaw('CAST(id AS CHAR) LIKE ?', ["%{$qId}%"])
+                    ->groupBy('name')->limit(5)->get()->map(function ($s) {
                     return [
                         'type' => 'spell',
                         'name' => $s->name,

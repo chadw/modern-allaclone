@@ -16,6 +16,11 @@ class DiscoveredItemController extends Controller
             abort(404);
         }
 
+        $request->validate([
+            'from' => ['nullable', 'date'],
+            'to' => ['nullable', 'date'],
+        ]);
+
         $query = DiscoveredItem::query()
             ->join('character_data', 'character_data.name', '=', 'discovered_items.char_name')
             ->where('character_data.gm', 0)

@@ -2,13 +2,37 @@
 
 namespace App\Http\Controllers;
 
+use App\Filters\DiscoveredItemFilter;
 use App\Models\DiscoveredItem;
 use App\Models\Item;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
-class DiscoveredItemLeaderboardController extends Controller
+class DiscoveredItemController extends Controller
 {
-    public function index()
+    public function index(Request $request)
+    {
+        if (!config('everquest.discovered_items.enable')) {
+            abort(404);
+        }
+
+        $query = DiscoveredItem::query()
+            ->join('character_data', 'character_data.name', '=', 'discovered_items.char_name')
+            ->where('character_data.gm', 0)
+            ->with('item')
+            ->select('discovered_items.*')
+            ->orderByDesc('discovered_date');
+
+        $query = (new DiscoveredItemFilter($request))->apply($query);
+        $items = $query->paginate(50)->withQueryString();
+
+        return view('discovery.index', [
+            'items' => $items,
+            'metaTitle' => config('app.name') . ' - Discovered Items',
+        ]);
+    }
+
+    public function leaderboard()
     {
         if (!config('everquest.discovered_items.enable')) {
             abort(404);

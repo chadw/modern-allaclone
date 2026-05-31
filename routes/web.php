@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\AaAbilityController;
-use App\Http\Controllers\DiscoveredItemLeaderboardController;
+use App\Http\Controllers\DiscoveredItemController;
 use App\Http\Controllers\FactionController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ItemController;
@@ -31,8 +31,8 @@ Route::get('/items/popup/{item}', [ItemController::class, 'popup'])->name('items
 Route::get('/items/drops_by_zone/{item}', [ItemController::class, 'drops_by_zone'])->name('items.drops_by_zone');
 
 // item discovery
-Route::get('/discovery/leaderboard', [DiscoveredItemLeaderboardController::class, 'index'])
-    ->name('discovery.leaderboard');
+Route::get('/discovery', [DiscoveredItemController::class, 'index'])->name('discovery.index');
+Route::get('/discovery/leaderboard', [DiscoveredItemController::class, 'leaderboard'])->name('discovery.leaderboard');
 
 // zones
 Route::get('/zones', [ZoneController::class, 'index'])->name('zones.index');

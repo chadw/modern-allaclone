@@ -22,8 +22,9 @@
                     <td>#{{ $index + 1 }}</td>
 
                     <td>
-                        @if(config('everquest.discovered_items.link_character_to_magelo'))
-                            <a href="{{ config('everquest.magelo_base_url') . urlencode($leader->char_name) }}">
+                        @if ($leader->magelo_url)
+                            <a href="{{ $leader->magelo_url }}" target="_blank" rel="noopener noreferrer"
+                                class="text-base link-accent link-hover">
                                 {{ $leader->char_name }}
                             </a>
                         @else

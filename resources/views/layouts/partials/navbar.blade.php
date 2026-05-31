@@ -56,6 +56,14 @@
                                 <li><a href="{{ route('pets.index') }}"
                                         class="{{ Route::is('pets.*') ? 'bg-base-300' : '' }}" title="Pets">Pets</a>
                                 </li>
+                                @if (config('everquest.discovered_items.enable'))
+                                <li><a href="{{ route('discovery.leaderboard') }}"
+                                        class="{{ Route::is('discovery.*') ? 'bg-base-300' : '' }}"
+                                        title="Discovery Leaderboard">
+                                        Discovery Leaderboard
+                                    </a>
+                                </li>
+                                @endif
                             </ul>
                         </details>
                     </li>
@@ -111,6 +119,14 @@
                     <li><a href="{{ route('pets.index') }}"
                             class="{{ Route::is('pets.*') ? 'active bg-base-200' : '' }}" title="Pets">Pets</a>
                     </li>
+                    @if (config('everquest.discovered_items.enable'))
+                    <li><a href="{{ route('discovery.leaderboard') }}"
+                            class="{{ Route::is('discovery.*') ? 'bg-base-200' : '' }}"
+                            title="Discovery Leaderboard">
+                            Discovery Leaderboard
+                        </a>
+                    </li>
+                    @endif
                 </ul>
             </div>
         </div>

@@ -38,7 +38,7 @@ return [
     ],
 
     'discovered_items' => [
-        'enable'                    => true,    // If TRUE, only Discovered Items will be displayed
+        'enable'                    => false,   // If TRUE, only Discovered Items will be displayed
         'link_character_to_magelo'  => true,    // link character who discovered to magelo (if enabled)
         'leaderboard'               => true,    // display leaderboard for most discovered items
     ],

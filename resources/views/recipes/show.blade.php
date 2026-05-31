@@ -52,26 +52,37 @@
                             }
                             $source = implode(', ', $sources);
                         @endphp
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center space-x-2">
-                                @if ($val->item?->icon)
-                                    <img src="{{ asset('img/icons/' . $val->item->icon . '.png') }}"
-                                        alt="{{ $val->item->Name }} Icon" loading="lazy" class="w-6 h-6 rounded">
-                                @endif
-                                <div class="badge badge-sm badge-info">
-                                    <strong>{{ $val->componentcount }}x</strong>
+
+                        @if(isUndiscoveredItem($val->item->id, $discoveredItems))
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-2">
+                                    <span class="text-warning">Undiscovered Item</span>
                                 </div>
-                                <span class="font-medium">
-                                    <x-item-link
-                                        :item_id="$val->item->id"
-                                        :item_name="$val->item->Name"
-                                    />
-                                </span>
+                                <div class="text-sm text-right text-gray-500">
+                                    Unknown
+                                </div>
                             </div>
-                            <div class="text-sm text-right text-gray-500">
-                                {{ $source ?: 'Unknown' }}
+                        @else
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-2">
+                                    @if ($val->item?->icon)
+                                        <span class="item-icon item-{{ $val->item?->icon }} item-icon-sm" aria-hidden="true"></span>
+                                    @endif
+                                    <div class="badge badge-sm badge-info">
+                                        <strong>{{ $val->componentcount }}x</strong>
+                                    </div>
+                                    <span class="font-medium">
+                                        <x-item-link
+                                            :item_id="$val->item->id"
+                                            :item_name="$val->item->Name"
+                                        />
+                                    </span>
+                                </div>
+                                <div class="text-sm text-right text-gray-500">
+                                    {{ $source ?: 'Unknown' }}
+                                </div>
                             </div>
-                        </div>
+                        @endif
                     @endforeach
                 </div>
             </div>
@@ -84,16 +95,25 @@
                     @if (!$val->item)
                         @continue
                     @endif
-                    <div class="flex items-center space-x-3">
-                        <x-item-link
-                            :item_id="$val->item->id"
-                            :item_name="$val->item->Name"
-                            :item_icon="$val->item->icon"
-                        />
-                        <div class="badge badge-sm badge-soft badge-success">
-                            Yields <strong>{{ $val->successcount }}</strong>
+                    @if(isUndiscoveredItem($val->item->id, $discoveredItems))
+                        <div class="flex items-center space-x-3">
+                            <span class="text-warning">Undiscovered Item</span>
+                            <div class="badge badge-sm badge-soft badge-success">
+                                Yields <strong>{{ $val->successcount }}</strong>
+                            </div>
                         </div>
-                    </div>
+                    @else
+                        <div class="flex items-center space-x-3">
+                            <x-item-link
+                                :item_id="$val->item->id"
+                                :item_name="$val->item->Name"
+                                :item_icon="$val->item->icon"
+                            />
+                            <div class="badge badge-sm badge-soft badge-success">
+                                Yields <strong>{{ $val->successcount }}</strong>
+                            </div>
+                        </div>
+                    @endif
                 @endforeach
             </div>
         </div>
@@ -111,13 +131,9 @@
                     @endif
                     <div class="flex items-center space-x-3">
                         @if ($val->item?->icon)
-                            <img src="{{ asset('img/icons/' . $val->item->icon . '.png') }}"
-                                alt="{{ $val->item->Name }} Icon" loading="lazy" class="w-6 h-6 rounded" width="24"
-                                height="24">
+                            <span class="item-icon item-{{ $val->item?->icon }} item-icon-sm" aria-hidden="true"></span>
                         @elseif ($isValidContainer && $val->custom_container_icon)
-                            <img src="{{ asset('img/icons/' . $val->custom_container_icon . '.png') }}"
-                                alt="{{ $val->custom_container_name }} Icon" loading="lazy" class="w-6 h-6 rounded"
-                                width="24" height="24">
+                            <span class="item-icon item-{{ $val->item?->icon }} item-icon-sm" aria-hidden="true"></span>
                         @endif
                         <span class="font-medium">
                             @if ($val->item)

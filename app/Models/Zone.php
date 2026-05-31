@@ -43,6 +43,7 @@ class Zone extends Model
     {
         return self::where('expansion', '<=', $expansion)
             ->where('min_status', 0)
+            ->whereNotIn('short_name', config('everquest.ignore_zones', []))
             ->select('id', 'expansion', 'short_name', 'long_name', 'version', 'zone_exp_multiplier')
             ->orderBy('expansion', 'asc')
             ->orderBy('long_name', 'asc')

@@ -11,6 +11,13 @@
             </thead>
             <tbody>
                 @foreach ($drops as $drop)
+                    @if(isUndiscoveredItem($drop['item']['id'], $discoveredItems))
+                        <tr>
+                            <td colspan="3">
+                                <span class="text-warning">Undiscovered Item</span>
+                            </td>
+                        </tr>
+                    @else
                     <tr>
                         <td scope="row">
                             <div class="flex items-center space-x-3">
@@ -49,6 +56,7 @@
                             @endif
                         </td>
                     </tr>
+                    @endif
                 @endforeach
             </tbody>
         </table>

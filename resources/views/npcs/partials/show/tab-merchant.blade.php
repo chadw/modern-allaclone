@@ -38,6 +38,14 @@
                     @if ($npc->class == 61 && $sell->items->ldonsold === 0)
                         @continue
                     @endif
+
+                    @if(isUndiscoveredItem($sell?->items?->id, $discoveredItems))
+                        <tr>
+                            <td colspan="3">
+                                <span class="text-warning">Undiscovered Item</span>
+                            </td>
+                        </tr>
+                    @else
                     <tr>
                         <td scope="row">
                             <div class="flex flex-col">
@@ -109,6 +117,7 @@
                             @endif
                         </td>
                     </tr>
+                    @endif
                 @endforeach
             </tbody>
         </table>

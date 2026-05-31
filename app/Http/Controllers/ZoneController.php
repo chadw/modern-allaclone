@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Zone;
 use App\Models\AlternateCurrency;
+use App\Models\DiscoveredItem;
+use App\Models\Zone;
 use App\ViewModels\ZoneViewModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -28,6 +29,8 @@ class ZoneController extends Controller
 
     public function show(Zone $zone, Request $request)
     {
+        abort_if(in_array($zone->short_name, config('everquest.ignore_zones', [])), 404);
+
         $version = (int) $request->query('v', 0);
 
         $zoneCache = Cache::rememberForever("zones.show.{$zone->id}_v{$version}", function () use ($zone, $version) {
@@ -57,6 +60,20 @@ class ZoneController extends Controller
         // get cached alt currency since tasks could use it
         $altCurrency = AlternateCurrency::allAltCurrency();
 
+        $discoveredItems = collect();
+        if (config('everquest.discovered_items.enable')) {
+            $itemIds = collect()
+                ->merge(collect($zoneCache['drops'])->pluck('item.id'))
+                ->merge(collect($zoneCache['foraged'])->pluck('item.id'))
+                ->merge(collect($zoneCache['fished'])->pluck('item.id'))
+                ->unique()
+                ->values();
+
+            $discoveredItems = DiscoveredItem::whereIn('item_id', $itemIds)
+                ->pluck('item_id')
+                ->flip();
+        }
+
         // zone version for meta title
         $zone = $zoneCache['zone'];
         $zversion = $zone->version ? ' - version (' . $zone->version . ')' : '';
@@ -64,6 +81,7 @@ class ZoneController extends Controller
         return view('zones.show', [
             ...$zoneCache,
             'altCurrency' => $altCurrency,
+            'discoveredItems' => $discoveredItems,
             'metaTitle' => config('app.name') . ' - Zone: ' . $zone->long_name . $zversion,
         ]);
     }

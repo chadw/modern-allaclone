@@ -21,6 +21,13 @@
                 <tbody>
                     @if ($drop->lootdropEntries)
                         @foreach ($drop->lootdropEntries as $loot)
+                            @if(isUndiscoveredItem($loot->item->id, $discoveredItems))
+                                <tr>
+                                    <td colspan="2">
+                                        <span class="text-warning">Undiscovered Item</span>
+                                    </td>
+                                </tr>
+                            @else
                             <tr>
                                 <td scope="row">
                                     <div class="flex items-center space-x-3">
@@ -41,6 +48,7 @@
                                     @endif
                                 </td>
                             </tr>
+                            @endif
                         @endforeach
                     @endif
                 </tbody>

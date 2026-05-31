@@ -56,11 +56,20 @@
                             <div class="text-base font-extrabold">Classes</div>
                             {{ $clsOutput }}
                         </div>
-                        @if ($spell->scrolleffect)
+                        @if ($spell->scrolleffect->isNotEmpty())
                             <div>
                                 <div class="text-base font-extrabold">Learned from</div>
                                 @foreach ($spell->scrolleffect as $item)
-                                    <x-item-link :item_id="$item->id" :item_name="$item->Name" :item_icon="$item->icon" item_class="flex" />
+                                    @if(isUndiscoveredItem($item->id, $discoveredItems))
+                                        <span class="text-warning">Undiscovered Item</span>
+                                    @else
+                                        <x-item-link
+                                            :item_id="$item->id"
+                                            :item_name="$item->Name"
+                                            :item_icon="$item->icon"
+                                            item_class="flex"
+                                        />
+                                    @endif
                                 @endforeach
                             </div>
                         @endif
@@ -79,27 +88,61 @@
                             )
                             @foreach ($spell->clickeffect as $click)
                                 <span class="inline-flex w-full items-center gap-1 whitespace-nowrap">
-                                    <x-item-link :item_id="$click->id" :item_name="$click->Name" :item_icon="$click->icon" item_class="flex" />
+                                    @if(isUndiscoveredItem($click->id, $discoveredItems))
+                                        <span class="text-warning">Undiscovered Item</span>
+                                    @else
+                                        <x-item-link
+                                            :item_id="$click->id"
+                                            :item_name="$click->Name"
+                                            :item_icon="$click->icon"
+                                            item_class="flex"
+                                        />
+                                    @endif
                                     <span class="font-sm text-accent">(Click)</span>
                                 </span>
                             @endforeach
                             @foreach ($spell->proceffect as $proc)
                                 <span class="inline-flex w-full items-center gap-1 whitespace-nowrap">
-                                    <x-item-link :item_id="$proc->id" :item_name="$proc->Name" :item_icon="$proc->icon" item_class="flex" />
+                                    @if(isUndiscoveredItem($proc->id, $discoveredItems))
+                                        <span class="text-warning">Undiscovered Item</span>
+                                    @else
+                                        <x-item-link
+                                            :item_id="$proc->id"
+                                            :item_name="$proc->Name"
+                                            :item_icon="$proc->icon"
+                                            item_class="flex"
+                                        />
+                                    @endif
                                     <span class="font-sm text-accent">(Proc)</span>
                                 </span>
                             @endforeach
                             @foreach ($spell->focuseffect as $focus)
                                 <span class="inline-flex items-center gap-1 whitespace-nowrap">
-                                    <x-item-link :item_id="$focus->id" :item_name="$focus->Name" :item_icon="$focus->icon"
-                                        item_class="flex" />
+                                    @if(isUndiscoveredItem($focus->id, $discoveredItems))
+                                        <span class="text-warning">Undiscovered Item</span>
+                                    @else
+                                        <x-item-link
+                                            :item_id="$focus->id"
+                                            :item_name="$focus->Name"
+                                            :item_icon="$focus->icon"
+                                            item_class="flex"
+                                        />
+                                    @endif
                                     <span class="font-sm text-accent">(Focus)</span>
                                 </span>
                             @endforeach
                             @foreach ($spell->worneffect as $worn)
                                 <span class="inline-flex items-center gap-1 whitespace-nowrap">
-                                    <x-item-link :item_id="$worn->id" :item_name="$worn->Name" :item_icon="$worn->icon"
-                                        item_class="flex" />
+                                    @if(isUndiscoveredItem($worn->id, $discoveredItems))
+                                        <span class="text-warning">Undiscovered Item</span>
+                                    @else
+                                        <x-item-link
+                                            :item_id="$worn->id"
+                                            :item_name="$worn->Name"
+                                            :item_icon="$worn->icon"
+                                            item_class="flex"
+                                        />
+                                    @endif
                                     <span class="font-sm text-accent">(Worn)</span>
                                 </span>
                             @endforeach

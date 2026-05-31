@@ -4,9 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Kyslik\ColumnSortable\Sortable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Kyslik\ColumnSortable\Sortable;
 
 class Item extends Model
 {
@@ -114,10 +115,31 @@ class Item extends Model
         return $this->hasMany(ItemEvolvingDetail::class, 'item_evo_id', 'evoid')->orderBy('item_evolve_level');
     }
 
+    public function discovery(): HasOne
+    {
+        return $this->hasOne(DiscoveredItem::class, 'item_id', 'id');
+    }
+
     public function ratioSortable($query, $direction)
     {
         $raw = "CASE WHEN damage = 0 THEN 1e9 ELSE (delay / NULLIF(damage,0)) END";
 
         return $query->orderByRaw($raw . ' ' . $direction)->select('items.*');
+    }
+
+    public function isDiscovered(): bool
+    {
+        return $this->relationLoaded('discovery')
+            ? $this->discovery !== null
+            : $this->discovery()->exists();
+    }
+
+    public function canDisplay(): bool
+    {
+        if (!config('everquest.discovered_items.enable')) {
+            return true;
+        }
+
+        return $this->isDiscovered();
     }
 }

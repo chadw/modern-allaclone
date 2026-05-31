@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Zone;
-use App\Models\NpcType;
-use App\Models\NpcSpell;
 use App\Filters\NpcFilter;
-use Illuminate\Http\Request;
 use App\Models\AlternateCurrency;
+use App\Models\DiscoveredItem;
+use App\Models\NpcSpell;
+use App\Models\NpcType;
+use App\Models\Zone;
+use Illuminate\Http\Request;
 
 class NpcController extends Controller
 {
@@ -63,6 +64,7 @@ class NpcController extends Controller
 
     public function show(NpcType $npc)
     {
+        $discoveryEnabled = config('everquest.discovered_items.enable');
         $ignoreZones = config('everquest.ignore_zones') ?? [];
 
         $npc = NpcType::with('npcSpellset.attackProcSpell')
@@ -131,6 +133,29 @@ class NpcController extends Controller
             }
         }
 
+        // discovery
+        $itemIds = collect();
+        if ($discoveryEnabled) {
+            if ($npc->lootTable) {
+                $itemIds = $itemIds->merge(
+                    $npc->lootTable->loottableEntries
+                        ->flatMap(function ($entry) {
+                            return $entry->lootdropEntries->pluck('item.id');
+                        })
+                );
+            }
+
+            if ($npc->merchantlist) {
+                $itemIds = $itemIds->merge($npc->merchantlist->pluck('items.id'));
+            }
+
+            $itemIds = $itemIds->filter()->unique()->values();
+        }
+
+        $discoveredItems = $discoveryEnabled
+            ? DiscoveredItem::whereIn('item_id', $itemIds)->pluck('item_id')->flip()
+            : collect();
+
         $defaultTab = null;
         if ($npc->lootTable?->loottableEntries->isNotEmpty()) {
             $defaultTab = 'drops';
@@ -152,6 +177,7 @@ class NpcController extends Controller
             'raisesFaction' => $raisesFaction,
             'lowersFaction' => $lowersFaction,
             'altCurrency' => $altCurrency,
+            'discoveredItems' => $discoveredItems,
             'metaTitle' => config('app.name') . ' - NPC: ' . $npc->clean_name . $lvl,
         ]);
     }

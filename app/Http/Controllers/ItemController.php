@@ -13,6 +13,8 @@ class ItemController extends Controller
 {
     public function index(Request $request)
     {
+        $discoveryEnabled = config('everquest.discovered_items.enable');
+
         $request->validate([
             'stat1comp' => 'in:1,2,5',
             'stat2comp' => 'in:1,2,5',
@@ -21,8 +23,13 @@ class ItemController extends Controller
 
         $items = collect();
         if ($request->query->count() > 0) {
-            $query = (new ItemFilter($request))->apply(Item::query())
-            ->select([
+            $query = (new ItemFilter($request))->apply(Item::query());
+
+            if ($discoveryEnabled) {
+                $query->whereHas('discovery');
+            }
+
+            $query->select([
                 'id', 'Name', 'icon', 'itemtype', 'ac', 'hp', 'damage', 'delay',
                 'augtype', 'slots', 'bagslots', 'bagwr',
                 'mana', 'endur', 'haste', 'aagi', 'acha', 'adex', 'aint', 'asta', 'astr', 'awis',
@@ -44,7 +51,9 @@ class ItemController extends Controller
     public function show(Item $item)
     {
         $itemCache = Cache::remember("items.show.{$item->id}", now()->addMonth(), function () use ($item) {
-            $item = Item::with('evolvingDetails.item')->where('id', $item->id)->firstOrFail();
+            $item = Item::with(['evolvingDetails.item', 'discovery'])
+                ->where('id', $item->id)
+                ->firstOrFail();
             $vm = (new ItemViewModel($item))->withEffects();
 
             return [

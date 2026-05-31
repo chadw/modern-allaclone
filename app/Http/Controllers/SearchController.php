@@ -14,6 +14,7 @@ class SearchController extends Controller
 {
     public function suggest(Request $request)
     {
+        $discoveryEnabled = config('everquest.discovered_items.enable');
         $q = $request->query('q');
 
         if (strlen($q) < 2) {
@@ -32,24 +33,32 @@ class SearchController extends Controller
                 NpcType::where('name', 'like', "%{$q}%")->orWhere('name', 'like', "%{$qNpcs}%")
                     ->orWhereRaw('CAST(id AS CHAR) LIKE ?', ["%{$qId}%"])
                     ->groupBy('name')->limit(5)->get()->map(function ($npc) {
-                    return [
-                        'type' => 'npc',
-                        'name' => $npc->clean_name,
-                        'url' => route('npcs.show', $npc->id),
-                        'id' => 'npc-' . $npc->id
-                    ];
-                })
+                        return [
+                            'type' => 'npc',
+                            'name' => $npc->clean_name,
+                            'url' => route('npcs.show', $npc->id),
+                            'id' => 'npc-' . $npc->id
+                        ];
+                    })
             )->merge(
-                Item::where('Name', 'like', "%{$q}%")
-                    ->orWhereRaw('CAST(id AS CHAR) LIKE ?', ["%{$qId}%"])
-                    ->limit(10)->get()->map(function ($item) {
-                    return [
-                        'type' => 'item',
-                        'name' => $item->Name,
-                        'url' => route('items.show', $item->id),
-                        'id' => 'item-' . $item->id
-                    ];
-                })
+                Item::query()
+                    ->when($discoveryEnabled, function ($q) {
+                        $q->whereHas('discovery');
+                    })
+                    ->where(function ($qBuilder) use ($q, $qId) {
+                        $qBuilder->where('Name', 'like', "%{$q}%")
+                            ->orWhereRaw('CAST(id AS CHAR) LIKE ?', ["%{$qId}%"]);
+                    })
+                    ->limit(10)
+                    ->get()
+                    ->map(function ($item) {
+                        return [
+                            'type' => 'item',
+                            'name' => $item->Name,
+                            'url' => route('items.show', $item->id),
+                            'id' => 'item-' . $item->id
+                        ];
+                    })
             )->merge(
                 TradeskillRecipe::where('name', 'like', "%{$q}%")->limit(5)->get()->map(function ($r) {
                     return [
@@ -60,17 +69,20 @@ class SearchController extends Controller
                     ];
                 })
             )->merge(
-                Zone::where('long_name', 'like', "%{$q}%")
-                    ->orWhere('short_name', 'like', "%{$q}%")
-                    ->orWhereRaw('CAST(zoneidnumber AS CHAR) LIKE ?', ["%{$qId}%"])
-                    ->groupBy('short_name', 'long_name')->limit(5)->get()->map(function ($z) {
-                    return [
-                        'type' => 'zone',
-                        'name' => $z->long_name,
-                        'url' => route('zones.show', $z->id),
-                        'id' => 'zone-' . $z->id
-                    ];
+                Zone::where(function ($query) use ($q, $qId) {
+                    $query->where('long_name', 'like', "%{$q}%")
+                        ->orWhere('short_name', 'like', "%{$q}%")
+                        ->orWhereRaw('CAST(zoneidnumber AS CHAR) LIKE ?', ["%{$qId}%"]);
                 })
+                    ->whereNotIn('short_name', config('everquest.ignore_zones', []))
+                    ->groupBy('short_name', 'long_name')->limit(5)->get()->map(function ($z) {
+                        return [
+                            'type' => 'zone',
+                            'name' => $z->long_name,
+                            'url' => route('zones.show', $z->id),
+                            'id' => 'zone-' . $z->id
+                        ];
+                    })
             )->merge(
                 FactionList::where('name', 'like', "%{$q}%")->limit(5)->get()->map(function ($f) {
                     return [
@@ -83,13 +95,13 @@ class SearchController extends Controller
             )->merge(
                 Spell::where('name', 'like', "%{$q}%")->orWhereRaw('CAST(id AS CHAR) LIKE ?', ["%{$qId}%"])
                     ->groupBy('name')->limit(5)->get()->map(function ($s) {
-                    return [
-                        'type' => 'spell',
-                        'name' => $s->name,
-                        'url' => route('spells.show', $s->id),
-                        'id' => 'spell-' . $s->id
-                    ];
-                })
+                        return [
+                            'type' => 'spell',
+                            'name' => $s->name,
+                            'url' => route('spells.show', $s->id),
+                            'id' => 'spell-' . $s->id
+                        ];
+                    })
             );
 
         return response()->json($results->take(40)->values());

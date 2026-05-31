@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Zone;
 use App\Models\DbStr;
+use App\Models\DiscoveredItem;
 use App\Models\Spell;
+use App\Models\Zone;
 use App\Services\SpellSearch;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -81,6 +82,8 @@ class SpellController extends Controller
 
     public function show(Spell $spell)
     {
+        $discoveryEnabled = config('everquest.discovered_items.enable');
+
         $description = null;
         if ($spell->descnum) {
             $desc = DbStr::where('id', $spell->descnum)->where('type', 6)->first();
@@ -95,9 +98,27 @@ class SpellController extends Controller
             'focuseffect',
         ]);
 
+        // discovery
+        $itemIds = collect();
+        if ($discoveryEnabled) {
+            $itemIds = $itemIds->merge($spell->scrolleffect->pluck('id'));
+            $itemIds = $itemIds
+                ->merge($spell->clickeffect->pluck('id'))
+                ->merge($spell->proceffect->pluck('id'))
+                ->merge($spell->focuseffect->pluck('id'))
+                ->merge($spell->worneffect->pluck('id'));
+        }
+
+        $itemIds = $itemIds->filter()->unique()->values();
+
+        $discoveredItems = $discoveryEnabled
+            ? DiscoveredItem::whereIn('item_id', $itemIds)->pluck('item_id')->flip()
+            : collect();
+
         return view('spells.show', [
             'spell' => $spell,
             'description' => $description,
+            'discoveredItems' => $discoveredItems,
             'metaTitle' => config('app.name') . ' - Spell: ' . $spell->name,
         ]);
     }

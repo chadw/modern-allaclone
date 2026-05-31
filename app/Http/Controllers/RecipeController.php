@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Filters\RecipeFilter;
 use App\Models\ContainerObject;
+use App\Models\DiscoveredItem;
 use App\Models\TradeskillRecipe;
+use Illuminate\Http\Request;
 
 class RecipeController extends Controller
 {
@@ -28,6 +29,7 @@ class RecipeController extends Controller
 
     public function show(TradeskillRecipe $recipe)
     {
+        $discoveryEnabled = config('everquest.discovered_items.enable');
         $tradeskills = collect(config('everquest.skills.tradeskill'))->sort()->toArray();
         $objects = collect(config('everquest.object_containers'))->toArray();
 
@@ -45,10 +47,26 @@ class RecipeController extends Controller
         $success = $recipe->successEntries();
         $fail = $recipe->failEntries();
         $components = $recipe->componentEntriesWithFlags();
+        //dd($success, $fail, $components);
 
         $failCount = $fail->mapWithKeys(function ($entry) {
             return [$entry->item->id => $entry->failcount];
-        })->toArray();;
+        })->toArray();
+
+        $itemIds = collect();
+        if ($discoveryEnabled) {
+            $itemIds = $itemIds
+                ->merge(collect($container)->pluck('item.id'))
+                ->merge($success->pluck('item.id'))
+                ->merge($fail->pluck('item.id'))
+                ->merge($components->pluck('item.id'));
+        }
+
+        $itemIds = $itemIds->filter()->unique()->values();
+
+        $discoveredItems = $discoveryEnabled
+            ? DiscoveredItem::whereIn('item_id', $itemIds)->pluck('item_id')->flip()
+            : collect();
 
         return view('recipes.show', [
             'recipe' => $recipe,
@@ -58,6 +76,7 @@ class RecipeController extends Controller
             'components' => $components,
             'tradeskills' => $tradeskills,
             'failCount' => $failCount,
+            'discoveredItems' => $discoveredItems,
             'metaTitle' => config('app.name') . ' - Recipe: ' . ucRomanNumeral($recipe->name),
         ]);
     }

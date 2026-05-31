@@ -432,4 +432,19 @@
             {{ $item->lore }}
         </div>
     @endif
+
+    @if (!empty($item->discovery))
+        <div class="mt-6 bg-emerald-900 text-sm text-white p-3 rounded">
+            Discovered by
+            @if ($item->discovery->magelo_url)
+                <a href="{{ $item->discovery->magelo_url }}" target="_blank" rel="noopener noreferrer"
+                    class="font-semibold underline hover:no-underline">
+                    {{ $item->discovery->char_name }}
+                </a>
+            @else
+                {{ $item->discovery->char_name }}
+            @endif
+            on {{ $item->discovery->discovered_at }}
+        </div>
+    @endif
 </div>

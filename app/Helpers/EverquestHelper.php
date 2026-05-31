@@ -371,3 +371,14 @@ if (!function_exists('getMinLevel')) {
         return intval($minLevel);
     }
 }
+
+if (!function_exists('isUndiscoveredItem')) {
+    function isUndiscoveredItem($itemId, $discoveredItems)
+    {
+        if (!config('everquest.discovered_items.enable')) {
+            return false;
+        }
+
+        return !$discoveredItems->has($itemId);
+    }
+}

@@ -6,6 +6,7 @@
 return [
     'current_expansion'                 => 9,   // dragons of norrath
     'server_max_level'                  => 70,  // server max level
+    'magelo_base_url' => '',            // https://magelo.yourdomain.com
 
     /**
      * NPC
@@ -36,18 +37,17 @@ return [
         ],
     ],
 
-    // copying some of the allaclone settings for now (NOT ALL OF THESE ARE TIED BACK IN YET)
+    'discovered_items' => [
+        'enable'                    => true,    // If TRUE, only Discovered Items will be displayed
+        'link_character_to_magelo'  => true,    // link character who discovered to magelo (if enabled)
+        'leaderboard'               => true,    // display leaderboard for most discovered items
+    ],
 
+    // copying some of the allaclone settings for now (NOT ALL OF THESE ARE TIED BACK IN YET)
     'allow_quests_npc'                  => false, // quests for npcs are available from NPC's page
     'server_max_npc_level'              => 95, // Max Level for any NPCs on the Server
     'spawngroup_around_range'           => 100, // range of surrounding spawngroups, spawngroups page
     'trackable_npcs_only'               => true, // If TRUE, will only display NPCs that are set to be trackable in search results
-
-    /**
-     * Items
-     */
-    'discovered_items_max_status'       => 20, // Max account status for a discovered item entry
-    'discovered_items_only'             => false, // If TRUE, only Discovered Items will be displayed
 
     /**
      * Misc
@@ -103,6 +103,8 @@ return [
         28  => 'Terror of Luclin',
         29  => 'Night of Shadows',
         30  => 'Laurion\'s Song',
+        31 => 'The Outer Brood',
+        32 => 'Shattering of Ro',
     ],
 
     // https://github.com/EQEmu/Server/blob/master/common/races.h
@@ -1980,6 +1982,44 @@ return [
         46  => 'Target of Target',
         47  => 'Pet Owner',
         50  => 'Target AE No Players Pets',
+    ],
+
+    'spell_target_colors' => [
+        0 => 'border border-red-500',
+        1 => 'border border-red-500',
+        2 => 'border border-indigo-200',
+        3 => 'border border-purple-500',
+        4 => 'border border-indigo-200',
+        5 => 'border border-red-500',
+        6 => 'border border-yellow-500',
+        8 => 'border border-green-300',
+        9 => 'border border-red-500',
+        11 => 'border border-red-500',
+        13 => 'border border-red-500',
+        14 => 'border border-red-500',
+        15 => 'border border-red-500',
+        16 => 'border border-red-500',
+        17 => 'border border-red-500',
+        18 => 'border border-red-500',
+        20 => 'border border-red-500',
+        24 => 'border border-indigo-200',
+        25 => 'border border-indigo-200',
+        32 => 'border border-neutral-900',
+        33 => 'border border-neutral-900',
+        34 => 'border border-red-500',
+        35 => 'border border-red-500',
+        36 => 'border border-neutral-900',
+        37 => 'border border-neutral-900',
+        38 => 'border border-red-500',
+        39 => 'border border-red-500',
+        40 => 'border border-purple-500',
+        41 => 'border border-purple-500',
+        42 => 'border border-teal-500',
+        43 => 'border border-red-500',
+        44 => 'border border-teal-500',
+        45 => 'border border-green-500',
+        46 => 'border border-purple-200',
+        47 => 'border border-red-500',
     ],
 
     'spell_effects' => [

@@ -12,7 +12,7 @@
     </nav>
 
     @if (!empty($plannerError) || empty($plannerData))
-        <div class="alert alert-warning" role="alert">
+        <div class="alert alert-soft alert-warning" role="alert">
             <div>
                 <h2 class="font-semibold">This recipe could not be planned</h2>
                 <p class="text-sm">
@@ -59,7 +59,7 @@
                                 </select>
                             </label>
 
-                            <div class="form-control">
+                            <div class="form-control flex flex-col items-start">
                                 <label for="tradeskill-plan-quantity" class="label pb-1">
                                     <span class="label-text text-xs">Target quantity</span>
                                 </label>
@@ -78,17 +78,17 @@
                             </div>
 
                             <div class="flex flex-wrap gap-2">
-                                <button type="button" class="btn btn-sm btn-primary" @click="savePlan()">
+                                <button type="button" class="btn btn-sm btn-soft btn-success" @click="savePlan()">
                                     <span x-text="saved ? 'Save changes' : 'Save to browser'"></span>
                                 </button>
-                                <button type="button" class="btn btn-sm btn-outline" @click="copyPlanLink()">
+                                <button type="button" class="btn btn-sm btn-soft btn-default" @click="copyPlanLink()">
                                     Copy plan link
                                 </button>
                             </div>
                         </div>
                     </div>
 
-                    <p class="text-xs text-base-content/55">
+                    <p class="text-info">
                         Browser saves stay on this device. Shared links contain only the target and recipe choices&mdash;never
                         inventory or checklist progress.
                     </p>
@@ -119,7 +119,7 @@
                 </div>
             </div>
 
-            <div x-show="status" role="status" aria-live="polite" class="alert"
+            <div x-show="status" role="status" aria-live="polite" class="alert alert-soft"
                 :class="{
                     'alert-error': statusType === 'error',
                     'alert-success': statusType === 'success',
@@ -130,7 +130,7 @@
 
             <div x-show="plan.warnings.length" class="space-y-2" aria-label="Planner warnings">
                 <template x-for="warning in plan.warnings" :key="`${warning.code}:${warning.itemKey || ''}:${warning.recipeId || ''}`">
-                    <div class="alert alert-warning py-3" role="alert">
+                    <div class="alert alert-soft alert-warning py-3" role="alert">
                         <span class="text-sm" x-text="warning.message"></span>
                     </div>
                 </template>
@@ -158,7 +158,7 @@
 
                                     <div class="min-w-0">
                                         <div class="flex min-w-0 items-center gap-2">
-                                            <span class="badge badge-xs shrink-0"
+                                            <span class="badge badge-sm badge-soft shrink-0"
                                                 :class="row.type === 'recipe' ? 'badge-secondary' : 'badge-info'"
                                                 x-text="row.type === 'recipe' ? 'Combine' : (row.role === 'container' ? 'Container' : 'Item')"></span>
                                             <a x-show="row.url" :href="row.url" class="link link-info min-w-0 truncate font-medium"
@@ -188,17 +188,17 @@
                         </div>
 
                         <div class="flex flex-wrap gap-2" aria-label="Filter bill of materials">
-                            <button type="button" class="btn btn-xs" @click="bomFilter = 'all'"
-                                :class="bomFilter === 'all' ? 'btn-primary' : 'btn-soft'"
+                            <button type="button" class="btn btn-xs btn-soft" @click="bomFilter = 'all'"
+                                :class="bomFilter === 'all' ? 'btn-accent' : 'btn-default'"
                                 :aria-pressed="String(bomFilter === 'all')">All <span x-text="plan.bom.length"></span></button>
-                            <button type="button" class="btn btn-xs" @click="bomFilter = 'acquire'"
-                                :class="bomFilter === 'acquire' ? 'btn-primary' : 'btn-soft'"
+                            <button type="button" class="btn btn-xs btn-soft" @click="bomFilter = 'acquire'"
+                                :class="bomFilter === 'acquire' ? 'btn-accent' : 'btn-default'"
                                 :aria-pressed="String(bomFilter === 'acquire')">Acquire <span x-text="filterCount('acquire')"></span></button>
-                            <button type="button" class="btn btn-xs" @click="bomFilter = 'craft'"
-                                :class="bomFilter === 'craft' ? 'btn-primary' : 'btn-soft'"
+                            <button type="button" class="btn btn-xs btn-soft" @click="bomFilter = 'craft'"
+                                :class="bomFilter === 'craft' ? 'btn-accent' : 'btn-default'"
                                 :aria-pressed="String(bomFilter === 'craft')">Subcombine <span x-text="filterCount('craft')"></span></button>
-                            <button type="button" class="btn btn-xs" @click="bomFilter = 'inventory'"
-                                :class="bomFilter === 'inventory' ? 'btn-primary' : 'btn-soft'"
+                            <button type="button" class="btn btn-xs btn-soft" @click="bomFilter = 'inventory'"
+                                :class="bomFilter === 'inventory' ? 'btn-accent' : 'btn-default'"
                                 :aria-pressed="String(bomFilter === 'inventory')">Covered <span x-text="filterCount('inventory')"></span></button>
                         </div>
 
@@ -219,10 +219,11 @@
                                         <tr>
                                             <th scope="row" class="font-normal">
                                                 <div class="flex min-w-44 items-center gap-2">
-                                                    <a x-show="material.url" :href="material.url" class="link link-info font-medium"
+                                                    <a x-show="material.url" :href="material.url" class="link link-info text-sm"
                                                         x-text="material.name"></a>
-                                                    <span x-show="!material.url" class="font-medium" x-text="material.name"></span>
-                                                    <span x-show="material.reusable > 0" class="badge badge-xs badge-outline">Reusable</span>
+                                                    <span x-show="!material.url" x-text="material.name"></span>
+                                                    <span x-show="material.reusable > 0"
+                                                        class="badge badge-sm badge-soft badge-dash badge-accent">Reusable</span>
                                                 </div>
                                             </th>
                                             <td class="text-right tabular-nums" x-text="material.need"></td>
@@ -240,12 +241,12 @@
                                             <td>
                                                 <div class="space-y-1.5">
                                                     <div class="flex items-start gap-2">
-                                                        <span class="badge badge-xs mt-0.5"
+                                                        <span class="badge badge-xs badge-dash mt-0.5"
                                                             :class="{
                                                                 'badge-success': material.acquisition === 'inventory' || material.sourceKind === 'vendor',
                                                                 'badge-secondary': material.acquisition === 'craft',
                                                                 'badge-info': ['forage', 'fishing', 'drop', 'ground'].includes(material.sourceKind),
-                                                                'badge-ghost': material.acquisition === 'world-object' || material.sourceKind === 'unknown'
+                                                                'badge-default': material.acquisition === 'world-object' || material.sourceKind === 'unknown'
                                                             }"
                                                             x-text="materialSourceLabel(material)"></span>
                                                         <span class="text-xs text-base-content/65" x-text="materialSource(material)"></span>
@@ -321,7 +322,7 @@
                                     </span>
                                     <span class="mt-0.5 block text-xs text-base-content/55" x-text="step.description"></span>
                                 </span>
-                                <span class="badge badge-sm whitespace-nowrap"
+                                <span class="badge badge-soft whitespace-nowrap"
                                     :class="step.type === 'finish' ? 'badge-primary' : (step.type === 'craft' ? 'badge-secondary' : 'badge-info')"
                                     x-text="`${index + 1} · ${step.type === 'finish' ? 'Finish' : (step.type === 'craft' ? 'Craft' : 'Acquire')}`"></span>
                             </label>

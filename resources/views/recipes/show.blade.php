@@ -23,7 +23,7 @@
                 </p>
             </div>
             @if (config('everquest.tradeskill_planner.enable', true))
-                <a href="{{ route('recipes.plan', $recipe) }}" class="btn btn-sm btn-primary shrink-0">
+                <a href="{{ route('recipes.plan', $recipe) }}" class="btn btn-primary shrink-0">
                     Plan this recipe
                 </a>
             @endif

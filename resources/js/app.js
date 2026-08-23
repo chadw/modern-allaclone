@@ -1,9 +1,12 @@
 import './bootstrap';
 import Alpine from 'alpinejs'
 import npcLocationMap from './components/npc-location-map';
+import { savedTradeskillPlans, tradeskillPlanner } from './tradeskill-planner';
 
 const baseUrl = document.querySelector('base')?.getAttribute('href') || '/';
 
+Alpine.data('tradeskillPlanner', tradeskillPlanner);
+Alpine.data('savedTradeskillPlans', savedTradeskillPlans);
 Alpine.data('npcLocationMap', npcLocationMap);
 Alpine.data('zoneAtlasMap', npcLocationMap);
 

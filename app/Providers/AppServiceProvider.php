@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Services\SpellHistory\SpellHistoryRepository;
+use App\Services\PatchArchive;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
 
@@ -18,6 +19,9 @@ class AppServiceProvider extends ServiceProvider
                 (string) config('everquest.spell_history.artifact_path'),
             );
         });
+        if (config('everquest.patch_history.enable', true)) {
+            $this->app->singleton(PatchArchive::class);
+        }
     }
 
     /**
